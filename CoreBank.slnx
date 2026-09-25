@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="CoreBank.Api/CoreBank.Api.csproj" />
+  <Project Path="CoreBank.Application/CoreBank.Application.csproj" />
+  <Project Path="CoreBank.Domain/CoreBank.Domain.csproj" />
+  <Project Path="CoreBank.Infrastructure/CoreBank.Infrastructure.csproj" />
+  <Project Path="CoreBank.Tests/CoreBank.Tests.csproj" />
+</Solution>
