@@ -1,6 +1,14 @@
 @CoreBank.Api_HostAddress = http://localhost:5062
 
-GET {{CoreBank.Api_HostAddress}}/weatherforecast/
+POST {{CoreBank.Api_HostAddress}}/api/Customers
+Content-Type: application/json
 Accept: application/json
+
+{
+  "name": "Maria Silva",
+  "cpf": "98765432100",
+  "email": "maria@teste.com",
+  "password": "Senha@123"
+}
 
 ###

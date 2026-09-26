@@ -23,7 +23,7 @@ public class Account
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-    // Realiza um depósito após validar as regras da conta.
+    // Realiza um depósito.
     public void Deposit(decimal amount)
     {
         ValidateActiveAccount();
@@ -36,7 +36,7 @@ public class Account
         Balance += amount;
     }
 
-    // Realiza um saque após validar saldo e regras da conta.
+    // Realiza um saque.
     public void Withdraw(decimal amount)
     {
         ValidateActiveAccount();
@@ -54,7 +54,7 @@ public class Account
         Balance -= amount;
     }
 
-    // Transfere dinheiro desta conta para outra conta.
+    // Transfere dinheiro para outra conta.
     public void TransferTo(Account destinationAccount, decimal amount)
     {
         ValidateActiveAccount();
@@ -79,7 +79,29 @@ public class Account
         destinationAccount.Balance += amount;
     }
 
-    // Centraliza a validação utilizada pelas operações bancárias.
+    // Bloqueia a conta.
+    public void Block()
+    {
+        if (Status == AccountStatus.Blocked)
+        {
+            throw new DomainException("A conta já está bloqueada.");
+        }
+
+        Status = AccountStatus.Blocked;
+    }
+
+    // Desbloqueia a conta.
+    public void Unblock()
+    {
+        if (Status == AccountStatus.Active)
+        {
+            throw new DomainException("A conta já está ativa.");
+        }
+
+        Status = AccountStatus.Active;
+    }
+
+    // Validação compartilhada pelas operações bancárias.
     private void ValidateActiveAccount()
     {
         if (Status != AccountStatus.Active)
