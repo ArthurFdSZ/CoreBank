@@ -1,5 +1,9 @@
+using CoreBank.Api.Middleware;
 using CoreBank.Infrastructure.Persistence;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +14,36 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<CoreBankDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// Obtém as configurações do JWT.
+var jwtKey = builder.Configuration["Jwt:Key"]
+    ?? throw new InvalidOperationException("A chave JWT não foi configurada.");
+
+var jwtIssuer = builder.Configuration["Jwt:Issuer"];
+var jwtAudience = builder.Configuration["Jwt:Audience"];
+
+// Configura a autenticação JWT.
+builder.Services
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+
+            ValidIssuer = jwtIssuer,
+            ValidAudience = jwtAudience,
+
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(jwtKey))
+        };
+    });
+
+// Configura autorização.
+builder.Services.AddAuthorization();
 
 // Configura o OpenAPI.
 builder.Services.AddOpenApi();
@@ -22,7 +56,16 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
+// Trata exceções de domínio.
+app.UseMiddleware<ExceptionMiddleware>();
+
 app.UseHttpsRedirection();
+
+// Verifica quem é o usuário através do token.
+app.UseAuthentication();
+
+// Verifica se o usuário possui permissão para acessar o endpoint.
+app.UseAuthorization();
 
 app.MapControllers();
 

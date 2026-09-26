@@ -1,5 +1,7 @@
 @CoreBank.Api_HostAddress = http://localhost:5062
 
+### CRIAR CLIENTE - MARIA
+
 POST {{CoreBank.Api_HostAddress}}/api/Customers
 Content-Type: application/json
 Accept: application/json
@@ -9,6 +11,133 @@ Accept: application/json
   "cpf": "98765432100",
   "email": "maria@teste.com",
   "password": "Senha@123"
+}
+
+###
+
+### CRIAR CONTA - MARIA
+
+POST {{CoreBank.Api_HostAddress}}/api/Accounts
+Content-Type: application/json
+Accept: application/json
+
+{
+  "customerId": 2,
+  "agency": "0001",
+  "number": "10001"
+}
+
+###
+
+### CONSULTAR CONTA - MARIA
+
+GET {{CoreBank.Api_HostAddress}}/api/Accounts/1
+Accept: application/json
+
+###
+
+### REALIZAR DEPÓSITO
+
+POST {{CoreBank.Api_HostAddress}}/api/Accounts/1/deposit
+Content-Type: application/json
+Accept: application/json
+
+{
+  "amount": 500.00
+}
+
+###
+
+### REALIZAR SAQUE
+
+POST {{CoreBank.Api_HostAddress}}/api/Accounts/1/withdraw
+Content-Type: application/json
+Accept: application/json
+
+{
+  "amount": 1000.00
+}
+
+###
+
+### CRIAR CLIENTE - JOÃO
+
+POST {{CoreBank.Api_HostAddress}}/api/Customers
+Content-Type: application/json
+Accept: application/json
+
+{
+  "name": "João Souza",
+  "cpf": "11122233344",
+  "email": "joao@teste.com",
+  "password": "Senha@123"
+}
+
+###
+
+### CRIAR CONTA - JOÃO
+
+POST {{CoreBank.Api_HostAddress}}/api/Accounts
+Content-Type: application/json
+Accept: application/json
+
+{
+  "customerId": 3,
+  "agency": "0001",
+  "number": "10002"
+}
+
+###
+
+### TRANSFERIR DA MARIA PARA O JOÃO
+
+POST {{CoreBank.Api_HostAddress}}/api/Accounts/1/transfer
+Content-Type: application/json
+Accept: application/json
+
+{
+  "destinationAccountId": 2,
+  "amount": 100.00
+}
+
+###
+
+### CONSULTAR EXTRATO - MARIA
+
+GET {{CoreBank.Api_HostAddress}}/api/Accounts/1/statement
+Accept: application/json
+
+###
+
+### CONSULTAR EXTRATO - JOÃO
+
+GET {{CoreBank.Api_HostAddress}}/api/Accounts/2/statement
+Accept: application/json
+
+###
+
+### LOGIN - CORRETO
+
+POST {{CoreBank.Api_HostAddress}}/api/Auth/login
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "maria@teste.com",
+  "password": "Senha@123"
+}
+
+###
+
+### LOGIN - SENHA INCORRETA
+
+POST {{CoreBank.Api_HostAddress}}/api/Auth/login
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "maria@teste.com",
+  "password": "senhaerrada"
 }
 
 ###
