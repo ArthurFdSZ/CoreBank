@@ -1,9 +1,11 @@
 ﻿using CoreBank.Api.Dtos;
 using CoreBank.Domain.Entities;
 using CoreBank.Infrastructure.Persistence;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace CoreBank.Api.Controllers;
 
@@ -66,5 +68,38 @@ public class CustomersController : ControllerBase
                 customer.Email,
                 customer.CreatedAt
             });
+    }
+
+    // Retorna os dados do cliente autenticado.
+    [Authorize]
+    [HttpGet("me")]
+    public async Task<IActionResult> GetMe()
+    {
+        var customerIdClaim = User.FindFirstValue(
+            ClaimTypes.NameIdentifier);
+
+        if (!int.TryParse(customerIdClaim, out int customerId))
+        {
+            return Unauthorized();
+        }
+
+        var customer = await _context.Customers
+            .AsNoTracking()
+            .FirstOrDefaultAsync(customer =>
+                customer.Id == customerId);
+
+        if (customer is null)
+        {
+            return NotFound("Cliente não encontrado.");
+        }
+
+        return Ok(new
+        {
+            customer.Id,
+            customer.Name,
+            customer.Cpf,
+            customer.Email,
+            customer.CreatedAt
+        });
     }
 }

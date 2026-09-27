@@ -1,4 +1,5 @@
-@CoreBank.Api_HostAddress = http://localhost:5062
+@CoreBank.Api_HostAddress = https://localhost:7122
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjIiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiTWFyaWEgU2lsdmEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJtYXJpYUB0ZXN0ZS5jb20iLCJleHAiOjE3OTA0ODA4MzQsImlzcyI6IkNvcmVCYW5rLkFwaSIsImF1ZCI6IkNvcmVCYW5rLkNsaWVudCJ9.q8G44VPpE858k5DWItXJ_2TAnYMfJC0-_Ns_terzXfE
 
 ### CRIAR CLIENTE - MARIA
 
@@ -15,11 +16,36 @@ Accept: application/json
 
 ###
 
+### CONSULTAR MEUS DADOS
+
+GET {{CoreBank.Api_HostAddress}}/api/Customers/me
+Accept: application/json
+Authorization: Bearer {{token}}
+
+###
+
+### CONSULTAR MINHA CONTA
+
+GET {{CoreBank.Api_HostAddress}}/api/Accounts/me
+Accept: application/json
+Authorization: Bearer {{token}}
+
+###
+
+### CONSULTAR MEU EXTRATO
+
+GET {{CoreBank.Api_HostAddress}}/api/Accounts/me/statement
+Accept: application/json
+Authorization: Bearer {{token}}
+
+###
+
 ### CRIAR CONTA - MARIA
 
 POST {{CoreBank.Api_HostAddress}}/api/Accounts
 Content-Type: application/json
 Accept: application/json
+Authorization: Bearer {{token}}
 
 {
   "customerId": 2,
@@ -33,29 +59,32 @@ Accept: application/json
 
 GET {{CoreBank.Api_HostAddress}}/api/Accounts/1
 Accept: application/json
+Authorization: Bearer {{token}}
 
 ###
 
-### REALIZAR DEPÓSITO
+### REALIZAR DEPÓSITO - MARIA
 
 POST {{CoreBank.Api_HostAddress}}/api/Accounts/1/deposit
 Content-Type: application/json
 Accept: application/json
+Authorization: Bearer {{token}}
 
 {
-  "amount": 500.00
+  "amount": 10.00
 }
 
 ###
 
-### REALIZAR SAQUE
+### REALIZAR SAQUE - MARIA
 
 POST {{CoreBank.Api_HostAddress}}/api/Accounts/1/withdraw
 Content-Type: application/json
 Accept: application/json
+Authorization: Bearer {{token}}
 
 {
-  "amount": 1000.00
+  "amount": 100.00
 }
 
 ###
@@ -80,6 +109,7 @@ Accept: application/json
 POST {{CoreBank.Api_HostAddress}}/api/Accounts
 Content-Type: application/json
 Accept: application/json
+Authorization: Bearer {{token}}
 
 {
   "customerId": 3,
@@ -94,10 +124,11 @@ Accept: application/json
 POST {{CoreBank.Api_HostAddress}}/api/Accounts/1/transfer
 Content-Type: application/json
 Accept: application/json
+Authorization: Bearer {{token}}
 
 {
   "destinationAccountId": 2,
-  "amount": 100.00
+  "amount": 10.00
 }
 
 ###
@@ -106,13 +137,16 @@ Accept: application/json
 
 GET {{CoreBank.Api_HostAddress}}/api/Accounts/1/statement
 Accept: application/json
+Authorization: Bearer {{token}}
 
 ###
 
 ### CONSULTAR EXTRATO - JOÃO
+### Com o token da Maria, este teste deve retornar 403 Forbidden.
 
 GET {{CoreBank.Api_HostAddress}}/api/Accounts/2/statement
 Accept: application/json
+Authorization: Bearer {{token}}
 
 ###
 

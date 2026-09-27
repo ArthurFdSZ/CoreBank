@@ -17,7 +17,8 @@ builder.Services.AddDbContext<CoreBankDbContext>(options =>
 
 // Obtém as configurações do JWT.
 var jwtKey = builder.Configuration["Jwt:Key"]
-    ?? throw new InvalidOperationException("A chave JWT não foi configurada.");
+    ?? throw new InvalidOperationException(
+        "A chave JWT não foi configurada.");
 
 var jwtIssuer = builder.Configuration["Jwt:Issuer"];
 var jwtAudience = builder.Configuration["Jwt:Audience"];
@@ -61,10 +62,10 @@ app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseHttpsRedirection();
 
-// Verifica quem é o usuário através do token.
+// Identifica o usuário através do JWT.
 app.UseAuthentication();
 
-// Verifica se o usuário possui permissão para acessar o endpoint.
+// Verifica se o usuário possui autorização.
 app.UseAuthorization();
 
 app.MapControllers();
