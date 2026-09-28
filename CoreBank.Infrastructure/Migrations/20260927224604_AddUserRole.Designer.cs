@@ -4,6 +4,7 @@ using CoreBank.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CoreBank.Infrastructure.Migrations
 {
     [DbContext(typeof(CoreBankDbContext))]
-    partial class CoreBankDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260927224604_AddUserRole")]
+    partial class AddUserRole
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -62,36 +65,6 @@ namespace CoreBank.Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("Accounts");
-                });
-
-            modelBuilder.Entity("CoreBank.Domain.Entities.AccountRequest", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AccountId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("ReviewedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AccountId");
-
-                    b.ToTable("AccountRequests", (string)null);
                 });
 
             modelBuilder.Entity("CoreBank.Domain.Entities.Customer", b =>
@@ -184,15 +157,6 @@ namespace CoreBank.Infrastructure.Migrations
                     b.HasOne("CoreBank.Domain.Entities.Customer", null)
                         .WithOne()
                         .HasForeignKey("CoreBank.Domain.Entities.Account", "CustomerId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("CoreBank.Domain.Entities.AccountRequest", b =>
-                {
-                    b.HasOne("CoreBank.Domain.Entities.Account", null)
-                        .WithMany()
-                        .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });

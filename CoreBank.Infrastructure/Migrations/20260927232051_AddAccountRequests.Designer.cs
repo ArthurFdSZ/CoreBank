@@ -4,6 +4,7 @@ using CoreBank.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CoreBank.Infrastructure.Migrations
 {
     [DbContext(typeof(CoreBankDbContext))]
-    partial class CoreBankDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260927232051_AddAccountRequests")]
+    partial class AddAccountRequests
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -89,9 +92,7 @@ namespace CoreBank.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AccountId");
-
-                    b.ToTable("AccountRequests", (string)null);
+                    b.ToTable("AccountRequests");
                 });
 
             modelBuilder.Entity("CoreBank.Domain.Entities.Customer", b =>
@@ -184,15 +185,6 @@ namespace CoreBank.Infrastructure.Migrations
                     b.HasOne("CoreBank.Domain.Entities.Customer", null)
                         .WithOne()
                         .HasForeignKey("CoreBank.Domain.Entities.Account", "CustomerId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("CoreBank.Domain.Entities.AccountRequest", b =>
-                {
-                    b.HasOne("CoreBank.Domain.Entities.Account", null)
-                        .WithMany()
-                        .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });

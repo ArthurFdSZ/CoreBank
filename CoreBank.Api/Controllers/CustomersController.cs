@@ -1,5 +1,7 @@
 ﻿using CoreBank.Api.Dtos;
+using CoreBank.Api.Helpers;
 using CoreBank.Domain.Entities;
+using CoreBank.Domain.Enums;
 using CoreBank.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -20,6 +22,17 @@ public class CustomersController : ControllerBase
     {
         _context = context;
         _passwordHasher = new PasswordHasher<Customer>();
+    }
+
+    // Traduz o perfil interno do usuário para português.
+    private static string FormatUserRole(UserRole role)
+    {
+        return role switch
+        {
+            UserRole.Customer => "Cliente",
+            UserRole.Admin => "Administrador",
+            _ => "Desconhecido"
+        };
     }
 
     // Cadastra um novo cliente.
@@ -66,7 +79,9 @@ public class CustomersController : ControllerBase
                 customer.Name,
                 customer.Cpf,
                 customer.Email,
-                customer.CreatedAt
+                Role = FormatUserRole(customer.Role),
+                CreatedAt = DateTimeHelper.ToBrazilianDateTime(
+                    customer.CreatedAt)
             });
     }
 
@@ -99,7 +114,9 @@ public class CustomersController : ControllerBase
             customer.Name,
             customer.Cpf,
             customer.Email,
-            customer.CreatedAt
+            Role = FormatUserRole(customer.Role),
+            CreatedAt = DateTimeHelper.ToBrazilianDateTime(
+                customer.CreatedAt)
         });
     }
 }

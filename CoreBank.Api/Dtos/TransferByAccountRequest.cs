@@ -2,9 +2,9 @@
 
 namespace CoreBank.Api.Dtos;
 
-// Dados necessários para criar uma conta bancária
-// para o cliente autenticado.
-public class CreateAccountRequest
+// Dados necessários para realizar uma transferência
+// utilizando agência e número da conta de destino.
+public class TransferByAccountRequest
 {
     [Required(ErrorMessage = "A agência é obrigatória.")]
     [RegularExpression(
@@ -16,5 +16,11 @@ public class CreateAccountRequest
     [RegularExpression(
         @"^\d{5}$",
         ErrorMessage = "O número da conta deve possuir exatamente 5 números.")]
-    public string Number { get; set; } = string.Empty;
+    public string AccountNumber { get; set; } = string.Empty;
+
+    [Range(
+        0.01,
+        9999999999999999.99,
+        ErrorMessage = "O valor da transferência deve ser maior que zero.")]
+    public decimal Amount { get; set; }
 }

@@ -1,4 +1,5 @@
-﻿using CoreBank.Domain.Exceptions;
+﻿using CoreBank.Domain.Enums;
+using CoreBank.Domain.Exceptions;
 
 namespace CoreBank.Domain.Entities;
 
@@ -14,10 +15,18 @@ public class Customer
     // Armazena somente o hash da senha.
     public string PasswordHash { get; private set; } = string.Empty;
 
+    // Define o nível de acesso do usuário.
+    // Todo novo cadastro começa como cliente comum.
+    public UserRole Role { get; set; } = UserRole.Customer;
+
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     // Cria um cliente validando seus dados obrigatórios.
-    public Customer(string name, string cpf, string email, string passwordHash)
+    public Customer(
+        string name,
+        string cpf,
+        string email,
+        string passwordHash)
     {
         if (string.IsNullOrWhiteSpace(name))
         {

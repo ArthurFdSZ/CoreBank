@@ -1,4 +1,5 @@
 ﻿using CoreBank.Api.Dtos;
+using CoreBank.Api.Helpers;
 using CoreBank.Domain.Entities;
 using CoreBank.Domain.Enums;
 using CoreBank.Infrastructure.Persistence;
@@ -11,7 +12,7 @@ namespace CoreBank.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize]
+[Authorize(Roles = "Customer")]
 public class AccountsController : ControllerBase
 {
     private readonly CoreBankDbContext _context;
@@ -36,18 +37,37 @@ public class AccountsController : ControllerBase
         return customerId;
     }
 
+    // Traduz o status interno da conta para português.
+    private static string FormatAccountStatus(AccountStatus status)
+    {
+        return status switch
+        {
+            AccountStatus.Active => "Ativa",
+            AccountStatus.Blocked => "Bloqueada",
+            _ => "Desconhecido"
+        };
+    }
+
+    // Traduz o tipo interno da movimentação para português.
+    private static string FormatTransactionType(TransactionType type)
+    {
+        return type switch
+        {
+            TransactionType.Deposit => "Depósito",
+            TransactionType.Withdrawal => "Saque",
+            TransactionType.TransferSent => "Transferência enviada",
+            TransactionType.TransferReceived => "Transferência recebida",
+            _ => "Desconhecido"
+        };
+    }
+
     // Cria uma nova conta para o próprio cliente autenticado.
     [HttpPost]
-    public async Task<IActionResult> Create(CreateAccountRequest request)
+    public async Task<IActionResult> Create(
+        CreateAccountRequest request)
     {
         int authenticatedCustomerId =
             GetAuthenticatedCustomerId();
-
-        // Impede que um cliente crie uma conta para outro cliente.
-        if (request.CustomerId != authenticatedCustomerId)
-        {
-            return Forbid();
-        }
 
         bool customerExists = await _context.Customers
             .AnyAsync(customer =>
@@ -55,10 +75,10 @@ public class AccountsController : ControllerBase
 
         if (!customerExists)
         {
-            return NotFound("Cliente não encontrado.");
+            return NotFound(
+                "Cliente não encontrado.");
         }
 
-        // Cada cliente pode possuir apenas uma conta no MVP.
         bool customerHasAccount = await _context.Accounts
             .AnyAsync(account =>
                 account.CustomerId == authenticatedCustomerId);
@@ -69,7 +89,6 @@ public class AccountsController : ControllerBase
                 "O cliente já possui uma conta.");
         }
 
-        // Impede agência + número duplicados.
         bool accountExists = await _context.Accounts
             .AnyAsync(account =>
                 account.Agency == request.Agency &&
@@ -89,6 +108,7 @@ public class AccountsController : ControllerBase
         };
 
         _context.Accounts.Add(account);
+
         await _context.SaveChangesAsync();
 
         return Created(
@@ -100,9 +120,11 @@ public class AccountsController : ControllerBase
                 account.Agency,
                 account.Number,
                 account.Balance,
-                account.Status,
-                CreatedAt = account.CreatedAt.ToString(
-                    "dd/MM/yyyy HH:mm:ss")
+                Status = FormatAccountStatus(
+                    account.Status),
+                CreatedAt =
+                    DateTimeHelper.ToBrazilianDateTime(
+                        account.CreatedAt)
             });
     }
 
@@ -116,11 +138,13 @@ public class AccountsController : ControllerBase
         var account = await _context.Accounts
             .AsNoTracking()
             .FirstOrDefaultAsync(account =>
-                account.CustomerId == authenticatedCustomerId);
+                account.CustomerId ==
+                authenticatedCustomerId);
 
         if (account is null)
         {
-            return NotFound("Conta não encontrada.");
+            return NotFound(
+                "Conta não encontrada.");
         }
 
         return Ok(new
@@ -130,9 +154,11 @@ public class AccountsController : ControllerBase
             account.Agency,
             account.Number,
             account.Balance,
-            account.Status,
-            CreatedAt = account.CreatedAt.ToString(
-                "dd/MM/yyyy HH:mm:ss")
+            Status = FormatAccountStatus(
+                account.Status),
+            CreatedAt =
+                DateTimeHelper.ToBrazilianDateTime(
+                    account.CreatedAt)
         });
     }
 
@@ -146,11 +172,13 @@ public class AccountsController : ControllerBase
         var account = await _context.Accounts
             .AsNoTracking()
             .FirstOrDefaultAsync(account =>
-                account.CustomerId == authenticatedCustomerId);
+                account.CustomerId ==
+                authenticatedCustomerId);
 
         if (account is null)
         {
-            return NotFound("Conta não encontrada.");
+            return NotFound(
+                "Conta não encontrada.");
         }
 
         var transactions = await _context.Transactions
@@ -165,12 +193,14 @@ public class AccountsController : ControllerBase
             .Select(transaction => new
             {
                 transaction.Id,
-                transaction.Type,
+                Type = FormatTransactionType(
+                    transaction.Type),
                 transaction.Amount,
                 transaction.Description,
                 transaction.RelatedAccountId,
-                CreatedAt = transaction.CreatedAt.ToString(
-                    "dd/MM/yyyy HH:mm:ss")
+                CreatedAt =
+                    DateTimeHelper.ToBrazilianDateTime(
+                        transaction.CreatedAt)
             })
             .ToList();
 
@@ -180,49 +210,15 @@ public class AccountsController : ControllerBase
             account.Agency,
             account.Number,
             account.Balance,
+            Status = FormatAccountStatus(
+                account.Status),
             Transactions = formattedTransactions
         });
     }
 
-    // Consulta uma conta pelo ID.
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetById(int id)
-    {
-        int authenticatedCustomerId =
-            GetAuthenticatedCustomerId();
-
-        var account = await _context.Accounts
-            .AsNoTracking()
-            .FirstOrDefaultAsync(account =>
-                account.Id == id);
-
-        if (account is null)
-        {
-            return NotFound("Conta não encontrada.");
-        }
-
-        if (account.CustomerId != authenticatedCustomerId)
-        {
-            return Forbid();
-        }
-
-        return Ok(new
-        {
-            account.Id,
-            account.CustomerId,
-            account.Agency,
-            account.Number,
-            account.Balance,
-            account.Status,
-            CreatedAt = account.CreatedAt.ToString(
-                "dd/MM/yyyy HH:mm:ss")
-        });
-    }
-
-    // Realiza um depósito e registra a movimentação.
-    [HttpPost("{id}/deposit")]
-    public async Task<IActionResult> Deposit(
-        int id,
+    // Realiza um depósito na conta do cliente autenticado.
+    [HttpPost("me/deposit")]
+    public async Task<IActionResult> DepositMyAccount(
         DepositRequest request)
     {
         int authenticatedCustomerId =
@@ -230,16 +226,13 @@ public class AccountsController : ControllerBase
 
         var account = await _context.Accounts
             .FirstOrDefaultAsync(account =>
-                account.Id == id);
+                account.CustomerId ==
+                authenticatedCustomerId);
 
         if (account is null)
         {
-            return NotFound("Conta não encontrada.");
-        }
-
-        if (account.CustomerId != authenticatedCustomerId)
-        {
-            return Forbid();
+            return NotFound(
+                "Conta não encontrada.");
         }
 
         account.Deposit(request.Amount);
@@ -253,6 +246,7 @@ public class AccountsController : ControllerBase
         };
 
         _context.Transactions.Add(transaction);
+
         await _context.SaveChangesAsync();
 
         return Ok(new
@@ -263,10 +257,9 @@ public class AccountsController : ControllerBase
         });
     }
 
-    // Realiza um saque e registra a movimentação.
-    [HttpPost("{id}/withdraw")]
-    public async Task<IActionResult> Withdraw(
-        int id,
+    // Realiza um saque na conta do cliente autenticado.
+    [HttpPost("me/withdraw")]
+    public async Task<IActionResult> WithdrawMyAccount(
         WithdrawRequest request)
     {
         int authenticatedCustomerId =
@@ -274,16 +267,13 @@ public class AccountsController : ControllerBase
 
         var account = await _context.Accounts
             .FirstOrDefaultAsync(account =>
-                account.Id == id);
+                account.CustomerId ==
+                authenticatedCustomerId);
 
         if (account is null)
         {
-            return NotFound("Conta não encontrada.");
-        }
-
-        if (account.CustomerId != authenticatedCustomerId)
-        {
-            return Forbid();
+            return NotFound(
+                "Conta não encontrada.");
         }
 
         account.Withdraw(request.Amount);
@@ -297,6 +287,7 @@ public class AccountsController : ControllerBase
         };
 
         _context.Transactions.Add(transaction);
+
         await _context.SaveChangesAsync();
 
         return Ok(new
@@ -307,18 +298,19 @@ public class AccountsController : ControllerBase
         });
     }
 
-    // Transfere dinheiro da conta autenticada para outra conta.
-    [HttpPost("{id}/transfer")]
-    public async Task<IActionResult> Transfer(
-        int id,
-        TransferRequest request)
+    // Transfere dinheiro da conta autenticada utilizando
+    // agência e número da conta de destino.
+    [HttpPost("me/transfer")]
+    public async Task<IActionResult> TransferMyAccount(
+        TransferByAccountRequest request)
     {
         int authenticatedCustomerId =
             GetAuthenticatedCustomerId();
 
         var sourceAccount = await _context.Accounts
             .FirstOrDefaultAsync(account =>
-                account.Id == id);
+                account.CustomerId ==
+                authenticatedCustomerId);
 
         if (sourceAccount is null)
         {
@@ -326,19 +318,21 @@ public class AccountsController : ControllerBase
                 "Conta de origem não encontrada.");
         }
 
-        if (sourceAccount.CustomerId != authenticatedCustomerId)
-        {
-            return Forbid();
-        }
-
         var destinationAccount = await _context.Accounts
             .FirstOrDefaultAsync(account =>
-                account.Id == request.DestinationAccountId);
+                account.Agency == request.Agency &&
+                account.Number == request.AccountNumber);
 
         if (destinationAccount is null)
         {
             return NotFound(
                 "Conta de destino não encontrada.");
+        }
+
+        if (destinationAccount.Id == sourceAccount.Id)
+        {
+            return BadRequest(
+                "Não é possível transferir para a própria conta.");
         }
 
         sourceAccount.TransferTo(
@@ -363,24 +357,30 @@ public class AccountsController : ControllerBase
             RelatedAccountId = sourceAccount.Id
         };
 
-        _context.Transactions.Add(outgoingTransaction);
-        _context.Transactions.Add(incomingTransaction);
+        _context.Transactions.Add(
+            outgoingTransaction);
+
+        _context.Transactions.Add(
+            incomingTransaction);
 
         await _context.SaveChangesAsync();
 
         return Ok(new
         {
             SourceAccountId = sourceAccount.Id,
-            DestinationAccountId = destinationAccount.Id,
+            DestinationAgency =
+                destinationAccount.Agency,
+            DestinationAccountNumber =
+                destinationAccount.Number,
             TransferredAmount = request.Amount,
-            SourceBalance = sourceAccount.Balance,
-            DestinationBalance = destinationAccount.Balance
+            SourceBalance = sourceAccount.Balance
         });
     }
 
-    // Retorna o extrato de uma conta pelo ID.
-    [HttpGet("{id}/statement")]
-    public async Task<IActionResult> GetStatement(int id)
+    // Consulta uma conta pelo ID.
+    // Utilizado também para validar autorização entre clientes.
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetById(int id)
     {
         int authenticatedCustomerId =
             GetAuthenticatedCustomerId();
@@ -392,42 +392,28 @@ public class AccountsController : ControllerBase
 
         if (account is null)
         {
-            return NotFound("Conta não encontrada.");
+            return NotFound(
+                "Conta não encontrada.");
         }
 
-        if (account.CustomerId != authenticatedCustomerId)
+        if (account.CustomerId !=
+            authenticatedCustomerId)
         {
             return Forbid();
         }
 
-        var transactions = await _context.Transactions
-            .AsNoTracking()
-            .Where(transaction =>
-                transaction.AccountId == id)
-            .OrderByDescending(transaction =>
-                transaction.CreatedAt)
-            .ToListAsync();
-
-        var formattedTransactions = transactions
-            .Select(transaction => new
-            {
-                transaction.Id,
-                transaction.Type,
-                transaction.Amount,
-                transaction.Description,
-                transaction.RelatedAccountId,
-                CreatedAt = transaction.CreatedAt.ToString(
-                    "dd/MM/yyyy HH:mm:ss")
-            })
-            .ToList();
-
         return Ok(new
         {
-            AccountId = account.Id,
+            account.Id,
+            account.CustomerId,
             account.Agency,
             account.Number,
             account.Balance,
-            Transactions = formattedTransactions
+            Status = FormatAccountStatus(
+                account.Status),
+            CreatedAt =
+                DateTimeHelper.ToBrazilianDateTime(
+                    account.CreatedAt)
         });
     }
 }

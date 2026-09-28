@@ -23,9 +23,6 @@ public class Transaction
     // Conta relacionada, utilizada principalmente em transferências.
     public int? RelatedAccountId { get; set; }
 
-    // Data e hora da movimentação no horário de Brasília.
-    public DateTime CreatedAt { get; set; } =
-        TimeZoneInfo.ConvertTimeBySystemTimeZoneId(
-            DateTime.UtcNow,
-            "E. South America Standard Time");
+    // Data e hora da movimentação armazenada em UTC.
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 }

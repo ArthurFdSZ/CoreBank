@@ -1,5 +1,6 @@
 ﻿using CoreBank.Api.Dtos;
 using CoreBank.Domain.Entities;
+using CoreBank.Domain.Enums;
 using CoreBank.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -28,6 +29,17 @@ public class AuthController : ControllerBase
         _passwordHasher = new PasswordHasher<Customer>();
     }
 
+    // Traduz o perfil interno para o texto exibido ao usuário.
+    private static string FormatUserRole(UserRole role)
+    {
+        return role switch
+        {
+            UserRole.Customer => "Cliente",
+            UserRole.Admin => "Administrador",
+            _ => "Desconhecido"
+        };
+    }
+
     // Realiza o login e gera um token JWT.
     [HttpPost("login")]
     public async Task<IActionResult> Login(LoginRequest request)
@@ -38,7 +50,10 @@ public class AuthController : ControllerBase
 
         if (customer is null)
         {
-            return Unauthorized("E-mail ou senha inválidos.");
+            return Unauthorized(new
+            {
+                mensagem = "E-mail ou senha inválidos."
+            });
         }
 
         var passwordResult = _passwordHasher.VerifyHashedPassword(
@@ -48,7 +63,10 @@ public class AuthController : ControllerBase
 
         if (passwordResult == PasswordVerificationResult.Failed)
         {
-            return Unauthorized("E-mail ou senha inválidos.");
+            return Unauthorized(new
+            {
+                mensagem = "E-mail ou senha inválidos."
+            });
         }
 
         string token = GenerateToken(customer);
@@ -58,19 +76,25 @@ public class AuthController : ControllerBase
             customer.Id,
             customer.Name,
             customer.Email,
+            Perfil = FormatUserRole(customer.Role),
             Token = token
         });
     }
 
-    // Gera o JWT do cliente autenticado.
+    // Gera o JWT do usuário autenticado.
     private string GenerateToken(Customer customer)
     {
         var jwtKey = _configuration["Jwt:Key"]
             ?? throw new InvalidOperationException(
                 "A chave JWT não foi configurada.");
 
-        var jwtIssuer = _configuration["Jwt:Issuer"];
-        var jwtAudience = _configuration["Jwt:Audience"];
+        var jwtIssuer = _configuration["Jwt:Issuer"]
+            ?? throw new InvalidOperationException(
+                "O emissor do JWT não foi configurado.");
+
+        var jwtAudience = _configuration["Jwt:Audience"]
+            ?? throw new InvalidOperationException(
+                "A audiência do JWT não foi configurada.");
 
         var claims = new[]
         {
@@ -84,7 +108,13 @@ public class AuthController : ControllerBase
 
             new Claim(
                 ClaimTypes.Email,
-                customer.Email)
+                customer.Email),
+
+            // Mantido internamente em inglês.
+            // É este valor que o ASP.NET usa para autorização.
+            new Claim(
+                ClaimTypes.Role,
+                customer.Role.ToString())
         };
 
         var securityKey = new SymmetricSecurityKey(
