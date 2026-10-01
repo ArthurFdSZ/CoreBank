@@ -1,7 +1,7 @@
 @CoreBank.Api_HostAddress = https://localhost:7122
 
 # Cole abaixo os tokens atuais antes dos testes.
-@customerToken = colar_aqui_o_token_do_cliente
+@customerToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjQiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiVGVzdGUgQ29yZUJhbmsiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJ0ZXN0ZUBjb3JlYmFuay5jb20iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJDdXN0b21lciIsImV4cCI6MTc5MDgyMTk1OCwiaXNzIjoiQ29yZUJhbmsuQXBpIiwiYXVkIjoiQ29yZUJhbmsuQ2xpZW50In0.V4jKtTG5gU_pqiaQFef93h4dVXZQg3T_o4s8v4hVcnY
 @adminToken = colar_aqui_o_token_do_administrador
 
 ### ============================================================
@@ -23,7 +23,19 @@ Accept: application/json
 
 ###
 
+### Criar cliente para teste do Login
 
+### Criar cliente exclusivo para teste do Login
+
+POST https://localhost:7122/api/Customers
+Content-Type: application/json
+
+{
+  "name": "adm CoreBank",
+  "cpf": "71992806020",
+  "email": "adm@corebank.com",
+  "password": "CoreBank@123"
+}
 ### ============================================================
 ### 2. ENDPOINT COM TOKEN INVÁLIDO
 ### ============================================================
@@ -89,5 +101,34 @@ Authorization: Bearer {{adminToken}}
 GET {{CoreBank.Api_HostAddress}}/api/Accounts/me/statement
 Accept: application/json
 Authorization: Bearer {{customerToken}}
+
+###
+
+### ============================================================
+### LOGIN - TESTE COREBANK
+### ============================================================
+
+POST {{CoreBank.Api_HostAddress}}/api/Auth/login
+Content-Type: application/json
+
+{
+  "email": "teste@corebank.com",
+  "password": "CoreBank@456"
+}
+
+###
+
+### ============================================================
+### CRIAR CONTA - TESTE COREBANK
+### ============================================================
+
+POST {{CoreBank.Api_HostAddress}}/api/Accounts
+Content-Type: application/json
+Authorization: Bearer {{customerToken}}
+
+{
+  "agency": "0001",
+  "number": "00001"
+}
 
 ###

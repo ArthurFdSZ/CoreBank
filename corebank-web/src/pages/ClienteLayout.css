@@ -1,0 +1,341 @@
+/* =========================================================
+   COREBANK - PADRÃO VISUAL COMPARTILHADO DA ÁREA DO CLIENTE
+   Mantém sidebar, escala e background iguais em todas as telas.
+   ========================================================= */
+
+.dashboard-page,
+.trans-page,
+.extrato-page,
+.solicitacoes-page,
+.perfil-page {
+    --sidebar-width: 270px;
+    position: relative;
+    isolation: isolate;
+    display: block;
+    width: 100%;
+    min-height: 100vh;
+    overflow-x: hidden;
+    color: #f4f5f6;
+    font-family: Inter, Arial, Helvetica, sans-serif;
+    background-color: #050709;
+}
+
+    .dashboard-page.sidebar-collapsed,
+    .trans-page.sidebar-collapsed,
+    .extrato-page.sidebar-collapsed,
+    .solicitacoes-page.sidebar-collapsed,
+    .perfil-page.sidebar-collapsed {
+        --sidebar-width: 82px;
+    }
+
+    /* Mesmo background da Home */
+    .dashboard-page::before,
+    .trans-page::before,
+    .extrato-page::before,
+    .solicitacoes-page::before,
+    .perfil-page::before {
+        content: "";
+        position: fixed;
+        z-index: -2;
+        top: -4%;
+        left: -4%;
+        width: 108%;
+        height: 108%;
+        background-image: url("/images/Backgrounddash.png");
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+        filter: brightness(0.42) contrast(1.12) saturate(0.7);
+        transform: scale(1.04);
+        animation: corebankBackgroundMove 24s ease-in-out infinite alternate;
+        pointer-events: none;
+    }
+
+    .dashboard-page::after,
+    .trans-page::after,
+    .extrato-page::after,
+    .solicitacoes-page::after,
+    .perfil-page::after {
+        content: "";
+        position: fixed;
+        z-index: -1;
+        inset: 0;
+        background: radial-gradient(circle at 72% 15%, rgba(185, 195, 205, 0.07), transparent 32%), linear-gradient(115deg, rgba(2, 6, 10, 0.87) 0%, rgba(5, 9, 13, 0.74) 48%, rgba(2, 5, 8, 0.82) 100%);
+        pointer-events: none;
+    }
+
+@keyframes corebankBackgroundMove {
+    0% {
+        transform: scale(1.04) translate3d(0, 0, 0);
+        background-position: 50% 50%;
+    }
+
+    50% {
+        transform: scale(1.08) translate3d(-0.8%, -0.5%, 0);
+        background-position: 52% 48%;
+    }
+
+    100% {
+        transform: scale(1.06) translate3d(0.8%, 0.5%, 0);
+        background-position: 48% 52%;
+    }
+}
+
+/* Sidebar idêntica à Home */
+.dashboard-sidebar,
+.trans-sidebar,
+.extrato-sidebar,
+.solicitacoes-sidebar,
+.perfil-sidebar {
+    position: fixed;
+    z-index: 20;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: var(--sidebar-width);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: 28px 18px 22px;
+    border-right: 1px solid rgba(214, 220, 226, 0.16);
+    background: linear-gradient(180deg, rgba(12, 17, 22, 0.72), rgba(5, 9, 13, 0.68));
+    box-shadow: 10px 0 40px rgba(0, 0, 0, 0.25), inset -1px 0 rgba(255, 255, 255, 0.025);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    transition: width 0.25s ease, padding 0.25s ease;
+}
+
+.sidebar-header {
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 32px;
+    padding: 0;
+}
+
+.corebank-logo {
+    display: flex;
+    padding-left: 10px;
+    font-size: 22px;
+    font-weight: 700;
+    line-height: normal;
+    white-space: nowrap;
+    letter-spacing: -0.8px;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+}
+
+.corebank-core {
+    color: #f5f6f7;
+}
+
+.corebank-bank,
+.logo-bank {
+    color: #aeb7bf;
+}
+
+.sidebar-toggle {
+    width: 38px;
+    min-width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(220, 225, 230, 0.28);
+    border-radius: 10px;
+    background: linear-gradient(145deg, rgba(183, 192, 200, 0.15), rgba(69, 78, 87, 0.12));
+    color: #f3f5f7;
+    font-size: 27px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.dashboard-nav,
+.trans-nav,
+.extrato-nav,
+.solicitacoes-nav,
+.perfil-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 0;
+}
+
+.nav-item,
+.logout-button {
+    width: 100%;
+    height: 50px;
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 0 15px;
+    border: 1px solid transparent;
+    border-radius: 11px;
+    background: transparent;
+    color: rgba(211, 218, 225, 0.68);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+    .nav-item:hover,
+    .logout-button:hover {
+        color: #fff;
+        border-color: rgba(205, 213, 220, 0.09);
+        background: rgba(204, 211, 217, 0.07);
+    }
+
+    .nav-item.active {
+        border-color: rgba(215, 222, 228, 0.25);
+        background: linear-gradient(90deg, rgba(194, 202, 209, 0.19), rgba(90, 101, 111, 0.08));
+        box-shadow: inset 0 1px rgba(255,255,255,0.05), 0 8px 22px rgba(0,0,0,0.13);
+        color: #fff;
+    }
+
+.nav-icon,
+.logout-icon {
+    width: 20px;
+    min-width: 20px;
+    text-align: center;
+    font-size: 17px;
+}
+
+.sidebar-footer {
+    margin-top: auto;
+}
+
+.security-box {
+    min-height: 58px;
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    margin-bottom: 14px;
+    padding: 12px 14px;
+    border: 1px solid rgba(204, 212, 219, 0.13);
+    border-radius: 11px;
+    background: rgba(178, 189, 198, 0.055);
+}
+
+.security-icon {
+    color: #cbd2d8;
+    font-size: inherit;
+}
+
+.security-text {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    white-space: nowrap;
+}
+
+    .security-text strong {
+        color: rgba(237,240,243,0.82);
+        font-size: 10px;
+    }
+
+    .security-text small {
+        color: rgba(188,197,205,0.5);
+        font-size: 9px;
+    }
+
+/* Conteúdo com a mesma escala e alinhamento da Home */
+.dashboard-content,
+.trans-content,
+.extrato-content,
+.solicitacoes-content,
+.perfil-content {
+    position: relative;
+    z-index: 1;
+    width: calc(100% - var(--sidebar-width));
+    min-height: 100vh;
+    margin-left: var(--sidebar-width);
+    padding: 42px clamp(32px, 4.5vw, 72px) 35px;
+    transition: width 0.25s ease, margin-left 0.25s ease;
+}
+
+/* Recolhimento igual em todas */
+.sidebar-collapsed .dashboard-sidebar,
+.sidebar-collapsed .trans-sidebar,
+.sidebar-collapsed .extrato-sidebar,
+.sidebar-collapsed .solicitacoes-sidebar,
+.sidebar-collapsed .perfil-sidebar {
+    padding: 28px 13px 22px;
+}
+
+.sidebar-collapsed .sidebar-header {
+    justify-content: center;
+}
+
+.sidebar-collapsed .corebank-logo {
+    display: none;
+}
+
+.sidebar-collapsed .nav-item,
+.sidebar-collapsed .logout-button {
+    justify-content: center;
+    padding: 0;
+}
+
+.sidebar-collapsed .nav-text {
+    display: none;
+}
+
+.sidebar-collapsed .security-box {
+    justify-content: center;
+    padding: 0;
+}
+
+.sidebar-collapsed .security-text {
+    display: none;
+}
+
+@media (max-width: 900px) {
+    .dashboard-page,
+    .trans-page,
+    .extrato-page,
+    .solicitacoes-page,
+    .perfil-page {
+        --sidebar-width: 82px;
+    }
+
+    .dashboard-sidebar,
+    .trans-sidebar,
+    .extrato-sidebar,
+    .solicitacoes-sidebar,
+    .perfil-sidebar {
+        padding: 28px 13px 22px;
+    }
+
+    .corebank-logo,
+    .nav-text,
+    .security-text {
+        display: none;
+    }
+
+    .sidebar-header,
+    .nav-item,
+    .logout-button,
+    .security-box {
+        justify-content: center;
+    }
+
+    .nav-item,
+    .logout-button,
+    .security-box {
+        padding-left: 0;
+        padding-right: 0;
+    }
+}
+
+@media (max-width: 700px) {
+    .dashboard-content,
+    .trans-content,
+    .extrato-content,
+    .solicitacoes-content,
+    .perfil-content {
+        padding: 28px 18px 35px;
+    }
+}

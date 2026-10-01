@@ -9,7 +9,9 @@ public class Customer
     public int Id { get; set; }
 
     public string Name { get; private set; } = string.Empty;
+
     public string Cpf { get; private set; } = string.Empty;
+
     public string Email { get; private set; } = string.Empty;
 
     // Armazena somente o hash da senha.
@@ -30,27 +32,44 @@ public class Customer
     {
         if (string.IsNullOrWhiteSpace(name))
         {
-            throw new DomainException("O nome é obrigatório.");
+            throw new DomainException(
+                "O nome é obrigatório.");
         }
 
         if (string.IsNullOrWhiteSpace(cpf))
         {
-            throw new DomainException("O CPF é obrigatório.");
+            throw new DomainException(
+                "O CPF é obrigatório.");
         }
 
         if (string.IsNullOrWhiteSpace(email))
         {
-            throw new DomainException("O e-mail é obrigatório.");
+            throw new DomainException(
+                "O e-mail é obrigatório.");
         }
 
         if (string.IsNullOrWhiteSpace(passwordHash))
         {
-            throw new DomainException("A senha é obrigatória.");
+            throw new DomainException(
+                "A senha é obrigatória.");
         }
 
         Name = name;
         Cpf = cpf;
         Email = email;
         PasswordHash = passwordHash;
+    }
+
+    // Atualiza o hash da senha do cliente.
+    // A senha em texto puro nunca é armazenada nesta entidade.
+    public void ChangePasswordHash(string newPasswordHash)
+    {
+        if (string.IsNullOrWhiteSpace(newPasswordHash))
+        {
+            throw new DomainException(
+                "A nova senha é obrigatória.");
+        }
+
+        PasswordHash = newPasswordHash;
     }
 }

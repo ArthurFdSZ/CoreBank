@@ -19,7 +19,11 @@ public class AdminController : ControllerBase
         _context = context;
     }
 
-    // Traduz o tipo interno da solicitação para português.
+    // =========================================================
+    // FORMATAÇÕES
+    // =========================================================
+
+    // Traduz o tipo interno da solicitação de conta.
     private static string FormatRequestType(AccountRequestType type)
     {
         return type switch
@@ -30,7 +34,7 @@ public class AdminController : ControllerBase
         };
     }
 
-    // Traduz o status interno da solicitação para português.
+    // Traduz o status interno da solicitação de conta.
     private static string FormatRequestStatus(AccountRequestStatus status)
     {
         return status switch
@@ -42,7 +46,7 @@ public class AdminController : ControllerBase
         };
     }
 
-    // Traduz o status interno da conta para português.
+    // Traduz o status interno da conta.
     private static string FormatAccountStatus(AccountStatus status)
     {
         return status switch
@@ -53,7 +57,24 @@ public class AdminController : ControllerBase
         };
     }
 
-    // Endpoint simples para validar o acesso administrativo.
+    // Traduz o status interno da recuperação de senha.
+    private static string FormatPasswordResetStatus(
+        PasswordResetRequestStatus status)
+    {
+        return status switch
+        {
+            PasswordResetRequestStatus.Pending => "Pendente",
+            PasswordResetRequestStatus.Approved => "Aprovada",
+            PasswordResetRequestStatus.Rejected => "Recusada",
+            PasswordResetRequestStatus.Completed => "Concluída",
+            _ => "Desconhecido"
+        };
+    }
+
+    // =========================================================
+    // TESTE DE ACESSO ADMINISTRATIVO
+    // =========================================================
+
     [HttpGet("test")]
     public IActionResult Test()
     {
@@ -63,7 +84,11 @@ public class AdminController : ControllerBase
         });
     }
 
-    // Retorna todas as solicitações que aguardam análise.
+    // =========================================================
+    // SOLICITAÇÕES DE BLOQUEIO / DESBLOQUEIO
+    // =========================================================
+
+    // Retorna todas as solicitações de conta pendentes.
     [HttpGet("account-requests/pending")]
     public async Task<IActionResult> GetPendingAccountRequests()
     {
@@ -98,6 +123,7 @@ public class AdminController : ControllerBase
                 SolicitacaoId = request.Id,
                 Tipo = FormatRequestType(request.Type),
                 Status = FormatRequestStatus(request.Status),
+
                 DataSolicitacao =
                     DateTimeHelper.ToBrazilianDateTime(
                         request.CreatedAt),
@@ -115,7 +141,7 @@ public class AdminController : ControllerBase
         return Ok(result);
     }
 
-    // Retorna o histórico completo de solicitações.
+    // Retorna o histórico completo das solicitações de conta.
     [HttpGet("account-requests")]
     public async Task<IActionResult> GetAccountRequestsHistory()
     {
@@ -161,6 +187,7 @@ public class AdminController : ControllerBase
                 ContaId = account.Id,
                 Agencia = account.Agency,
                 NumeroConta = account.Number,
+
                 StatusConta =
                     FormatAccountStatus(account.Status),
 
@@ -183,7 +210,8 @@ public class AdminController : ControllerBase
 
         if (request is null)
         {
-            return NotFound("Solicitação não encontrada.");
+            return NotFound(
+                "Solicitação não encontrada.");
         }
 
         if (request.Status != AccountRequestStatus.Pending)
@@ -202,7 +230,6 @@ public class AdminController : ControllerBase
                 "Conta relacionada à solicitação não encontrada.");
         }
 
-        // Executa a ação solicitada pelo cliente.
         switch (request.Type)
         {
             case AccountRequestType.Block:
@@ -224,20 +251,27 @@ public class AdminController : ControllerBase
 
         return Ok(new
         {
-            Mensagem = "Solicitação aprovada com sucesso.",
+            Mensagem =
+                "Solicitação aprovada com sucesso.",
+
             SolicitacaoId = request.Id,
-            Tipo = FormatRequestType(request.Type),
+
+            Tipo =
+                FormatRequestType(request.Type),
+
             StatusSolicitacao =
                 FormatRequestStatus(request.Status),
+
             StatusConta =
                 FormatAccountStatus(account.Status),
+
             DataAnalise =
                 DateTimeHelper.ToBrazilianDateTime(
                     request.ReviewedAt)
         });
     }
 
-    // Rejeita uma solicitação sem alterar o status da conta.
+    // Rejeita uma solicitação de bloqueio/desbloqueio.
     [HttpPost("account-requests/{id}/reject")]
     public async Task<IActionResult> RejectAccountRequest(int id)
     {
@@ -247,7 +281,8 @@ public class AdminController : ControllerBase
 
         if (request is null)
         {
-            return NotFound("Solicitação não encontrada.");
+            return NotFound(
+                "Solicitação não encontrada.");
         }
 
         if (request.Status != AccountRequestStatus.Pending)
@@ -273,14 +308,265 @@ public class AdminController : ControllerBase
 
         return Ok(new
         {
-            Mensagem = "Solicitação rejeitada com sucesso.",
+            Mensagem =
+                "Solicitação rejeitada com sucesso.",
+
             SolicitacaoId = request.Id,
-            Tipo = FormatRequestType(request.Type),
+
+            Tipo =
+                FormatRequestType(request.Type),
+
             StatusSolicitacao =
                 FormatRequestStatus(request.Status),
+
             StatusConta =
                 FormatAccountStatus(account.Status),
+
             DataAnalise =
+                DateTimeHelper.ToBrazilianDateTime(
+                    request.ReviewedAt)
+        });
+    }
+
+    // =========================================================
+    // RECUPERAÇÃO DE SENHA
+    // =========================================================
+
+    // Retorna somente as solicitações de recuperação
+    // de senha que aguardam análise do administrador.
+    [HttpGet("password-reset-requests/pending")]
+    public async Task<IActionResult>
+        GetPendingPasswordResetRequests()
+    {
+        var requests = await _context.PasswordResetRequests
+            .AsNoTracking()
+            .Where(request =>
+                request.Status ==
+                PasswordResetRequestStatus.Pending)
+            .OrderBy(request => request.CreatedAt)
+            .ToListAsync();
+
+        var result = new List<object>();
+
+        foreach (var request in requests)
+        {
+            var customer = await _context.Customers
+                .AsNoTracking()
+                .FirstOrDefaultAsync(customer =>
+                    customer.Id == request.CustomerId);
+
+            if (customer is null)
+            {
+                continue;
+            }
+
+            result.Add(new
+            {
+                SolicitacaoId = request.Id,
+
+                Status =
+                    FormatPasswordResetStatus(
+                        request.Status),
+
+                DataSolicitacao =
+                    DateTimeHelper.ToBrazilianDateTime(
+                        request.CreatedAt),
+
+                ClienteId = customer.Id,
+                NomeCliente = customer.Name,
+                EmailCliente = customer.Email,
+                CpfCliente = customer.Cpf
+            });
+        }
+
+        return Ok(result);
+    }
+
+    // Retorna o histórico completo de solicitações
+    // de recuperação de senha.
+    [HttpGet("password-reset-requests")]
+    public async Task<IActionResult>
+        GetPasswordResetRequestsHistory()
+    {
+        var requests = await _context.PasswordResetRequests
+            .AsNoTracking()
+            .OrderByDescending(request =>
+                request.CreatedAt)
+            .ToListAsync();
+
+        var result = new List<object>();
+
+        foreach (var request in requests)
+        {
+            var customer = await _context.Customers
+                .AsNoTracking()
+                .FirstOrDefaultAsync(customer =>
+                    customer.Id == request.CustomerId);
+
+            if (customer is null)
+            {
+                continue;
+            }
+
+            result.Add(new
+            {
+                SolicitacaoId = request.Id,
+
+                Status =
+                    FormatPasswordResetStatus(
+                        request.Status),
+
+                DataSolicitacao =
+                    DateTimeHelper.ToBrazilianDateTime(
+                        request.CreatedAt),
+
+                DataAnalise =
+                    DateTimeHelper.ToBrazilianDateTime(
+                        request.ReviewedAt),
+
+                DataConclusao =
+                    DateTimeHelper.ToBrazilianDateTime(
+                        request.CompletedAt),
+
+                ClienteId = customer.Id,
+                NomeCliente = customer.Name,
+                EmailCliente = customer.Email,
+                CpfCliente = customer.Cpf
+            });
+        }
+
+        return Ok(result);
+    }
+
+    // Aprova uma solicitação de recuperação de senha.
+    [HttpPost("password-reset-requests/{id}/approve")]
+    public async Task<IActionResult>
+        ApprovePasswordResetRequest(int id)
+    {
+        var request = await _context.PasswordResetRequests
+            .FirstOrDefaultAsync(request =>
+                request.Id == id);
+
+        if (request is null)
+        {
+            return NotFound(new
+            {
+                mensagem =
+                    "Solicitação de recuperação de senha não encontrada."
+            });
+        }
+
+        if (request.Status !=
+            PasswordResetRequestStatus.Pending)
+        {
+            return BadRequest(new
+            {
+                mensagem =
+                    "A solicitação já foi analisada."
+            });
+        }
+
+        var customer = await _context.Customers
+            .AsNoTracking()
+            .FirstOrDefaultAsync(customer =>
+                customer.Id == request.CustomerId);
+
+        if (customer is null)
+        {
+            return NotFound(new
+            {
+                mensagem =
+                    "Cliente relacionado à solicitação não encontrado."
+            });
+        }
+
+        request.Approve();
+
+        await _context.SaveChangesAsync();
+
+        return Ok(new
+        {
+            mensagem =
+                "Recuperação de senha aprovada com sucesso.",
+
+            solicitacaoId = request.Id,
+
+            status =
+                FormatPasswordResetStatus(
+                    request.Status),
+
+            clienteId = customer.Id,
+            nomeCliente = customer.Name,
+            emailCliente = customer.Email,
+
+            dataAnalise =
+                DateTimeHelper.ToBrazilianDateTime(
+                    request.ReviewedAt)
+        });
+    }
+
+    // Recusa uma solicitação de recuperação de senha.
+    [HttpPost("password-reset-requests/{id}/reject")]
+    public async Task<IActionResult>
+        RejectPasswordResetRequest(int id)
+    {
+        var request = await _context.PasswordResetRequests
+            .FirstOrDefaultAsync(request =>
+                request.Id == id);
+
+        if (request is null)
+        {
+            return NotFound(new
+            {
+                mensagem =
+                    "Solicitação de recuperação de senha não encontrada."
+            });
+        }
+
+        if (request.Status !=
+            PasswordResetRequestStatus.Pending)
+        {
+            return BadRequest(new
+            {
+                mensagem =
+                    "A solicitação já foi analisada."
+            });
+        }
+
+        var customer = await _context.Customers
+            .AsNoTracking()
+            .FirstOrDefaultAsync(customer =>
+                customer.Id == request.CustomerId);
+
+        if (customer is null)
+        {
+            return NotFound(new
+            {
+                mensagem =
+                    "Cliente relacionado à solicitação não encontrado."
+            });
+        }
+
+        request.Reject();
+
+        await _context.SaveChangesAsync();
+
+        return Ok(new
+        {
+            mensagem =
+                "Recuperação de senha recusada com sucesso.",
+
+            solicitacaoId = request.Id,
+
+            status =
+                FormatPasswordResetStatus(
+                    request.Status),
+
+            clienteId = customer.Id,
+            nomeCliente = customer.Name,
+            emailCliente = customer.Email,
+
+            dataAnalise =
                 DateTimeHelper.ToBrazilianDateTime(
                     request.ReviewedAt)
         });

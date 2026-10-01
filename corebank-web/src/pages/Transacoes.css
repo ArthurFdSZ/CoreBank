@@ -1,0 +1,654 @@
+* {
+    box-sizing: border-box;
+}
+
+.trans-page {
+    --sidebar-width: 325px;
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    overflow-x: hidden;
+    background: #050a0f;
+    color: #f4f5f6;
+    font-family: Inter, Arial, Helvetica, sans-serif;
+}
+
+    /* MESMO BACKGROUND DA HOME */
+    .trans-page::before {
+        content: "";
+        position: fixed;
+        z-index: 0;
+        top: -4%;
+        left: -4%;
+        width: 108%;
+        height: 108%;
+        background-image: url("/images/Backgrounddash.png");
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+        filter: brightness(0.42) contrast(1.12) saturate(0.7);
+        transform: scale(1.04);
+        animation: transBackgroundMove 24s ease-in-out infinite alternate;
+        pointer-events: none;
+    }
+
+    .trans-page::after {
+        content: "";
+        position: fixed;
+        z-index: 1;
+        inset: 0;
+        background: radial-gradient( circle at 72% 15%, rgba(185, 195, 205, 0.07), transparent 32% ), linear-gradient( 115deg, rgba(2, 6, 10, 0.87) 0%, rgba(5, 9, 13, 0.74) 48%, rgba(2, 5, 8, 0.82) 100% );
+        pointer-events: none;
+    }
+
+@keyframes transBackgroundMove {
+    0% {
+        transform: scale(1.04) translate3d(0, 0, 0);
+        background-position: 50% 50%;
+    }
+
+    50% {
+        transform: scale(1.08) translate3d( -0.8%, -0.5%, 0 );
+        background-position: 52% 48%;
+    }
+
+    100% {
+        transform: scale(1.06) translate3d( 0.8%, 0.5%, 0 );
+        background-position: 48% 52%;
+    }
+}
+
+.trans-page.sidebar-collapsed {
+    --sidebar-width: 82px;
+}
+
+/* ============================================================
+   SIDEBAR
+   ============================================================ */
+
+.trans-sidebar {
+    position: fixed;
+    z-index: 20;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: var(--sidebar-width);
+    display: flex;
+    flex-direction: column;
+    padding: 24px 20px 22px;
+    border-right: 1px solid rgba(210, 217, 223, 0.18);
+    background: rgba(3, 9, 14, 0.82);
+    backdrop-filter: blur(14px);
+    transition: width 0.25s ease, padding 0.25s ease;
+}
+
+.sidebar-header {
+    height: 62px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 28px;
+}
+
+.corebank-logo {
+    padding-left: 12px;
+    color: #f5f6f7;
+    font-size: 27px;
+    letter-spacing: -1px;
+    white-space: nowrap;
+}
+
+.sidebar-toggle {
+    width: 46px;
+    min-width: 46px;
+    height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(222, 227, 232, 0.3);
+    border-radius: 12px;
+    background: linear-gradient( 145deg, rgba(170, 179, 187, 0.18), rgba(61, 70, 78, 0.18) );
+    color: #ffffff;
+    font-size: 28px;
+    cursor: pointer;
+}
+
+.trans-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.nav-item,
+.logout-button {
+    width: 100%;
+    height: 58px;
+    display: flex;
+    align-items: center;
+    gap: 17px;
+    padding: 0 18px;
+    border: 1px solid transparent;
+    border-radius: 13px;
+    background: transparent;
+    color: rgba(215, 220, 225, 0.68);
+    font-size: 15px;
+    font-weight: 650;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: 0.2s ease;
+}
+
+    .nav-item:hover,
+    .logout-button:hover {
+        color: #ffffff;
+        background: rgba(207, 214, 220, 0.07);
+    }
+
+    .nav-item.active {
+        border-color: rgba(219, 224, 228, 0.27);
+        background: linear-gradient( 90deg, rgba(188, 197, 205, 0.17), rgba(83, 94, 104, 0.08) );
+        color: #ffffff;
+    }
+
+.nav-icon,
+.logout-icon {
+    width: 24px;
+    min-width: 24px;
+    text-align: center;
+    font-size: 19px;
+}
+
+.sidebar-footer {
+    margin-top: auto;
+}
+
+.security-box {
+    min-height: 70px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    padding: 14px 17px;
+    border: 1px solid rgba(210, 217, 223, 0.15);
+    border-radius: 13px;
+    background: rgba(183, 193, 201, 0.05);
+}
+
+.security-icon {
+    color: #d7dde2;
+    font-size: 20px;
+}
+
+.security-text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    white-space: nowrap;
+}
+
+    .security-text strong {
+        color: rgba(239, 242, 244, 0.86);
+        font-size: 11px;
+    }
+
+    .security-text small {
+        color: rgba(190, 199, 207, 0.48);
+        font-size: 10px;
+    }
+
+/* ============================================================
+   SIDEBAR RECOLHIDA
+   ============================================================ */
+
+.sidebar-collapsed
+.trans-sidebar {
+    padding: 24px 13px 22px;
+}
+
+.sidebar-collapsed
+.sidebar-header {
+    justify-content: center;
+}
+
+.sidebar-collapsed
+.corebank-logo,
+.sidebar-collapsed
+.nav-text,
+.sidebar-collapsed
+.security-text {
+    display: none;
+}
+
+.sidebar-collapsed
+.nav-item,
+.sidebar-collapsed
+.logout-button,
+.sidebar-collapsed
+.security-box {
+    justify-content: center;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+/* ============================================================
+   CONTEÚDO
+   ============================================================ */
+
+.trans-content {
+    position: relative;
+    z-index: 2;
+    width: calc( 100% - var(--sidebar-width) );
+    min-height: 100vh;
+    margin-left: var(--sidebar-width);
+    padding: 34px clamp(32px, 4.5vw, 72px) 40px;
+    transition: width 0.25s ease, margin-left 0.25s ease;
+}
+
+.trans-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+    margin-bottom: 28px;
+}
+
+.section-label {
+    display: block;
+    color: #c2c8ce;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+.trans-header h1 {
+    margin: 7px 0 4px;
+    color: #f7f8f9;
+    font-size: clamp( 31px, 3vw, 42px );
+    font-weight: 680;
+    letter-spacing: -1.5px;
+}
+
+.trans-header p {
+    margin: 0;
+    color: rgba(194, 202, 209, 0.58);
+    font-size: 12px;
+}
+
+.header-user {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 11px 13px 11px 18px;
+    border: 1px solid rgba(211, 218, 224, 0.15);
+    border-radius: 17px;
+    background: rgba(7, 13, 18, 0.55);
+    backdrop-filter: blur(10px);
+}
+
+.header-user-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    text-align: right;
+}
+
+    .header-user-info strong {
+        font-size: 11px;
+    }
+
+    .header-user-info span {
+        color: rgba(189, 198, 205, 0.48);
+        font-size: 9px;
+    }
+
+.user-avatar {
+    width: 46px;
+    height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(222, 227, 231, 0.28);
+    border-radius: 50%;
+    background: linear-gradient( 145deg, rgba(155, 165, 174, 0.22), rgba(55, 64, 72, 0.22) );
+    font-weight: 700;
+}
+
+/* ============================================================
+   MENSAGENS
+   ============================================================ */
+
+.trans-message {
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-size: 11px;
+}
+
+    .trans-message p {
+        margin: 0;
+    }
+
+    .trans-message.error {
+        border: 1px solid rgba(255, 92, 92, 0.25);
+        background: rgba(145, 36, 36, 0.14);
+        color: #f2b6b6;
+    }
+
+    .trans-message.success {
+        border: 1px solid rgba(67, 211, 155, 0.22);
+        background: rgba(26, 133, 91, 0.12);
+        color: #82dfba;
+    }
+
+/* ============================================================
+   SALDO
+   ============================================================ */
+
+.trans-balance-card {
+    position: relative;
+    min-height: 165px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+    margin-bottom: 20px;
+    padding: 27px 31px;
+    overflow: hidden;
+    border: 1px solid rgba(209, 216, 222, 0.2);
+    border-radius: 18px;
+    background: linear-gradient( 145deg, rgba(15, 22, 28, 0.8), rgba(6, 12, 17, 0.76) );
+    backdrop-filter: blur(12px);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
+}
+
+.trans-balance-value {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 14px;
+}
+
+    .trans-balance-value strong {
+        font-size: clamp( 29px, 3vw, 39px );
+        letter-spacing: -1.5px;
+    }
+
+    .trans-balance-value button {
+        border: none;
+        background: transparent;
+        color: rgba(221, 226, 230, 0.62);
+        font-size: 18px;
+        cursor: pointer;
+    }
+
+.trans-account-data {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+}
+
+    .trans-account-data div {
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+    }
+
+    .trans-account-data span {
+        color: rgba(189, 198, 205, 0.5);
+        font-size: 9px;
+    }
+
+    .trans-account-data strong {
+        font-size: 12px;
+    }
+
+.status-green {
+    color: #66d9aa;
+}
+
+.trans-line {
+    position: absolute;
+    right: -50px;
+    bottom: -110px;
+    width: 330px;
+    height: 190px;
+    border: 1px solid rgba(224, 229, 233, 0.17);
+    border-radius: 50%;
+    transform: rotate(-8deg);
+}
+
+.line-two {
+    right: -65px;
+    bottom: -122px;
+    width: 365px;
+    border-color: rgba(224, 229, 233, 0.09);
+}
+
+/* ============================================================
+   TRANSAÇÕES
+   ============================================================ */
+
+.transactions-grid {
+    display: grid;
+    grid-template-columns: repeat( 2, minmax(0, 1fr) );
+    gap: 20px;
+}
+
+.transaction-card {
+    min-height: 285px;
+    padding: 27px 30px;
+    border: 1px solid rgba(209, 216, 222, 0.2);
+    border-radius: 18px;
+    background: linear-gradient( 145deg, rgba(15, 22, 28, 0.8), rgba(6, 12, 17, 0.76) );
+    backdrop-filter: blur(12px);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
+}
+
+.transfer-card {
+    grid-column: 1 / -1;
+}
+
+.transaction-title {
+    display: flex;
+    align-items: center;
+    gap: 17px;
+    margin-bottom: 25px;
+}
+
+.transaction-icon {
+    width: 50px;
+    min-width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: linear-gradient( 145deg, #d6dce1, #87929c );
+    color: #10161b;
+    font-size: 23px;
+    font-weight: 700;
+}
+
+.transaction-title h2 {
+    margin: 4px 0;
+    font-size: 18px;
+}
+
+.transaction-title p {
+    margin: 0;
+    color: rgba(190, 199, 206, 0.5);
+    font-size: 10px;
+}
+
+.transaction-card > label,
+.transfer-fields label {
+    display: block;
+    margin-bottom: 7px;
+    color: rgba(216, 222, 227, 0.72);
+    font-size: 10px;
+}
+
+.money-input,
+.text-input {
+    height: 47px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+    border: 1px solid rgba(211, 218, 224, 0.17);
+    border-radius: 10px;
+    background: rgba(190, 199, 207, 0.045);
+}
+
+    .money-input:focus-within,
+    .text-input:focus-within {
+        border-color: rgba(226, 231, 235, 0.42);
+    }
+
+    .money-input span {
+        padding-left: 14px;
+        color: #e9ecef;
+        font-size: 11px;
+        font-weight: 700;
+    }
+
+    .money-input input,
+    .text-input input {
+        width: 100%;
+        height: 100%;
+        padding: 0 12px;
+        border: none;
+        outline: none;
+        background: transparent;
+        color: #ffffff;
+        font-size: 12px;
+    }
+
+        .money-input input::placeholder,
+        .text-input input::placeholder {
+            color: rgba(190, 199, 206, 0.35);
+        }
+
+.transaction-button {
+    width: 100%;
+    height: 47px;
+    border: 1px solid rgba(255, 255, 255, 0.42);
+    border-radius: 10px;
+    background: linear-gradient( 180deg, #e1e5e8, #9ea8b0 );
+    color: #11171c;
+    font-size: 11px;
+    font-weight: 750;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+    .transaction-button:hover:not(:disabled) {
+        transform: translateY(-1px);
+        filter: brightness(1.08);
+    }
+
+    .transaction-button:disabled {
+        cursor: not-allowed;
+        opacity: 0.6;
+    }
+
+.transfer-fields {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+
+/* ============================================================
+   LOADING
+   ============================================================ */
+
+.trans-loading {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: #050a0e;
+    color: #ffffff;
+    font-family: Inter, Arial, sans-serif;
+}
+
+    .trans-loading strong {
+        font-size: 26px;
+    }
+
+    .trans-loading p {
+        color: rgba(196, 204, 210, 0.55);
+        font-size: 10px;
+    }
+
+/* ============================================================
+   RESPONSIVIDADE
+   ============================================================ */
+
+@media (max-width: 1100px) {
+    .transactions-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .transfer-card {
+        grid-column: auto;
+    }
+
+    .trans-balance-card {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 900px) {
+    .trans-page {
+        --sidebar-width: 82px;
+    }
+
+    .trans-sidebar {
+        padding: 24px 13px 22px;
+    }
+
+    .corebank-logo,
+    .nav-text,
+    .security-text {
+        display: none;
+    }
+
+    .sidebar-header,
+    .nav-item,
+    .logout-button,
+    .security-box {
+        justify-content: center;
+    }
+
+    .nav-item,
+    .logout-button,
+    .security-box {
+        padding-left: 0;
+        padding-right: 0;
+    }
+}
+
+@media (max-width: 650px) {
+    .trans-content {
+        padding: 25px 18px 35px;
+    }
+
+    .header-user-info {
+        display: none;
+    }
+
+    .trans-account-data,
+    .transfer-fields {
+        grid-template-columns: 1fr;
+    }
+}
