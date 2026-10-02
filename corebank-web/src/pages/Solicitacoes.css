@@ -503,9 +503,9 @@
 .requests-table-header,
 .requests-table-row {
     display: grid;
-    grid-template-columns: 70px minmax(160px, 0.8fr) minmax(220px, 1.4fr) 130px 170px;
+    grid-template-columns: 70px minmax(160px, 0.8fr) minmax(220px, 1.4fr) 140px 190px;
     align-items: center;
-    gap: 20px;
+    column-gap: 20px;
 }
 
 .requests-table-header {
@@ -519,7 +519,7 @@
 }
 
 .requests-table-row {
-    min-height: 65px;
+    min-height: 72px;
     padding: 0 12px;
     border-top: 1px solid rgba(202, 210, 216, 0.08);
     color: rgba(220, 225, 229, 0.72);
@@ -529,6 +529,11 @@
 
     .requests-table-row:hover {
         background: rgba(190, 199, 207, 0.03);
+    }
+
+    .requests-table-row > * {
+        min-width: 0;
+        align-self: center;
     }
 
     .requests-table-row strong {
@@ -547,34 +552,45 @@
 }
 
 .request-status {
-    width: fit-content;
-    min-width: 85px;
-    padding: 7px 12px;
-    border: 1px solid rgba(211, 218, 224, 0.12);
-    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    justify-self: start;
+    width: 106px;
+    min-height: 30px;
+    padding: 0 12px;
+    border: 1px solid transparent;
+    border-radius: 999px;
     text-align: center;
-    font-size: 8px;
-    font-weight: 700;
+    line-height: 1;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 0.1px;
 }
 
 .status-concluida {
-    background: rgba(89, 153, 126, 0.1);
-    color: #a8d5c2;
+    border-color: rgba(78, 216, 170, 0.3);
+    background: rgba(11, 63, 47, 0.32);
+    color: #4ed8aa;
 }
 
+.status-rejeitada,
 .status-cancelada {
-    background: rgba(137, 142, 148, 0.09);
-    color: #b9bec2;
+    border-color: rgba(235, 99, 99, 0.3);
+    background: rgba(105, 30, 30, 0.28);
+    color: #ef8585;
 }
 
 .status-analise {
+    border-color: rgba(142, 158, 173, 0.25);
     background: rgba(142, 158, 173, 0.11);
     color: #c3ccd3;
 }
 
 .status-pendente {
-    background: rgba(155, 149, 120, 0.09);
-    color: #d0cbb0;
+    border-color: rgba(225, 184, 76, 0.32);
+    background: rgba(111, 83, 15, 0.26);
+    color: #e5bd55;
 }
 
 /* ============================================================
@@ -690,4 +706,173 @@
         .requests-panel-header select {
             width: 100%;
         }
+}
+
+
+/* ============================================================
+   MODAL DE CONFIRMAÇÃO
+   ============================================================ */
+
+.confirmacao-overlay {
+    position: fixed;
+    z-index: 1000;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: rgba(0, 4, 8, 0.76);
+    backdrop-filter: blur(8px);
+}
+
+.confirmacao-modal {
+    position: relative;
+    width: min(100%, 520px);
+    padding: 34px;
+    border: 1px solid rgba(215, 222, 228, 0.22);
+    border-radius: 20px;
+    background: linear-gradient(145deg, rgba(18, 25, 31, 0.98), rgba(5, 10, 15, 0.98));
+    box-shadow: 0 30px 90px rgba(0, 0, 0, 0.55);
+    color: #f4f6f7;
+}
+
+.confirmacao-fechar {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    width: 38px;
+    height: 38px;
+    border: 1px solid rgba(215, 222, 228, 0.14);
+    border-radius: 10px;
+    background: rgba(185, 195, 203, 0.06);
+    color: rgba(235, 239, 242, 0.72);
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.confirmacao-icone {
+    width: 54px;
+    height: 54px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 22px;
+    border: 1px solid rgba(215, 222, 228, 0.14);
+    border-radius: 15px;
+    background: linear-gradient(145deg, rgba(180, 190, 199, 0.14), rgba(64, 73, 81, 0.08));
+    color: #d8dee3;
+    font-size: 20px;
+}
+
+.confirmacao-label {
+    display: block;
+    margin-bottom: 8px;
+    color: #aeb7bf;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+.confirmacao-modal h2 {
+    margin: 0 0 12px;
+    color: #f7f8f9;
+    font-size: 25px;
+    letter-spacing: -0.7px;
+}
+
+.confirmacao-modal > p {
+    margin: 0;
+    color: rgba(196, 204, 211, 0.62);
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+.confirmacao-aviso {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    margin: 24px 0;
+    padding: 15px 16px;
+    border: 1px solid rgba(210, 217, 223, 0.12);
+    border-radius: 13px;
+    background: rgba(185, 195, 203, 0.05);
+}
+
+    .confirmacao-aviso > span {
+        width: 30px;
+        min-width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid rgba(215, 222, 228, 0.16);
+        border-radius: 50%;
+        color: #cbd2d8;
+        font-size: 11px;
+        font-weight: 800;
+    }
+
+    .confirmacao-aviso div {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .confirmacao-aviso strong {
+        font-size: 11px;
+    }
+
+    .confirmacao-aviso small {
+        color: rgba(190, 199, 207, 0.52);
+        font-size: 9px;
+        line-height: 1.5;
+    }
+
+.confirmacao-acoes {
+    display: grid;
+    grid-template-columns: 1fr 1.35fr;
+    gap: 12px;
+}
+
+    .confirmacao-acoes button {
+        min-height: 48px;
+        border-radius: 12px;
+        font-size: 11px;
+        font-weight: 750;
+        cursor: pointer;
+        transition: 0.2s ease;
+    }
+
+.confirmacao-cancelar {
+    border: 1px solid rgba(215, 222, 228, 0.16);
+    background: rgba(185, 195, 203, 0.05);
+    color: rgba(229, 233, 236, 0.72);
+}
+
+.confirmacao-confirmar {
+    border: 1px solid rgba(232, 236, 239, 0.32);
+    background: linear-gradient(145deg, #d6dde2, #aeb8c0);
+    color: #071017;
+}
+
+.confirmacao-acoes button:hover:not(:disabled),
+.confirmacao-fechar:hover:not(:disabled) {
+    transform: translateY(-1px);
+    filter: brightness(1.08);
+}
+
+.confirmacao-acoes button:disabled,
+.confirmacao-fechar:disabled {
+    opacity: 0.55;
+    cursor: wait;
+}
+
+@media (max-width: 600px) {
+    .confirmacao-modal {
+        padding: 28px 22px 22px;
+    }
+
+    .confirmacao-acoes {
+        grid-template-columns: 1fr;
+    }
 }

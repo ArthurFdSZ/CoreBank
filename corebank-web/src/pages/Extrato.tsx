@@ -70,6 +70,9 @@ function Extrato() {
     const [busca, setBusca] =
         useState("");
 
+    const [movimentacaoSelecionada, setMovimentacaoSelecionada] =
+        useState<Movimentacao | null>(null);
+
     const [filtroTipo, setFiltroTipo] =
         useState<FiltroTipo>("Todas");
 
@@ -527,640 +530,779 @@ function Extrato() {
         setDataFinal("");
     }
 
+    function fecharDetalhes() {
+        setMovimentacaoSelecionada(null);
+    }
+
+    function obterDetalhesTransferencia(descricao: string) {
+        const texto = descricao ?? "";
+        const contraparte = texto.match(/(?:Para|De):\s*(.*?)\s*•/i)?.[1]?.trim() ?? null;
+        const agencia = texto.match(/Agência\s+([^•]+)/i)?.[1]?.trim() ?? null;
+        const conta = texto.match(/Conta\s+([^•]+)/i)?.[1]?.trim() ?? null;
+        return { contraparte, agencia, conta };
+    }
+
     if (carregando) {
         return (
-            <main className="extrato-loading">
-                <strong>
-                    CoreBank
-                </strong>
+            <main className= "extrato-loading" >
+            <strong>
+            CoreBank
+            </strong>
 
-                <p>
+            <p>
                     Carregando seu
                     extrato...
-                </p>
+        </p>
             </main>
         );
     }
 
     return (
         <main
-            className={`extrato-page ${sidebarRecolhida
-                    ? "sidebar-collapsed"
-                    : ""
-                }`}
+            className= {`extrato-page ${sidebarRecolhida
+            ? "sidebar-collapsed"
+            : ""
+            }`
+}
         >
-            <aside className="extrato-sidebar">
-                <div className="sidebar-header">
-                    <strong className="corebank-logo">
-                        <span className="corebank-core">
-                            Core
-                        </span>
+    <aside className="extrato-sidebar" >
+        <div className="sidebar-header" >
+            <strong className="corebank-logo" >
+                <span className="corebank-core" >
+                    Core
+                    </span>
 
-                        <span className="corebank-bank">
-                            Bank
+                    < span className = "corebank-bank" >
+                        Bank
                         </span>
-                    </strong>
+                        </strong>
 
-                    <button
-                        type="button"
-                        className="sidebar-toggle"
-                        onClick={() =>
-                            setSidebarRecolhida(
-                                !sidebarRecolhida
-                            )
+                        < button
+type = "button"
+className = "sidebar-toggle"
+onClick = {() =>
+setSidebarRecolhida(
+    !sidebarRecolhida
+)
                         }
-                        title={
-                            sidebarRecolhida
-                                ? "Expandir menu"
-                                : "Recolher menu"
+title = {
+    sidebarRecolhida
+    ? "Expandir menu"
+        : "Recolher menu"
+}
+    >
+{
+    sidebarRecolhida
+    ? "›"
+        : "‹"
+}
+    </button>
+    </div>
+
+    < nav className = "extrato-nav" >
+        <button
+                        type="button"
+className = "nav-item"
+onClick = {() =>
+navigate(
+    "/dashboard"
+)
                         }
                     >
-                        {sidebarRecolhida
-                            ? "›"
-                            : "‹"}
-                    </button>
-                </div>
-
-                <nav className="extrato-nav">
-                    <button
-                        type="button"
-                        className="nav-item"
-                        onClick={() =>
-                            navigate(
-                                "/dashboard"
-                            )
-                        }
-                    >
-                        <span className="nav-icon">
+    <span className="nav-icon" >
                             ◆
-                        </span>
+</span>
 
-                        <span className="nav-text">
-                            Início
-                        </span>
-                    </button>
+    < span className = "nav-text" >
+        Início
+        </span>
+        </button>
 
-                    <button
-                        type="button"
-                        className="nav-item"
-                        onClick={() =>
-                            navigate(
-                                "/transacoes"
-                            )
+        < button
+type = "button"
+className = "nav-item"
+onClick = {() =>
+navigate(
+    "/transacoes"
+)
                         }
                     >
-                        <span className="nav-icon">
+    <span className="nav-icon" >
                             ➤
-                        </span>
+</span>
 
-                        <span className="nav-text">
-                            Transações
-                        </span>
-                    </button>
+    < span className = "nav-text" >
+        Transações
+        </span>
+        </button>
 
-                    <button
-                        type="button"
-                        className="nav-item active"
-                    >
-                        <span className="nav-icon">
+        < button
+type = "button"
+className = "nav-item active"
+    >
+    <span className="nav-icon" >
                             ▤
-                        </span>
+</span>
 
-                        <span className="nav-text">
-                            Extrato
-                        </span>
-                    </button>
+    < span className = "nav-text" >
+        Extrato
+        </span>
+        </button>
 
-                    <button
-                        type="button"
-                        className="nav-item"
-                        onClick={() =>
-                            navigate(
-                                "/solicitacoes"
-                            )
+        < button
+type = "button"
+className = "nav-item"
+onClick = {() =>
+navigate(
+    "/solicitacoes"
+)
                         }
                     >
-                        <span className="nav-icon">
+    <span className="nav-icon" >
                             ◇
-                        </span>
+</span>
 
-                        <span className="nav-text">
-                            Solicitações
-                        </span>
-                    </button>
+    < span className = "nav-text" >
+        Solicitações
+        </span>
+        </button>
 
-                    <button
-                        type="button"
-                        className="nav-item"
-                        onClick={() =>
-                            navigate(
-                                "/perfil"
-                            )
+        < button
+type = "button"
+className = "nav-item"
+onClick = {() =>
+navigate(
+    "/perfil"
+)
                         }
                     >
-                        <span className="nav-icon">
+    <span className="nav-icon" >
                             ♙
-                        </span>
+</span>
 
-                        <span className="nav-text">
-                            Perfil
-                        </span>
-                    </button>
-                </nav>
+    < span className = "nav-text" >
+        Perfil
+        </span>
+        </button>
+        </nav>
 
-                <div className="sidebar-footer">
-                    <div className="security-box">
-                        <span className="security-icon">
+        < div className = "sidebar-footer" >
+            <div className="security-box" >
+                <span className="security-icon" >
                             ✓
-                        </span>
+</span>
 
-                        <div className="security-text">
-                            <strong>
-                                Ambiente seguro
-                            </strong>
+    < div className = "security-text" >
+        <strong>
+        Ambiente seguro
+            </strong>
 
-                            <small>
+            <small>
                                 Sessão protegida
-                            </small>
-                        </div>
-                    </div>
+    </small>
+    </div>
+    </div>
 
-                    <button
-                        type="button"
-                        className="logout-button"
-                        onClick={
-                            handleLogout
-                        }
-                    >
-                        <span className="logout-icon">
+    < button
+type = "button"
+className = "logout-button"
+onClick = {
+    handleLogout
+}
+    >
+    <span className="logout-icon" >
                             ↪
-                        </span>
+</span>
 
-                        <span className="nav-text">
-                            Sair
-                        </span>
-                    </button>
-                </div>
-            </aside>
+    < span className = "nav-text" >
+        Sair
+        </span>
+        </button>
+        </div>
+        </aside>
 
-            <section className="extrato-content">
-                <header className="extrato-header">
-                    <div>
-                        <span className="section-label">
-                            HISTÓRICO
-                            FINANCEIRO
-                        </span>
+        < section className = "extrato-content" >
+            <header className="extrato-header" >
+                <div>
+                <span className="section-label" >
+                    HISTÓRICO
+FINANCEIRO
+    </span>
 
-                        <h1>
-                            Extrato
-                        </h1>
+    <h1>
+Extrato
+    </h1>
 
-                        <p>
+    <p>
                             Acompanhe todas as
-                            movimentações da sua
-                            conta.
+    movimentações da sua
+conta.
                         </p>
-                    </div>
+    </div>
 
-                    <div className="header-user">
-                        <div className="header-user-info">
-                            <strong>
-                                {usuario?.nome ??
-                                    "Cliente CoreBank"}
-                            </strong>
+    < div className = "header-user" >
+        <div className="header-user-info" >
+            <strong>
+            { usuario?.nome ??
+            "Cliente CoreBank"}
+</strong>
 
-                            <span>
-                                {usuario?.email}
-                            </span>
-                        </div>
+    <span>
+{ usuario?.email }
+</span>
+    </div>
 
-                        <div className="user-avatar">
-                            {usuario?.nome
+    < div className = "user-avatar" >
+    {
+        usuario?.nome
                                 ?.charAt(0)
                                 .toUpperCase() ??
-                                "C"}
-                        </div>
-                    </div>
-                </header>
+            "C"
+    }
+        </div>
+        </div>
+        </header>
 
-                {erro ? (
-                    <section className="extrato-error">
-                        <span>
-                            !
-                        </span>
+{
+    erro ? (
+        <section className= "extrato-error" >
+        <span>
+        !
+        </span>
 
-                        <div>
-                            <strong>
-                                Não foi possível
+        < div >
+        <strong>
+        Não foi possível
                                 carregar o extrato
-                            </strong>
+        </strong>
 
-                            <p>
-                                {erro}
-                            </p>
-                        </div>
-                    </section>
+        <p>
+    { erro }
+    </p>
+        </div>
+        </section>
                 ) : (
-                    <>
-                        <section className="extrato-summary">
-                            <article className="extrato-balance">
-                                <div>
-                                    <span className="section-label">
-                                        SALDO ATUAL
-                                    </span>
+        <>
+        <section className= "extrato-summary" >
+        <article className="extrato-balance" >
+            <div>
+            <span className="section-label" >
+                SALDO ATUAL
+                    </span>
 
-                                    <div className="balance-value">
-                                        <strong>
-                                            {saldoVisivel
-                                                ? formatarMoeda(
-                                                    extrato?.balance ??
-                                                    0
+                    < div className = "balance-value" >
+                        <strong>
+                        {
+                            saldoVisivel
+                            ? formatarMoeda(
+                                extrato?.balance ??
+                        0
                                                 )
-                                                : "R$ ••••••"}
-                                        </strong>
+                                                : "R$ ••••••"
+}
+</strong>
 
-                                        <button
-                                            type="button"
-                                            onClick={() =>
-                                                setSaldoVisivel(
-                                                    !saldoVisivel
-                                                )
+    < button
+type = "button"
+onClick = {() =>
+setSaldoVisivel(
+    !saldoVisivel
+)
                                             }
                                         >
-                                            {saldoVisivel
-                                                ? "◉"
-                                                : "○"}
-                                        </button>
-                                    </div>
-                                </div>
+{
+    saldoVisivel
+    ? "◉"
+        : "○"
+}
+    </button>
+    </div>
+    </div>
 
-                                <div className="account-information">
-                                    <div>
-                                        <span>
-                                            Agência
-                                        </span>
+    < div className = "account-information" >
+        <div>
+        <span>
+        Agência
+        </span>
 
-                                        <strong>
-                                            {
-                                                extrato?.agency
-                                            }
-                                        </strong>
-                                    </div>
+        <strong>
+{
+    extrato?.agency
+}
+</strong>
+    </div>
 
-                                    <div>
-                                        <span>
-                                            Conta
-                                        </span>
+    < div >
+    <span>
+    Conta
+    </span>
 
-                                        <strong>
-                                            {
-                                                extrato?.number
-                                            }
-                                        </strong>
-                                    </div>
+    <strong>
+{
+    extrato?.number
+}
+</strong>
+    </div>
 
-                                    <div>
-                                        <span>
-                                            Status
-                                        </span>
+    < div >
+    <span>
+    Status
+    </span>
 
-                                        <strong className="status-active">
-                                            ●{" "}
-                                            {
-                                                extrato?.status
-                                            }
-                                        </strong>
-                                    </div>
-                                </div>
+    < strong className = "status-active" >
+                                            ●{ " " }
+{
+    extrato?.status
+}
+</strong>
+    </div>
+    </div>
 
-                                <div className="balance-line line-one"></div>
+    < div className = "balance-line line-one" > </div>
 
-                                <div className="balance-line line-two"></div>
-                            </article>
+        < div className = "balance-line line-two" > </div>
+            </article>
 
-                            <article className="extrato-stat-card">
-                                <span className="stat-icon income">
+            < article className = "extrato-stat-card" >
+                <span className="stat-icon income" >
                                     ↓
-                                </span>
+</span>
 
-                                <div>
-                                    <span>
-                                        ENTRADAS
-                                    </span>
+    < div >
+    <span>
+    ENTRADAS
+    </span>
 
-                                    <strong className="income-text">
-                                        {formatarMoeda(
-                                            totalEntradas
-                                        )}
-                                    </strong>
+    < strong className = "income-text" >
+    {
+        formatarMoeda(
+            totalEntradas
+        )
+    }
+        </strong>
 
-                                    <small>
+        <small>
                                         Total recebido
-                                    </small>
-                                </div>
-                            </article>
+    </small>
+    </div>
+    </article>
 
-                            <article className="extrato-stat-card">
-                                <span className="stat-icon expense">
+    < article className = "extrato-stat-card" >
+        <span className="stat-icon expense" >
                                     ↑
-                                </span>
+</span>
 
-                                <div>
-                                    <span>
-                                        SAÍDAS
-                                    </span>
+    < div >
+    <span>
+    SAÍDAS
+    </span>
 
-                                    <strong className="expense-text">
-                                        {formatarMoeda(
-                                            totalSaidas
-                                        )}
-                                    </strong>
+    < strong className = "expense-text" >
+    {
+        formatarMoeda(
+            totalSaidas
+        )
+    }
+        </strong>
 
-                                    <small>
+        <small>
                                         Total movimentado
-                                    </small>
-                                </div>
-                            </article>
-                        </section>
+    </small>
+    </div>
+    </article>
+    </section>
 
-                        <section className="extrato-panel">
-                            <div className="extrato-panel-header">
-                                <div>
-                                    <span className="section-label">
-                                        MOVIMENTAÇÕES
-                                    </span>
+    < section className = "extrato-panel" >
+        <div className="extrato-panel-header" >
+            <div>
+            <span className="section-label" >
+                MOVIMENTAÇÕES
+                </span>
 
-                                    <h2>
+                <h2>
                                         Histórico da conta
-                                    </h2>
+    </h2>
 
-                                    <p>
+    <p>
                                         Consulte e filtre
                                         suas transações.
                                     </p>
-                                </div>
+    </div>
 
-                                <div className="result-count">
-                                    {
-                                        movimentacoesFiltradas.length
-                                    }
+    < div className = "result-count" >
+        {
+            movimentacoesFiltradas.length
+        }
 
-                                    <span>
-                                        {" "}
-                                        registro
-                                        {movimentacoesFiltradas.length !==
-                                            1
-                                            ? "s"
-                                            : ""}
-                                    </span>
-                                </div>
-                            </div>
+        <span>
+{ " " }
+registro
+{
+    movimentacoesFiltradas.length !==
+    1
+    ? "s"
+    : ""
+}
+</span>
+    </div>
+    </div>
 
-                            <div className="extrato-filters">
-                                <div className="filter-field search-field">
-                                    <label htmlFor="busca">
-                                        Buscar
-                                    </label>
+    < div className = "extrato-filters" >
+        <div className="filter-field search-field" >
+            <label htmlFor="busca" >
+                Buscar
+                </label>
 
-                                    <div className="filter-input">
-                                        <span>
+                < div className = "filter-input" >
+                    <span>
                                             ⌕
-                                        </span>
+</span>
 
-                                        <input
-                                            id="busca"
-                                            type="text"
-                                            placeholder="Descrição ou tipo"
-                                            value={
-                                                busca
-                                            }
-                                            onChange={(
-                                                event
-                                            ) =>
-                                                setBusca(
-                                                    event
-                                                        .target
-                                                        .value
-                                                )
+    < input
+id = "busca"
+type = "text"
+placeholder = "Descrição ou tipo"
+value = {
+    busca
+}
+onChange = {(
+    event
+) =>
+setBusca(
+    event
+        .target
+        .value
+)
                                             }
                                         />
-                                    </div>
-                                </div>
+    </div>
+    </div>
 
-                                <div className="filter-field">
-                                    <label htmlFor="tipo">
-                                        Tipo
-                                    </label>
+    < div className = "filter-field" >
+        <label htmlFor="tipo" >
+            Tipo
+            </label>
 
-                                    <select
-                                        id="tipo"
-                                        value={
-                                            filtroTipo
-                                        }
-                                        onChange={(
-                                            event
-                                        ) =>
-                                            setFiltroTipo(
-                                                event
-                                                    .target
-                                                    .value as FiltroTipo
-                                            )
+            < select
+id = "tipo"
+value = {
+    filtroTipo
+}
+onChange = {(
+    event
+) =>
+setFiltroTipo(
+    event
+        .target
+        .value as FiltroTipo
+)
                                         }
                                     >
-                                        <option value="Todas">
-                                            Todas
-                                        </option>
+    <option value="Todas" >
+        Todas
+        </option>
 
-                                        <option value="Entradas">
-                                            Entradas
-                                        </option>
+        < option value = "Entradas" >
+            Entradas
+            </option>
 
-                                        <option value="Saídas">
-                                            Saídas
-                                        </option>
+            < option value = "Saídas" >
+                Saídas
+                </option>
 
-                                        <option value="Depósitos">
-                                            Depósitos
-                                        </option>
+                < option value = "Depósitos" >
+                    Depósitos
+                    </option>
 
-                                        <option value="Saques">
-                                            Saques
-                                        </option>
+                    < option value = "Saques" >
+                        Saques
+                        </option>
 
-                                        <option value="Transferências">
-                                            Transferências
-                                        </option>
-                                    </select>
-                                </div>
-
-                                <div className="filter-field">
-                                    <label htmlFor="dataInicial">
-                                        De
-                                    </label>
-
-                                    <input
-                                        id="dataInicial"
-                                        type="date"
-                                        value={
-                                            dataInicial
-                                        }
-                                        onChange={(
-                                            event
-                                        ) =>
-                                            setDataInicial(
-                                                event
-                                                    .target
-                                                    .value
-                                            )
-                                        }
-                                    />
-                                </div>
-
-                                <div className="filter-field">
-                                    <label htmlFor="dataFinal">
-                                        Até
-                                    </label>
-
-                                    <input
-                                        id="dataFinal"
-                                        type="date"
-                                        value={
-                                            dataFinal
-                                        }
-                                        onChange={(
-                                            event
-                                        ) =>
-                                            setDataFinal(
-                                                event
-                                                    .target
-                                                    .value
-                                            )
-                                        }
-                                    />
-                                </div>
-
-                                <button
-                                    type="button"
-                                    className="clear-filters"
-                                    onClick={
-                                        limparFiltros
-                                    }
-                                >
-                                    Limpar
-                                </button>
+                        < option value = "Transferências" >
+                            Transferências
+                            </option>
+                            </select>
                             </div>
 
-                            <div className="statement-table">
-                                <div className="statement-table-header">
-                                    <span>
-                                        Movimentação
-                                    </span>
+                            < div className = "filter-field" >
+                                <label htmlFor="dataInicial" >
+                                    De
+                                    </label>
 
-                                    <span>
-                                        Data
-                                    </span>
+                                    < input
+id = "dataInicial"
+type = "date"
+value = {
+    dataInicial
+}
+onChange = {(
+    event
+) =>
+setDataInicial(
+    event
+        .target
+        .value
+)
+                                        }
+                                    />
+    </div>
 
-                                    <span>
-                                        Valor
-                                    </span>
-                                </div>
+    < div className = "filter-field" >
+        <label htmlFor="dataFinal" >
+            Até
+            </label>
 
-                                <div className="statement-list">
-                                    {movimentacoesFiltradas.length ===
-                                        0 ? (
-                                        <div className="statement-empty">
-                                            <span>
+            < input
+id = "dataFinal"
+type = "date"
+value = {
+    dataFinal
+}
+onChange = {(
+    event
+) =>
+setDataFinal(
+    event
+        .target
+        .value
+)
+                                        }
+                                    />
+    </div>
+
+    < button
+type = "button"
+className = "clear-filters"
+onClick = {
+    limparFiltros
+}
+    >
+    Limpar
+    </button>
+    </div>
+
+    < div className = "statement-table" >
+        <div className="statement-table-header" >
+            <span>
+            Movimentação
+            </span>
+
+            <span>
+Data
+    </span>
+
+    <span>
+Valor
+    </span>
+    </div>
+
+    < div className = "statement-list" >
+    {
+        movimentacoesFiltradas.length ===
+            0 ? (
+                <div className= "statement-empty" >
+        <span>
                                                 ⇄
                                             </span>
 
-                                            <strong>
-                                                Nenhuma
-                                                movimentação
-                                                encontrada
-                                            </strong>
+        <strong>
+Nenhuma
+movimentação
+encontrada
+    </strong>
 
-                                            <p>
+    <p>
                                                 Não existem
-                                                registros
+registros
                                                 para os
-                                                filtros
-                                                selecionados.
+filtros
+selecionados.
                                             </p>
-                                        </div>
+    </div>
                                     ) : (
-                                        movimentacoesFiltradas.map(
-                                            (
-                                                movimentacao
-                                            ) => {
-                                                const entrada =
-                                                    movimentacaoEhEntrada(
-                                                        movimentacao.type
-                                                    );
+    movimentacoesFiltradas.map(
+        (
+            movimentacao
+        ) => {
+            const entrada =
+                movimentacaoEhEntrada(
+                    movimentacao.type
+                );
 
-                                                return (
-                                                    <div
-                                                        className="statement-item"
-                                                        key={
-                                                            movimentacao.id
-                                                        }
+            return (
+                <div
+                                                        className= "statement-item"
+            key = {
+                movimentacao.id
+            }
+            role = "button"
+            tabIndex = { 0}
+            onClick = {() =>
+            setMovimentacaoSelecionada(movimentacao)
+        }
+                                                        onKeyDown = {(event) => {
+        if(event.key === "Enter" || event.key === " ") {
+    setMovimentacaoSelecionada(movimentacao);
+}
+                                                        }}
                                                     >
-                                                        <div className="statement-transaction">
-                                                            <div
-                                                                className={`statement-icon ${entrada
-                                                                        ? "income"
-                                                                        : "expense"
-                                                                    }`}
+    <div className="statement-transaction" >
+        <div
+                                                                className={
+    `statement-icon ${entrada
+        ? "income"
+        : "expense"
+    }`
+}
                                                             >
-                                                                {entrada
-                                                                    ? "↓"
-                                                                    : "↑"}
-                                                            </div>
+{
+    entrada
+    ? "↓"
+        : "↑"
+}
+    </div>
 
-                                                            <div>
-                                                                <strong>
-                                                                    {
-                                                                        movimentacao.type
-                                                                    }
-                                                                </strong>
+    < div >
+    <strong>
+    {
+        movimentacao.type
+    }
+    </strong>
 
-                                                                <span>
-                                                                    {movimentacao.description ||
-                                                                        "Movimentação CoreBank"}
-                                                                </span>
-                                                            </div>
-                                                        </div>
+    <span>
+{
+    movimentacao.description ||
+    "Movimentação CoreBank"
+}
+</span>
+    </div>
+    </div>
 
-                                                        <div className="statement-date">
-                                                            {formatarData(
-                                                                movimentacao.createdAt
-                                                            )}
-                                                        </div>
+    < div className = "statement-date" >
+    {
+        formatarData(
+            movimentacao.createdAt
+                                                            )
+    }
+        </div>
 
-                                                        <div
-                                                            className={`statement-amount ${entrada
-                                                                    ? "income"
-                                                                    : "expense"
-                                                                }`}
+        < div
+className = {`statement-amount ${entrada
+    ? "income"
+    : "expense"
+    }`}
                                                         >
-                                                            {entrada
-                                                                ? "+"
-                                                                : "-"}{" "}
-                                                            {formatarMoeda(
-                                                                movimentacao.amount
-                                                            )}
-                                                        </div>
-                                                    </div>
+{
+    entrada
+    ? "+"
+        : "-"
+}{ " " }
+{
+    formatarMoeda(
+        movimentacao.amount
+    )
+}
+</div>
+    </div>
                                                 );
                                             }
                                         )
                                     )}
-                                </div>
-                            </div>
-                        </section>
-                    </>
+</div>
+    </div>
+    </section>
+    </>
                 )}
-            </section>
-        </main>
+</section>
+
+{
+    movimentacaoSelecionada && (() => {
+        const entrada = movimentacaoEhEntrada(movimentacaoSelecionada.type);
+        const transferencia = movimentacaoEhTransferencia(movimentacaoSelecionada.type);
+        const detalhes = obterDetalhesTransferencia(movimentacaoSelecionada.description);
+
+        return (
+            <div className= "transaction-modal-overlay" onMouseDown = { fecharDetalhes } >
+                <article
+                            className="transaction-modal"
+        role = "dialog"
+        aria-modal="true"
+        aria-label="Detalhes da movimentação"
+        onMouseDown = {(event) => event.stopPropagation()
+    }
+                        >
+    <button
+                                type="button"
+    className = "transaction-modal-close"
+    onClick = { fecharDetalhes }
+    aria-label="Fechar detalhes"
+        >
+                                ×
+    </button>
+
+        < div className = {`transaction-modal-status ${entrada ? "income" : "expense"}`
+}>
+    <span>{ entrada? "↓": "↑" } </span>
+    < div >
+    <small>DETALHES DA MOVIMENTAÇÃO </small>
+        < strong > { movimentacaoSelecionada.type } </strong>
+        </div>
+        </div>
+
+        < div className = "transaction-modal-value" >
+            <span>Valor </span>
+            < strong className = { entrada? "income": "expense" } >
+            { entrada? "+": "-" } { formatarMoeda(movimentacaoSelecionada.amount) }
+</strong>
+    </div>
+
+{
+    transferencia && detalhes.contraparte && (
+        <div className="transaction-modal-highlight" >
+            <span>{ entrada? "Enviado por": "Enviado para" } </span>
+            < strong > { detalhes.contraparte } </strong>
+            </div>
+                            )
+}
+
+<div className="transaction-modal-grid" >
+{ transferencia && detalhes.agencia && (
+        <div>
+        <span>Agência </span>
+        < strong > { detalhes.agencia } </strong>
+        </div>
+    )}
+{
+    transferencia && detalhes.conta && (
+        <div>
+        <span>Conta </span>
+        < strong > { detalhes.conta } </strong>
+        </div>
+    )
+}
+<div>
+    <span>Data e hora </span>
+        < strong > { formatarData(movimentacaoSelecionada.createdAt) } </strong>
+        </div>
+        < div >
+        <span>ID da transação </span>
+            < strong >#{ movimentacaoSelecionada.id } </strong>
+                </div>
+                </div>
+
+                < div className = "transaction-modal-description" >
+                    <span>Descrição </span>
+                    < p > { movimentacaoSelecionada.description || "Movimentação CoreBank" } </p>
+                    </div>
+
+                    < button type = "button" className = "transaction-modal-button" onClick = { fecharDetalhes } >
+                        Fechar
+                        </button>
+                        </article>
+                        </div>
+                );
+            }) ()}
+</main>
     );
 }
 

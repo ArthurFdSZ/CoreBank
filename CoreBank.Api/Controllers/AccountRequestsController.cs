@@ -47,6 +47,22 @@ public class AccountRequestsController : ControllerBase
         };
     }
 
+    // Gera uma descrição amigável para a solicitação.
+    private static string FormatRequestDescription(AccountRequestType type)
+    {
+        return type switch
+        {
+            AccountRequestType.Block =>
+                "Solicitação de bloqueio da conta.",
+
+            AccountRequestType.Unblock =>
+                "Solicitação de desbloqueio da conta.",
+
+            _ =>
+                "Solicitação registrada no CoreBank."
+        };
+    }
+
     // Traduz o status interno da solicitação para português.
     private static string FormatRequestStatus(AccountRequestStatus status)
     {
@@ -59,7 +75,10 @@ public class AccountRequestsController : ControllerBase
         };
     }
 
-    // Retorna o histórico de solicitações da própria conta.
+    // ============================================================
+    // HISTÓRICO DE SOLICITAÇÕES DO CLIENTE
+    // ============================================================
+
     [HttpGet("me")]
     public async Task<IActionResult> GetMyRequests()
     {
@@ -72,7 +91,8 @@ public class AccountRequestsController : ControllerBase
 
         if (account is null)
         {
-            return NotFound("Conta não encontrada.");
+            return NotFound(
+                "Conta não encontrada.");
         }
 
         var requests = await _context.AccountRequests
@@ -86,15 +106,25 @@ public class AccountRequestsController : ControllerBase
         var result = requests
             .Select(request => new
             {
-                SolicitacaoId = request.Id,
-                Tipo = FormatRequestType(request.Type),
-                Status = FormatRequestStatus(request.Status),
+                Id = request.Id,
 
-                DataSolicitacao =
+                Tipo =
+                    FormatRequestType(
+                        request.Type),
+
+                Descricao =
+                    FormatRequestDescription(
+                        request.Type),
+
+                Status =
+                    FormatRequestStatus(
+                        request.Status),
+
+                CreatedAt =
                     DateTimeHelper.ToBrazilianDateTime(
                         request.CreatedAt),
 
-                DataAnalise =
+                ReviewedAt =
                     DateTimeHelper.ToBrazilianDateTime(
                         request.ReviewedAt)
             })
@@ -103,7 +133,10 @@ public class AccountRequestsController : ControllerBase
         return Ok(result);
     }
 
-    // Solicita o bloqueio da própria conta.
+    // ============================================================
+    // SOLICITAÇÃO DE BLOQUEIO
+    // ============================================================
+
     [HttpPost("me/block")]
     public async Task<IActionResult> RequestBlock()
     {
@@ -115,18 +148,26 @@ public class AccountRequestsController : ControllerBase
 
         if (account is null)
         {
-            return NotFound("Conta não encontrada.");
+            return NotFound(
+                "Conta não encontrada.");
         }
 
+        // Não permite solicitar bloqueio
+        // caso a conta já esteja bloqueada.
         if (account.Status == AccountStatus.Blocked)
         {
-            return BadRequest("A conta já está bloqueada.");
+            return BadRequest(
+                "A conta já está bloqueada.");
         }
 
-        bool pendingRequestExists = await _context.AccountRequests
-            .AnyAsync(request =>
-                request.AccountId == account.Id &&
-                request.Status == AccountRequestStatus.Pending);
+        // Evita várias solicitações pendentes
+        // para a mesma conta.
+        bool pendingRequestExists =
+            await _context.AccountRequests
+                .AnyAsync(request =>
+                    request.AccountId == account.Id &&
+                    request.Status ==
+                        AccountRequestStatus.Pending);
 
         if (pendingRequestExists)
         {
@@ -140,23 +181,46 @@ public class AccountRequestsController : ControllerBase
             Type = AccountRequestType.Block
         };
 
-        _context.AccountRequests.Add(accountRequest);
+        _context.AccountRequests.Add(
+            accountRequest);
+
         await _context.SaveChangesAsync();
 
         return Created(
             $"/api/accountrequests/{accountRequest.Id}",
             new
             {
-                accountRequest.Id,
-                accountRequest.AccountId,
-                Type = FormatRequestType(accountRequest.Type),
-                Status = FormatRequestStatus(accountRequest.Status),
-                CreatedAt = DateTimeHelper.ToBrazilianDateTime(
-                    accountRequest.CreatedAt)
+                Id = accountRequest.Id,
+
+                Tipo =
+                    FormatRequestType(
+                        accountRequest.Type),
+
+                Descricao =
+                    FormatRequestDescription(
+                        accountRequest.Type),
+
+                Status =
+                    FormatRequestStatus(
+                        accountRequest.Status),
+
+                CreatedAt =
+                    DateTimeHelper.ToBrazilianDateTime(
+                        accountRequest.CreatedAt),
+
+                ReviewedAt =
+                    DateTimeHelper.ToBrazilianDateTime(
+                        accountRequest.ReviewedAt),
+
+                Message =
+                    "Solicitação de bloqueio realizada com sucesso."
             });
     }
 
-    // Solicita o desbloqueio da própria conta.
+    // ============================================================
+    // SOLICITAÇÃO DE DESBLOQUEIO
+    // ============================================================
+
     [HttpPost("me/unblock")]
     public async Task<IActionResult> RequestUnblock()
     {
@@ -168,19 +232,26 @@ public class AccountRequestsController : ControllerBase
 
         if (account is null)
         {
-            return NotFound("Conta não encontrada.");
+            return NotFound(
+                "Conta não encontrada.");
         }
 
+        // Só é possível solicitar desbloqueio
+        // quando a conta estiver bloqueada.
         if (account.Status == AccountStatus.Active)
         {
             return BadRequest(
                 "A conta já está ativa.");
         }
 
-        bool pendingRequestExists = await _context.AccountRequests
-            .AnyAsync(request =>
-                request.AccountId == account.Id &&
-                request.Status == AccountRequestStatus.Pending);
+        // Evita várias solicitações pendentes
+        // para a mesma conta.
+        bool pendingRequestExists =
+            await _context.AccountRequests
+                .AnyAsync(request =>
+                    request.AccountId == account.Id &&
+                    request.Status ==
+                        AccountRequestStatus.Pending);
 
         if (pendingRequestExists)
         {
@@ -194,19 +265,39 @@ public class AccountRequestsController : ControllerBase
             Type = AccountRequestType.Unblock
         };
 
-        _context.AccountRequests.Add(accountRequest);
+        _context.AccountRequests.Add(
+            accountRequest);
+
         await _context.SaveChangesAsync();
 
         return Created(
             $"/api/accountrequests/{accountRequest.Id}",
             new
             {
-                accountRequest.Id,
-                accountRequest.AccountId,
-                Type = FormatRequestType(accountRequest.Type),
-                Status = FormatRequestStatus(accountRequest.Status),
-                CreatedAt = DateTimeHelper.ToBrazilianDateTime(
-                    accountRequest.CreatedAt)
+                Id = accountRequest.Id,
+
+                Tipo =
+                    FormatRequestType(
+                        accountRequest.Type),
+
+                Descricao =
+                    FormatRequestDescription(
+                        accountRequest.Type),
+
+                Status =
+                    FormatRequestStatus(
+                        accountRequest.Status),
+
+                CreatedAt =
+                    DateTimeHelper.ToBrazilianDateTime(
+                        accountRequest.CreatedAt),
+
+                ReviewedAt =
+                    DateTimeHelper.ToBrazilianDateTime(
+                        accountRequest.ReviewedAt),
+
+                Message =
+                    "Solicitação de desbloqueio realizada com sucesso."
             });
     }
 }

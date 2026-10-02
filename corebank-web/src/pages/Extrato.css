@@ -659,8 +659,14 @@ div > span {
     min-height: 72px;
     padding: 0 13px;
     border-bottom: 1px solid rgba( 202, 210, 216, 0.08 );
-    transition: background 0.2s ease;
+    transition: background 0.2s ease, transform 0.2s ease;
+    cursor: pointer;
 }
+
+    .statement-item:focus-visible {
+        outline: 1px solid rgba( 226, 231, 235, 0.45 );
+        outline-offset: -2px;
+    }
 
     .statement-item:hover {
         background: rgba( 190, 199, 207, 0.03 );
@@ -765,6 +771,197 @@ div > span {
         color: rgba( 185, 194, 201, 0.43 );
         font-size: 9px;
     }
+
+
+
+/* ============================================================
+   MODAL DE DETALHES DA MOVIMENTAÇÃO
+   ============================================================ */
+
+.transaction-modal-overlay {
+    position: fixed;
+    z-index: 100;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: rgba( 0, 4, 8, 0.76 );
+    backdrop-filter: blur(8px);
+}
+
+.transaction-modal {
+    position: relative;
+    width: min( 100%, 520px );
+    padding: 30px;
+    border: 1px solid rgba( 211, 218, 224, 0.22 );
+    border-radius: 20px;
+    background: linear-gradient( 145deg, rgba( 16, 23, 29, 0.98 ), rgba( 5, 11, 16, 0.98 ) );
+    box-shadow: 0 30px 90px rgba( 0, 0, 0, 0.55 );
+}
+
+.transaction-modal-close {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    width: 36px;
+    height: 36px;
+    border: 1px solid rgba( 211, 218, 224, 0.16 );
+    border-radius: 10px;
+    background: rgba( 190, 199, 207, 0.055 );
+    color: rgba( 235, 238, 240, 0.8 );
+    font-size: 21px;
+    cursor: pointer;
+}
+
+.transaction-modal-status {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding-right: 48px;
+}
+
+    .transaction-modal-status > span {
+        width: 46px;
+        height: 46px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        font-size: 20px;
+    }
+
+    .transaction-modal-status.income > span {
+        background: rgba( 57, 192, 140, 0.13 );
+        color: #62d1a5;
+    }
+
+    .transaction-modal-status.expense > span {
+        background: rgba( 234, 76, 76, 0.12 );
+        color: #ff7777;
+    }
+
+    .transaction-modal-status div {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .transaction-modal-status small {
+        color: rgba( 189, 198, 205, 0.48 );
+        font-size: 8px;
+        font-weight: 800;
+        letter-spacing: 1.5px;
+    }
+
+    .transaction-modal-status strong {
+        color: #f4f5f6;
+        font-size: 16px;
+    }
+
+.transaction-modal-value {
+    margin: 26px 0 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba( 202, 210, 216, 0.1 );
+}
+
+    .transaction-modal-value span, .transaction-modal-highlight span, .transaction-modal-grid span, .transaction-modal-description span {
+        display: block;
+        margin-bottom: 6px;
+        color: rgba( 189, 198, 205, 0.48 );
+        font-size: 9px;
+    }
+
+    .transaction-modal-value strong {
+        font-size: 30px;
+        letter-spacing: -1px;
+    }
+
+        .transaction-modal-value strong.income {
+            color: #62d1a5;
+        }
+
+        .transaction-modal-value strong.expense {
+            color: #ff7777;
+        }
+
+.transaction-modal-highlight {
+    margin-bottom: 18px;
+    padding: 15px 16px;
+    border: 1px solid rgba( 211, 218, 224, 0.12 );
+    border-radius: 12px;
+    background: rgba( 190, 199, 207, 0.045 );
+}
+
+    .transaction-modal-highlight strong {
+        color: #f2f4f6;
+        font-size: 13px;
+    }
+
+.transaction-modal-grid {
+    display: grid;
+    grid-template-columns: repeat( 2, 1fr );
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+    .transaction-modal-grid > div {
+        min-height: 64px;
+        padding: 13px 14px;
+        border: 1px solid rgba( 211, 218, 224, 0.1 );
+        border-radius: 11px;
+        background: rgba( 7, 13, 18, 0.42 );
+    }
+
+    .transaction-modal-grid strong {
+        color: rgba( 242, 244, 246, 0.88 );
+        font-size: 11px;
+    }
+
+.transaction-modal-description {
+    margin-bottom: 22px;
+    padding: 14px 15px;
+    border-top: 1px solid rgba( 202, 210, 216, 0.08 );
+    border-bottom: 1px solid rgba( 202, 210, 216, 0.08 );
+}
+
+    .transaction-modal-description p {
+        margin: 0;
+        color: rgba( 210, 216, 221, 0.68 );
+        font-size: 10px;
+        line-height: 1.6;
+    }
+
+.transaction-modal-button {
+    width: 100%;
+    height: 44px;
+    border: 1px solid rgba( 222, 227, 232, 0.24 );
+    border-radius: 11px;
+    background: linear-gradient( 145deg, rgba( 170, 179, 187, 0.16 ), rgba( 61, 70, 78, 0.16 ) );
+    color: #f4f5f6;
+    font-size: 10px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+    .transaction-modal-button:hover, .transaction-modal-close:hover {
+        border-color: rgba( 225, 230, 234, 0.38 );
+        background: rgba( 190, 199, 207, 0.1 );
+    }
+
+@media ( max-width: 560px ) {
+    .transaction-modal {
+        padding: 25px 20px 20px;
+    }
+
+    .transaction-modal-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .transaction-modal-value strong {
+        font-size: 25px;
+    }
+}
 
 /* ============================================================
    ERRO

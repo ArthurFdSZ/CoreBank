@@ -31,6 +31,7 @@ function Solicitacoes() {
     const [mensagem, setMensagem] = useState("");
     const [filtro, setFiltro] = useState("Todos");
     const [sidebarRecolhida, setSidebarRecolhida] = useState(false);
+    const [confirmacao, setConfirmacao] = useState<"bloqueio" | "desbloqueio" | null>(null);
 
     const API_URL = "https://localhost:7122";
 
@@ -175,13 +176,7 @@ function Solicitacoes() {
     }, []);
 
     async function solicitarBloqueio() {
-        if (
-            !window.confirm(
-                "Deseja realmente solicitar o bloqueio da sua conta?"
-            )
-        ) {
-            return;
-        }
+        setConfirmacao(null);
 
         const token = obterToken();
 
@@ -225,13 +220,7 @@ function Solicitacoes() {
     }
 
     async function solicitarDesbloqueio() {
-        if (
-            !window.confirm(
-                "Deseja realmente solicitar o desbloqueio da sua conta?"
-            )
-        ) {
-            return;
-        }
+        setConfirmacao(null);
 
         const token = obterToken();
 
@@ -326,9 +315,10 @@ function Solicitacoes() {
 
         if (
             statusNormalizado.includes("cancel") ||
-            statusNormalizado.includes("recus")
+            statusNormalizado.includes("recus") ||
+            statusNormalizado.includes("rejeit")
         ) {
-            return "status-cancelada";
+            return "status-rejeitada";
         }
 
         if (
@@ -361,289 +351,390 @@ function Solicitacoes() {
 
     return (
         <main
-            className={`solicitacoes-page ${sidebarRecolhida ? "sidebar-collapsed" : ""
-                }`}
+            className= {`solicitacoes-page ${sidebarRecolhida ? "sidebar-collapsed" : ""
+            }`
+}
         >
-            <aside className="solicitacoes-sidebar">
-                <div className="sidebar-header">
-                    <strong className="corebank-logo">
-                        <span>Core</span>
-                        <span className="logo-bank">Bank</span>
+    <aside className="solicitacoes-sidebar" >
+        <div className="sidebar-header" >
+            <strong className="corebank-logo" >
+                <span>Core </span>
+                < span className = "logo-bank" > Bank </span>
                     </strong>
 
-                    <button
-                        type="button"
-                        className="sidebar-toggle"
-                        onClick={() =>
-                            setSidebarRecolhida(!sidebarRecolhida)
+                    < button
+type = "button"
+className = "sidebar-toggle"
+onClick = {() =>
+setSidebarRecolhida(!sidebarRecolhida)
                         }
                     >
-                        {sidebarRecolhida ? "›" : "‹"}
-                    </button>
-                </div>
+{ sidebarRecolhida? "›": "‹" }
+    </button>
+    </div>
 
-                <nav className="solicitacoes-nav">
-                    <button
+    < nav className = "solicitacoes-nav" >
+        <button
                         type="button"
-                        className="nav-item"
-                        onClick={() => navigate("/dashboard")}
+className = "nav-item"
+onClick = {() => navigate("/dashboard")}
                     >
-                        <span className="nav-icon">◆</span>
-                        <span className="nav-text">Início</span>
-                    </button>
+    <span className="nav-icon" >◆</span>
+        < span className = "nav-text" > Início </span>
+            </button>
 
-                    <button
-                        type="button"
-                        className="nav-item"
-                        onClick={() => navigate("/transacoes")}
+            < button
+type = "button"
+className = "nav-item"
+onClick = {() => navigate("/transacoes")}
                     >
-                        <span className="nav-icon">➤</span>
-                        <span className="nav-text">Transações</span>
-                    </button>
+    <span className="nav-icon" >➤</span>
+        < span className = "nav-text" > Transações </span>
+            </button>
 
-                    <button
-                        type="button"
-                        className="nav-item"
-                        onClick={() => navigate("/extrato")}
+            < button
+type = "button"
+className = "nav-item"
+onClick = {() => navigate("/extrato")}
                     >
-                        <span className="nav-icon">▤</span>
-                        <span className="nav-text">Extrato</span>
-                    </button>
+    <span className="nav-icon" >▤</span>
+        < span className = "nav-text" > Extrato </span>
+            </button>
 
-                    <button
-                        type="button"
-                        className="nav-item active"
+            < button
+type = "button"
+className = "nav-item active"
+    >
+    <span className="nav-icon" >◇</span>
+        < span className = "nav-text" > Solicitações </span>
+            </button>
+
+            < button
+type = "button"
+className = "nav-item"
+onClick = {() => navigate("/perfil")}
                     >
-                        <span className="nav-icon">◇</span>
-                        <span className="nav-text">Solicitações</span>
-                    </button>
+    <span className="nav-icon" >♟</span>
+        < span className = "nav-text" > Perfil </span>
+            </button>
+            </nav>
 
-                    <button
-                        type="button"
-                        className="nav-item"
-                        onClick={() => navigate("/perfil")}
-                    >
-                        <span className="nav-icon">♟</span>
-                        <span className="nav-text">Perfil</span>
-                    </button>
-                </nav>
+            < div className = "sidebar-footer" >
+                <div className="security-box" >
+                    <span className="security-icon" >✓</span>
 
-                <div className="sidebar-footer">
-                    <div className="security-box">
-                        <span className="security-icon">✓</span>
+                        < div className = "security-text" >
+                            <strong>Ambiente seguro </strong>
+                                < small > Sessão protegida </small>
+                                    </div>
+                                    </div>
 
-                        <div className="security-text">
-                            <strong>Ambiente seguro</strong>
-                            <small>Sessão protegida</small>
-                        </div>
-                    </div>
-
-                    <button
-                        type="button"
-                        className="logout-button"
-                        onClick={sair}
-                    >
-                        <span className="nav-icon">↪</span>
-                        <span className="nav-text">Sair</span>
-                    </button>
-                </div>
+                                    < button
+type = "button"
+className = "logout-button"
+onClick = { sair }
+    >
+    <span className="nav-icon" >↪</span>
+        < span className = "nav-text" > Sair </span>
+            </button>
+            </div>
             </aside>
 
-            <section className="solicitacoes-content">
-                <header className="solicitacoes-header">
+            < section className = "solicitacoes-content" >
+                <header className="solicitacoes-header" >
                     <div>
-                        <span className="section-label">SOLICITAÇÕES</span>
+                    <span className="section-label" > SOLICITAÇÕES </span>
 
-                        <h1>Solicitações</h1>
+                        < h1 > Solicitações </h1>
 
                         <p>
                             Gerencie suas solicitações de forma simples e segura.
                         </p>
+    </div>
+
+    < div className = "header-user" >
+        <div className="header-user-info" >
+            <strong>
+            { usuario?.nome ?? "Cliente CoreBank"}
+</strong>
+
+    <span>
+{ usuario?.email ?? "" }
+</span>
+    </div>
+
+    < div className = "user-avatar" >
+    { usuario?.nome?.charAt(0).toUpperCase() ?? "C" }
+        </div>
+        </div>
+        </header>
+
+{
+    erro && (
+        <div className="feedback feedback-error" >
+            <span>!</span>
+
+            < div >
+            <strong>Não foi possível concluir a operação </strong>
+                < p > { erro } </p>
+                </div>
+                </div>
+                )
+}
+
+{
+    mensagem && (
+        <div className="feedback feedback-success" >
+            <span>✓</span>
+
+                < div >
+                <strong>Solicitação registrada </strong>
+                    < p > { mensagem } </p>
                     </div>
-
-                    <div className="header-user">
-                        <div className="header-user-info">
-                            <strong>
-                                {usuario?.nome ?? "Cliente CoreBank"}
-                            </strong>
-
-                            <span>
-                                {usuario?.email ?? ""}
-                            </span>
-                        </div>
-
-                        <div className="user-avatar">
-                            {usuario?.nome?.charAt(0).toUpperCase() ?? "C"}
-                        </div>
                     </div>
-                </header>
+                )
+}
 
-                {erro && (
-                    <div className="feedback feedback-error">
-                        <span>!</span>
-
-                        <div>
-                            <strong>Não foi possível concluir a operação</strong>
-                            <p>{erro}</p>
-                        </div>
-                    </div>
-                )}
-
-                {mensagem && (
-                    <div className="feedback feedback-success">
-                        <span>✓</span>
-
-                        <div>
-                            <strong>Solicitação registrada</strong>
-                            <p>{mensagem}</p>
-                        </div>
-                    </div>
-                )}
-
-                <section className="request-actions">
-                    <button
+<section className="request-actions" >
+    <button
                         type="button"
-                        className="request-card"
-                        onClick={solicitarBloqueio}
-                        disabled={processando}
-                    >
-                        <div className="request-card-icon">
+className = "request-card"
+onClick = {() => setConfirmacao("bloqueio")}
+disabled = { processando }
+    >
+    <div className="request-card-icon" >
                             🔒
-                        </div>
+</div>
 
-                        <div className="request-card-text">
-                            <strong>Bloquear conta</strong>
+    < div className = "request-card-text" >
+        <strong>Bloquear conta </strong>
 
-                            <p>
+            <p>
                                 Bloqueie sua conta em caso de perda,
-                                roubo ou por segurança.
+    roubo ou por segurança.
                             </p>
-                        </div>
+        </div>
 
-                        <span className="request-arrow">›</span>
-                    </button>
+        < span className = "request-arrow" >›</span>
+            </button>
 
-                    <button
-                        type="button"
-                        className="request-card"
-                        onClick={solicitarDesbloqueio}
-                        disabled={processando}
-                    >
-                        <div className="request-card-icon">
+            < button
+type = "button"
+className = "request-card"
+onClick = {() => setConfirmacao("desbloqueio")}
+disabled = { processando }
+    >
+    <div className="request-card-icon" >
                             🔓
-                        </div>
+</div>
 
-                        <div className="request-card-text">
-                            <strong>Desbloquear conta</strong>
+    < div className = "request-card-text" >
+        <strong>Desbloquear conta </strong>
 
-                            <p>
+            <p>
                                 Solicite o desbloqueio da sua conta após
                                 verificação de segurança.
                             </p>
-                        </div>
+    </div>
 
-                        <span className="request-arrow">›</span>
-                    </button>
-                </section>
+    < span className = "request-arrow" >›</span>
+        </button>
+        </section>
 
-                <section className="requests-panel">
-                    <div className="requests-panel-header">
-                        <div>
-                            <h2>Minhas solicitações</h2>
+        < section className = "requests-panel" >
+            <div className="requests-panel-header" >
+                <div>
+                <h2>Minhas solicitações </h2>
 
-                            <p>
+                    <p>
                                 Acompanhe o status de todas as suas solicitações.
                             </p>
-                        </div>
+    </div>
 
-                        <select
-                            value={filtro}
-                            onChange={(event) =>
-                                setFiltro(event.target.value)
+    < select
+value = { filtro }
+onChange = {(event) =>
+setFiltro(event.target.value)
                             }
                         >
-                            <option value="Todos">
-                                Todos os tipos
-                            </option>
+    <option value="Todos" >
+        Todos os tipos
+            </option>
 
-                            <option value="Bloqueio">
-                                Bloqueio
-                            </option>
+            < option value = "Bloqueio" >
+                Bloqueio
+                </option>
 
-                            <option value="Desbloqueio">
-                                Desbloqueio
-                            </option>
-                        </select>
+                < option value = "Desbloqueio" >
+                    Desbloqueio
+                    </option>
+                    </select>
                     </div>
 
-                    {carregando ? (
-                        <div className="requests-empty">
-                            <div className="empty-icon">◌</div>
+{
+    carregando ? (
+        <div className= "requests-empty" >
+        <div className="empty-icon" >◌</div>
 
-                            <strong>Carregando solicitações...</strong>
-                        </div>
+            < strong > Carregando solicitações...</strong>
+                </div>
                     ) : solicitacoesFiltradas.length === 0 ? (
-                        <div className="requests-empty">
-                            <div className="empty-icon">◇</div>
+        <div className= "requests-empty" >
+        <div className="empty-icon" >◇</div>
 
-                            <strong>Nenhuma solicitação encontrada</strong>
+            < strong > Nenhuma solicitação encontrada </strong>
 
-                            <p>
+                <p>
                                 Suas solicitações aparecerão aqui.
                             </p>
-                        </div>
+        </div>
                     ) : (
-                        <div className="requests-table">
-                            <div className="requests-table-header">
-                                <span>ID</span>
-                                <span>Tipo de solicitação</span>
-                                <span>Descrição</span>
-                                <span>Status</span>
-                                <span>Data da solicitação</span>
-                            </div>
+        <div className= "requests-table" >
+        <div className="requests-table-header" >
+            <span>ID </span>
+            < span > Tipo de solicitação </span>
+                < span > Descrição </span>
+                < span > Status </span>
+                < span > Data da solicitação </span>
+                    </div>
 
-                            {solicitacoesFiltradas.map((solicitacao) => {
-                                const status = obterStatus(solicitacao);
+    {
+        solicitacoesFiltradas.map((solicitacao) => {
+            const status = obterStatus(solicitacao);
 
-                                return (
-                                    <div
-                                        className="requests-table-row"
-                                        key={solicitacao.id}
-                                    >
-                                        <span className="request-id">
-                                            #{solicitacao.id}
-                                        </span>
+            return (
+                <div
+                                        className= "requests-table-row"
+            key = { solicitacao.id }
+                >
+                <span className="request-id" >
+                                            #{ solicitacao.id }
+            </span>
 
-                                        <strong>
-                                            {obterTipo(solicitacao)}
-                                        </strong>
+                <strong>
+            { obterTipo(solicitacao) }
+            </strong>
 
-                                        <span className="request-description">
-                                            {obterDescricao(solicitacao)}
-                                        </span>
+                < span className = "request-description" >
+                { obterDescricao(solicitacao) }
+                    </span>
 
-                                        <span
-                                            className={`request-status ${classeStatus(
-                                                status
-                                            )}`}
+                    < span
+            className = {`request-status ${classeStatus(
+                status
+            )}`
+        }
                                         >
-                                            {status}
-                                        </span>
+            { status }
+            </span>
 
-                                        <span>
-                                            {formatarData(
-                                                solicitacao.createdAt ??
-                                                solicitacao.dataHora
-                                            )}
-                                        </span>
-                                    </div>
+            <span>
+                                            {
+                formatarData(
+                    solicitacao.createdAt ??
+                        solicitacao.dataHora
+                                            )
+    }
+    </span>
+        </div>
                                 );
-                            })}
-                        </div>
+})}
+</div>
                     )}
-                </section>
-            </section>
-        </main>
+</section>
+    </section>
+
+{
+    confirmacao && (
+        <div
+                    className="confirmacao-overlay"
+    role = "presentation"
+    onMouseDown = {(event) => {
+        if (event.target === event.currentTarget && !processando) {
+            setConfirmacao(null);
+        }
+    }
+}
+                >
+    <section
+                        className="confirmacao-modal"
+role = "dialog"
+aria-modal="true"
+aria-labelledby="confirmacao-titulo"
+    >
+    <button
+                            type="button"
+className = "confirmacao-fechar"
+onClick = {() => setConfirmacao(null)}
+disabled = { processando }
+aria-label="Fechar confirmação"
+    >
+                            ×
+</button>
+
+    < div className = "confirmacao-icone" >
+    { confirmacao === "bloqueio" ? "◆" : "◇"}
+</div>
+
+    < span className = "confirmacao-label" > CONFIRMAÇÃO </span>
+
+        < h2 id = "confirmacao-titulo" >
+        { confirmacao === "bloqueio"
+            ? "Solicitar bloqueio da conta?"
+            : "Solicitar desbloqueio da conta?"}
+</h2>
+
+    <p>
+{
+    confirmacao === "bloqueio"
+    ? "Sua conta continuará ativa até que a solicitação seja analisada pelo administrador."
+    : "O desbloqueio será realizado somente após a solicitação ser analisada e aprovada pelo administrador."
+}
+</p>
+
+    < div className = "confirmacao-aviso" >
+        <span>i </span>
+        < div >
+        <strong>Análise necessária </strong>
+            <small>
+                                    A solicitação ficará com status Pendente até a análise administrativa.
+                                </small>
+    </div>
+    </div>
+
+    < div className = "confirmacao-acoes" >
+        <button
+                                type="button"
+className = "confirmacao-cancelar"
+onClick = {() => setConfirmacao(null)}
+disabled = { processando }
+    >
+    Cancelar
+    </button>
+
+    < button
+type = "button"
+className = "confirmacao-confirmar"
+onClick = {
+    confirmacao === "bloqueio"
+    ? solicitarBloqueio
+    : solicitarDesbloqueio
+                                }
+disabled = { processando }
+    >
+{
+    processando
+    ? "Enviando..."
+        : confirmacao === "bloqueio"
+            ? "Confirmar bloqueio"
+            : "Confirmar desbloqueio"
+}
+    </button>
+    </div>
+    </section>
+    </div>
+            )}
+</main>
     );
 }
 

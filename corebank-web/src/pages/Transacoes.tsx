@@ -408,28 +408,99 @@ function Transacoes() {
         }
     }
 
-    function handleTransferencia(
+    async function handleTransferencia(
         event: FormEvent<HTMLFormElement>
     ) {
         event.preventDefault();
 
-        if (
-            !agenciaDestino.trim() ||
-            !contaDestino.trim() ||
-            !valorTransferencia.trim()
-        ) {
+        const token = obterToken();
+        const agencia = agenciaDestino.trim();
+        const numeroConta = contaDestino.trim();
+        const valor = converterValor(valorTransferencia);
+
+        if (!token) {
+            handleLogout();
+            return;
+        }
+
+        if (!agencia || !numeroConta || !valorTransferencia.trim()) {
             exibirMensagem(
                 "Preencha os dados da transferência.",
                 "error"
             );
-
             return;
         }
 
-        exibirMensagem(
-            "A transferência será conectada ao backend na próxima etapa.",
-            "error"
-        );
+        if (!valor || Number.isNaN(valor) || valor <= 0) {
+            exibirMensagem(
+                "Informe um valor válido para a transferência.",
+                "error"
+            );
+            return;
+        }
+
+        try {
+            setProcessando(true);
+            setMensagem("");
+            setTipoMensagem("");
+
+            const resposta = await fetch(
+                "https://localhost:7122/api/Accounts/me/transfer",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    },
+                    body: JSON.stringify({
+                        agency: agencia,
+                        accountNumber: numeroConta,
+                        amount: valor,
+                    }),
+                }
+            );
+
+            if (resposta.status === 401 || resposta.status === 403) {
+                handleLogout();
+                return;
+            }
+
+            if (!resposta.ok) {
+                let dados: MensagemApi | null = null;
+
+                try {
+                    dados = (await resposta.json()) as MensagemApi;
+                } catch {
+                    dados = null;
+                }
+
+                throw new Error(
+                    dados?.mensagem ??
+                    dados?.erros?.[0] ??
+                    "Não foi possível realizar a transferência."
+                );
+            }
+
+            setAgenciaDestino("");
+            setContaDestino("");
+            setValorTransferencia("");
+
+            exibirMensagem(
+                "Transferência realizada com sucesso.",
+                "success"
+            );
+
+            await carregarConta();
+        } catch (error) {
+            exibirMensagem(
+                error instanceof Error
+                    ? error.message
+                    : "Não foi possível realizar a transferência.",
+                "error"
+            );
+        } finally {
+            setProcessando(false);
+        }
     }
 
     if (carregando) {
@@ -902,7 +973,8 @@ setAgenciaDestino(
         .value
 )
                                         }
-                                    />
+disabled = { processando }
+    />
     </div>
     </div>
 
@@ -928,7 +1000,8 @@ setContaDestino(
         .value
 )
                                         }
-                                    />
+disabled = { processando }
+    />
     </div>
     </div>
     </div>
@@ -956,19 +1029,21 @@ setValorTransferencia(
         .value
 )
                                 }
-                            />
+disabled = { processando }
+    />
     </div>
 
     < button
 type = "submit"
 className = "transaction-button"
+disabled = { processando }
     >
-    Continuar transferência
-        </button>
-        </form>
-        </section>
-        </section>
-        </main>
+{ processando? "Processando...": "Realizar transferência" }
+    </button>
+    </form>
+    </section>
+    </section>
+    </main>
     );
 }
 

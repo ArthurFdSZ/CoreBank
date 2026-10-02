@@ -307,6 +307,7 @@ public class AccountsController : ControllerBase
         int authenticatedCustomerId =
             GetAuthenticatedCustomerId();
 
+        // Busca a conta de origem do cliente autenticado.
         var sourceAccount = await _context.Accounts
             .FirstOrDefaultAsync(account =>
                 account.CustomerId ==
@@ -318,6 +319,7 @@ public class AccountsController : ControllerBase
                 "Conta de origem não encontrada.");
         }
 
+        // Busca a conta de destino pela agência e número.
         var destinationAccount = await _context.Accounts
             .FirstOrDefaultAsync(account =>
                 account.Agency == request.Agency &&
@@ -329,31 +331,69 @@ public class AccountsController : ControllerBase
                 "Conta de destino não encontrada.");
         }
 
+        // Impede transferência para a própria conta.
         if (destinationAccount.Id == sourceAccount.Id)
         {
             return BadRequest(
                 "Não é possível transferir para a própria conta.");
         }
 
+        // Busca o cliente que está enviando o dinheiro.
+        var sourceCustomer = await _context.Customers
+            .AsNoTracking()
+            .FirstOrDefaultAsync(customer =>
+                customer.Id == sourceAccount.CustomerId);
+
+        if (sourceCustomer is null)
+        {
+            return NotFound(
+                "Cliente da conta de origem não encontrado.");
+        }
+
+        // Busca o cliente que receberá o dinheiro.
+        var destinationCustomer = await _context.Customers
+            .AsNoTracking()
+            .FirstOrDefaultAsync(customer =>
+                customer.Id == destinationAccount.CustomerId);
+
+        if (destinationCustomer is null)
+        {
+            return NotFound(
+                "Cliente da conta de destino não encontrado.");
+        }
+
+        // Executa a movimentação dos saldos.
         sourceAccount.TransferTo(
             destinationAccount,
             request.Amount);
 
+        // Movimentação registrada no extrato de quem enviou.
         var outgoingTransaction = new Transaction
         {
             AccountId = sourceAccount.Id,
             Type = TransactionType.TransferSent,
             Amount = request.Amount,
-            Description = "Transferência enviada",
+
+            Description =
+                $"Para: {destinationCustomer.Name} • " +
+                $"Agência {destinationAccount.Agency} • " +
+                $"Conta {destinationAccount.Number}",
+
             RelatedAccountId = destinationAccount.Id
         };
 
+        // Movimentação registrada no extrato de quem recebeu.
         var incomingTransaction = new Transaction
         {
             AccountId = destinationAccount.Id,
             Type = TransactionType.TransferReceived,
             Amount = request.Amount,
-            Description = "Transferência recebida",
+
+            Description =
+                $"De: {sourceCustomer.Name} • " +
+                $"Agência {sourceAccount.Agency} • " +
+                $"Conta {sourceAccount.Number}",
+
             RelatedAccountId = sourceAccount.Id
         };
 
@@ -368,12 +408,21 @@ public class AccountsController : ControllerBase
         return Ok(new
         {
             SourceAccountId = sourceAccount.Id,
+
+            DestinationCustomer =
+                destinationCustomer.Name,
+
             DestinationAgency =
                 destinationAccount.Agency,
+
             DestinationAccountNumber =
                 destinationAccount.Number,
-            TransferredAmount = request.Amount,
-            SourceBalance = sourceAccount.Balance
+
+            TransferredAmount =
+                request.Amount,
+
+            SourceBalance =
+                sourceAccount.Balance
         });
     }
 

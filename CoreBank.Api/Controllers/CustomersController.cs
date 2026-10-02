@@ -119,4 +119,78 @@ public class CustomersController : ControllerBase
                 customer.CreatedAt)
         });
     }
+
+
+    // Altera a senha do cliente autenticado após validar a senha atual.
+    [Authorize(Roles = "Customer")]
+    [HttpPut("me/password")]
+    public async Task<IActionResult> ChangeMyPassword(
+        ChangePasswordRequest request)
+    {
+        var customerIdClaim = User.FindFirstValue(
+            ClaimTypes.NameIdentifier);
+
+        if (!int.TryParse(customerIdClaim, out int customerId))
+        {
+            return Unauthorized();
+        }
+
+        var customer = await _context.Customers
+            .FirstOrDefaultAsync(customer =>
+                customer.Id == customerId);
+
+        if (customer is null)
+        {
+            return NotFound(new
+            {
+                mensagem = "Cliente não encontrado."
+            });
+        }
+
+        var currentPasswordResult =
+            _passwordHasher.VerifyHashedPassword(
+                customer,
+                customer.PasswordHash,
+                request.CurrentPassword);
+
+        if (currentPasswordResult ==
+            PasswordVerificationResult.Failed)
+        {
+            return BadRequest(new
+            {
+                mensagem = "A senha atual está incorreta."
+            });
+        }
+
+        var samePasswordResult =
+            _passwordHasher.VerifyHashedPassword(
+                customer,
+                customer.PasswordHash,
+                request.NewPassword);
+
+        if (samePasswordResult !=
+            PasswordVerificationResult.Failed)
+        {
+            return BadRequest(new
+            {
+                mensagem =
+                    "A nova senha deve ser diferente da senha atual."
+            });
+        }
+
+        string newPasswordHash =
+            _passwordHasher.HashPassword(
+                customer,
+                request.NewPassword);
+
+        customer.ChangePasswordHash(
+            newPasswordHash);
+
+        await _context.SaveChangesAsync();
+
+        return Ok(new
+        {
+            mensagem = "Senha alterada com sucesso."
+        });
+    }
 }
