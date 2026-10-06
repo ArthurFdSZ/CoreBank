@@ -876,3 +876,264 @@
         grid-template-columns: 1fr;
     }
 }
+
+
+/* =========================================================
+   MOTIVO DA SOLICITAÇÃO
+   ========================================================= */
+
+.confirmacao-motivo {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 20px 0 16px;
+    text-align: left;
+}
+
+    .confirmacao-motivo label {
+        color: rgba(237, 241, 243, 0.88);
+        font-size: 11px;
+        font-weight: 650;
+    }
+
+    .confirmacao-motivo textarea {
+        width: 100%;
+        min-height: 112px;
+        resize: vertical;
+        padding: 13px 14px;
+        border: 1px solid rgba(211, 219, 226, 0.14);
+        border-radius: 10px;
+        outline: none;
+        background: rgba(5, 11, 17, 0.66);
+        color: #edf0f2;
+        font: inherit;
+        font-size: 11px;
+        line-height: 1.55;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+        .confirmacao-motivo textarea::placeholder {
+            color: rgba(177, 188, 197, 0.38);
+        }
+
+        .confirmacao-motivo textarea:focus {
+            border-color: rgba(79, 140, 255, 0.45);
+            box-shadow: 0 0 0 3px rgba(79, 140, 255, 0.07);
+        }
+
+        .confirmacao-motivo textarea:disabled {
+            opacity: 0.62;
+            cursor: not-allowed;
+        }
+
+.confirmacao-motivo-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+    .confirmacao-motivo-footer small,
+    .confirmacao-motivo-footer span {
+        color: rgba(174, 185, 194, 0.50);
+        font-size: 9px;
+    }
+
+.request-reason {
+    display: block;
+    margin-top: 5px;
+    color: rgba(169, 196, 255, 0.68);
+    font-size: 9px;
+    line-height: 1.4;
+}
+
+.confirmacao-confirmar:disabled {
+    opacity: 0.48;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* ============================================================
+   REFINO VISUAL — SOLICITAÇÕES / COREBANK
+   Somente aparência. Estrutura original preservada.
+   ============================================================ */
+
+.request-card {
+    border-color: rgba(157, 181, 204, 0.22);
+    background: radial-gradient(circle at 92% 8%, rgba(96, 145, 194, 0.10), transparent 34%), linear-gradient(145deg, rgba(15, 23, 30, 0.88), rgba(6, 12, 17, 0.82));
+    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.025);
+}
+
+    .request-card:hover {
+        border-color: rgba(134, 174, 211, 0.34);
+        background: radial-gradient(circle at 92% 8%, rgba(96, 145, 194, 0.14), transparent 36%), linear-gradient(145deg, rgba(19, 28, 36, 0.92), rgba(7, 14, 20, 0.86));
+        box-shadow: 0 22px 52px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.035);
+    }
+
+.request-card-icon {
+    border-color: rgba(124, 163, 201, 0.18);
+    background: radial-gradient(circle at 50% 20%, rgba(115, 163, 211, 0.16), transparent 70%), linear-gradient(145deg, rgba(53, 78, 101, 0.24), rgba(25, 37, 48, 0.16));
+    color: #b7d2ee;
+    filter: none;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
+}
+
+.request-arrow {
+    color: rgba(158, 190, 220, 0.72);
+}
+
+.requests-panel {
+    border-color: rgba(157, 181, 204, 0.20);
+    background: radial-gradient(circle at 88% 5%, rgba(73, 119, 160, 0.075), transparent 31%), linear-gradient(145deg, rgba(13, 21, 28, 0.90), rgba(5, 11, 16, 0.84));
+    box-shadow: 0 22px 55px rgba(0, 0, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.022);
+}
+
+.requests-panel-header {
+    border-bottom-color: rgba(132, 159, 183, 0.13);
+}
+
+    .requests-panel-header select {
+        border-color: rgba(137, 169, 198, 0.20);
+        background: rgba(10, 19, 27, 0.86);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
+    }
+
+.requests-table-row {
+    border-top-color: rgba(128, 154, 178, 0.10);
+}
+
+    .requests-table-row:hover {
+        background: rgba(77, 119, 157, 0.055);
+    }
+
+.status-concluida {
+    border-color: rgba(78, 216, 170, 0.34);
+    background: rgba(13, 78, 57, 0.30);
+    color: #58deb0;
+    box-shadow: 0 0 18px rgba(57, 206, 153, 0.055);
+}
+
+.status-rejeitada,
+.status-cancelada {
+    border-color: rgba(235, 99, 99, 0.32);
+    background: rgba(105, 30, 30, 0.28);
+    color: #ef8585;
+}
+
+.status-analise {
+    border-color: rgba(103, 159, 216, 0.30);
+    background: rgba(36, 77, 117, 0.22);
+    color: #9bc6ef;
+}
+
+.status-pendente {
+    border-color: rgba(225, 184, 76, 0.35);
+    background: rgba(111, 83, 15, 0.25);
+    color: #e8c45e;
+    box-shadow: 0 0 18px rgba(225, 184, 76, 0.045);
+}
+
+.feedback-success {
+    border-color: rgba(78, 216, 170, 0.22);
+    background: linear-gradient(90deg, rgba(25, 100, 75, 0.14), rgba(17, 47, 39, 0.08));
+}
+
+.feedback-error {
+    border-color: rgba(220, 91, 91, 0.23);
+    background: linear-gradient(90deg, rgba(120, 40, 40, 0.14), rgba(60, 25, 25, 0.08));
+}
+
+.confirmacao-modal {
+    border-color: rgba(146, 176, 203, 0.24);
+    background: radial-gradient(circle at 90% 5%, rgba(74, 124, 169, 0.11), transparent 34%), linear-gradient(145deg, rgba(17, 25, 32, 0.985), rgba(5, 11, 16, 0.985));
+    box-shadow: 0 32px 95px rgba(0, 0, 0, 0.58), inset 0 1px 0 rgba(255, 255, 255, 0.025);
+}
+
+.confirmacao-icone {
+    border-color: rgba(126, 163, 198, 0.20);
+    background: linear-gradient(145deg, rgba(52, 79, 104, 0.27), rgba(24, 38, 50, 0.18));
+    color: #b9d3eb;
+}
+
+.confirmacao-aviso {
+    border-color: rgba(130, 158, 183, 0.16);
+    background: rgba(37, 61, 81, 0.10);
+}
+
+.confirmacao-motivo textarea {
+    border-color: rgba(129, 161, 190, 0.18);
+    background: rgba(4, 11, 17, 0.76);
+}
+
+    .confirmacao-motivo textarea:focus {
+        border-color: rgba(91, 155, 219, 0.48);
+        box-shadow: 0 0 0 3px rgba(79, 140, 255, 0.065);
+    }
+
+.confirmacao-cancelar {
+    border-color: rgba(137, 163, 186, 0.18);
+    background: rgba(48, 66, 81, 0.10);
+}
+
+.confirmacao-confirmar {
+    border-color: rgba(130, 173, 214, 0.35);
+    background: linear-gradient(145deg, #b9d2e8, #8eafcb);
+    color: #071017;
+}
+
+/* ============================================================
+   DETALHES DE COR — COREBANK
+   Apenas acabamento visual. Estrutura preservada.
+   ============================================================ */
+
+/* Primeiro card: detalhe verde */
+.requests-actions .request-card:nth-child(1) {
+    border-color: rgba(64, 201, 151, 0.20);
+}
+
+    .requests-actions .request-card:nth-child(1) .request-card-icon {
+        color: #63d8ae;
+        border-color: rgba(64, 201, 151, 0.22);
+        background: rgba(42, 151, 112, 0.10);
+    }
+
+/* Segundo card: detalhe azul */
+.requests-actions .request-card:nth-child(2) {
+    border-color: rgba(91, 155, 255, 0.20);
+}
+
+    .requests-actions .request-card:nth-child(2) .request-card-icon {
+        color: #86b5ff;
+        border-color: rgba(91, 155, 255, 0.22);
+        background: rgba(61, 118, 207, 0.10);
+    }
+
+/* Terceiro card: detalhe roxo */
+.requests-actions .request-card:nth-child(3) {
+    border-color: rgba(156, 113, 230, 0.20);
+}
+
+    .requests-actions .request-card:nth-child(3) .request-card-icon {
+        color: #b69aeb;
+        border-color: rgba(156, 113, 230, 0.22);
+        background: rgba(118, 77, 188, 0.10);
+    }
+
+/* Pequeno destaque azul no histórico */
+.requests-panel {
+    border-top-color: rgba(91, 155, 255, 0.24);
+}
+
+/* Hover preservando a identidade de cada ação */
+.requests-actions .request-card:nth-child(1):hover {
+    border-color: rgba(64, 201, 151, 0.34);
+}
+
+.requests-actions .request-card:nth-child(2):hover {
+    border-color: rgba(91, 155, 255, 0.34);
+}
+
+.requests-actions .request-card:nth-child(3):hover {
+    border-color: rgba(156, 113, 230, 0.34);
+}

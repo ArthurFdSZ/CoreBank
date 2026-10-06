@@ -1127,3 +1127,83 @@ div > span {
         gap: 10px;
     }
 }
+
+/* ============================================================
+   AJUSTE VISUAL COREBANK
+   Apenas identidade visual — sem alteração de estrutura/layout
+   ============================================================ */
+
+/* Cartão principal de saldo */
+.extrato-balance {
+    border-color: rgba(91, 155, 255, 0.30);
+    background: radial-gradient(circle at 88% 18%, rgba(52, 125, 255, 0.13), transparent 34%), linear-gradient(145deg, rgba(12, 24, 38, 0.88), rgba(5, 12, 19, 0.78));
+    box-shadow: 0 22px 55px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.025);
+}
+
+/* Cards de entradas e saídas */
+.extrato-stat-card {
+    background: linear-gradient(145deg, rgba(17, 25, 33, 0.82), rgba(6, 12, 18, 0.76));
+    box-shadow: 0 20px 48px rgba(0, 0, 0, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.025);
+}
+
+    .extrato-stat-card:has(.stat-icon.income) {
+        border-color: rgba(73, 205, 157, 0.22);
+        background: radial-gradient(circle at 88% 14%, rgba(54, 205, 151, 0.10), transparent 38%), linear-gradient(145deg, rgba(14, 25, 27, 0.84), rgba(6, 13, 17, 0.76));
+    }
+
+    .extrato-stat-card:has(.stat-icon.expense) {
+        border-color: rgba(255, 104, 104, 0.20);
+        background: radial-gradient(circle at 88% 14%, rgba(255, 91, 91, 0.08), transparent 38%), linear-gradient(145deg, rgba(25, 18, 21, 0.82), rgba(7, 12, 17, 0.76));
+    }
+
+/* Painel do histórico */
+.extrato-panel {
+    border-color: rgba(121, 151, 181, 0.22);
+    background: radial-gradient(circle at 96% 4%, rgba(76, 139, 220, 0.07), transparent 28%), linear-gradient(145deg, rgba(12, 20, 28, 0.84), rgba(5, 11, 16, 0.78));
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.025);
+}
+
+/* Área dos filtros */
+.extrato-filters {
+    background: linear-gradient(135deg, rgba(14, 23, 31, 0.62), rgba(6, 13, 19, 0.48));
+    border-color: rgba(137, 158, 178, 0.16);
+}
+
+/* Interação sutil nas movimentações */
+.statement-item:hover {
+    background: linear-gradient(90deg, rgba(70, 126, 185, 0.055), rgba(190, 199, 207, 0.018));
+}
+
+/* Destaque discreto no avatar */
+.user-avatar {
+    border-color: rgba(108, 158, 221, 0.30);
+    background: linear-gradient(145deg, rgba(49, 88, 137, 0.25), rgba(28, 42, 55, 0.22));
+}
+
+/* Mantém os elementos decorativos do saldo mais sutis */
+.balance-line {
+    border-color: rgba(104, 153, 213, 0.15);
+}
+
+.line-two {
+    border-color: rgba(104, 153, 213, 0.075);
+}
+
+/* ============================================================
+   AJUSTE CARD SALDO — PADRÃO DASHBOARD
+   Somente aparência. Estrutura e dimensões preservadas.
+   ============================================================ */
+
+.extrato-balance {
+    border-color: rgba(61, 203, 145, 0.28);
+    background: radial-gradient(circle at 88% 12%, rgba(49, 201, 143, 0.15), transparent 34%), linear-gradient(145deg, rgba(13, 22, 27, 0.88), rgba(6, 12, 17, 0.80));
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.025);
+}
+
+.balance-line {
+    border-color: rgba(108, 153, 174, 0.14);
+}
+
+.line-two {
+    border-color: rgba(108, 153, 174, 0.07);
+}

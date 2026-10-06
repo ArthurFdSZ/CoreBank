@@ -15,6 +15,8 @@ type Solicitacao = {
     tipo?: string;
     description?: string;
     descricao?: string;
+    motivo?: string;
+    reason?: string;
     status?: string;
     createdAt?: string;
     dataHora?: string;
@@ -32,6 +34,7 @@ function Solicitacoes() {
     const [filtro, setFiltro] = useState("Todos");
     const [sidebarRecolhida, setSidebarRecolhida] = useState(false);
     const [confirmacao, setConfirmacao] = useState<"bloqueio" | "desbloqueio" | null>(null);
+    const [motivo, setMotivo] = useState("");
 
     const API_URL = "https://localhost:7122";
 
@@ -176,7 +179,17 @@ function Solicitacoes() {
     }, []);
 
     async function solicitarBloqueio() {
-        setConfirmacao(null);
+        const motivoNormalizado = motivo.trim();
+
+        if (!motivoNormalizado) {
+            setErro("Informe o motivo da solicitação.");
+            return;
+        }
+
+        if (motivoNormalizado.length > 500) {
+            setErro("O motivo deve ter no máximo 500 caracteres.");
+            return;
+        }
 
         const token = obterToken();
 
@@ -196,8 +209,12 @@ function Solicitacoes() {
                     method: "POST",
                     headers: {
                         Accept: "application/json",
+                        "Content-Type": "application/json",
                         Authorization: `Bearer ${token}`,
                     },
+                    body: JSON.stringify({
+                        motivo: motivoNormalizado,
+                    }),
                 }
             );
 
@@ -210,6 +227,8 @@ function Solicitacoes() {
             );
 
             await carregarSolicitacoes();
+            setMotivo("");
+            setConfirmacao(null);
         } catch (error) {
             if (error instanceof Error && error.message !== "Sessão expirada.") {
                 setErro(error.message);
@@ -220,7 +239,17 @@ function Solicitacoes() {
     }
 
     async function solicitarDesbloqueio() {
-        setConfirmacao(null);
+        const motivoNormalizado = motivo.trim();
+
+        if (!motivoNormalizado) {
+            setErro("Informe o motivo da solicitação.");
+            return;
+        }
+
+        if (motivoNormalizado.length > 500) {
+            setErro("O motivo deve ter no máximo 500 caracteres.");
+            return;
+        }
 
         const token = obterToken();
 
@@ -240,8 +269,12 @@ function Solicitacoes() {
                     method: "POST",
                     headers: {
                         Accept: "application/json",
+                        "Content-Type": "application/json",
                         Authorization: `Bearer ${token}`,
                     },
+                    body: JSON.stringify({
+                        motivo: motivoNormalizado,
+                    }),
                 }
             );
 
@@ -254,6 +287,8 @@ function Solicitacoes() {
             );
 
             await carregarSolicitacoes();
+            setMotivo("");
+            setConfirmacao(null);
         } catch (error) {
             if (error instanceof Error && error.message !== "Sessão expirada.") {
                 setErro(error.message);
@@ -273,6 +308,10 @@ function Solicitacoes() {
             solicitacao.description ??
             "Solicitação registrada no CoreBank."
         );
+    }
+
+    function obterMotivo(solicitacao: Solicitacao) {
+        return solicitacao.motivo ?? solicitacao.reason ?? "";
     }
 
     function obterStatus(solicitacao: Solicitacao) {
@@ -499,7 +538,11 @@ onClick = { sair }
     <button
                         type="button"
 className = "request-card"
-onClick = {() => setConfirmacao("bloqueio")}
+onClick = {() => {
+    setErro("");
+    setMotivo("");
+    setConfirmacao("bloqueio");
+}}
 disabled = { processando }
     >
     <div className="request-card-icon" >
@@ -521,7 +564,11 @@ disabled = { processando }
             < button
 type = "button"
 className = "request-card"
-onClick = {() => setConfirmacao("desbloqueio")}
+onClick = {() => {
+    setErro("");
+    setMotivo("");
+    setConfirmacao("desbloqueio");
+}}
 disabled = { processando }
     >
     <div className="request-card-icon" >
@@ -617,26 +664,34 @@ setFiltro(event.target.value)
 
                 < span className = "request-description" >
                 { obterDescricao(solicitacao) }
-                    </span>
 
-                    < span
-            className = {`request-status ${classeStatus(
-                status
-            )}`
-        }
-                                        >
-            { status }
-            </span>
-
-            <span>
-                                            {
-                formatarData(
-                    solicitacao.createdAt ??
-                        solicitacao.dataHora
-                                            )
+            {
+                obterMotivo(solicitacao) && (
+                    <small className="request-reason" >
+                        Motivo: { obterMotivo(solicitacao) }
+                </small>
+                        )
     }
     </span>
-        </div>
+
+        < span
+    className = {`request-status ${classeStatus(
+        status
+    )}`
+}
+                                        >
+{ status }
+    </span>
+
+    <span>
+{
+    formatarData(
+        solicitacao.createdAt ??
+        solicitacao.dataHora
+    )
+}
+</span>
+    </div>
                                 );
 })}
 </div>
@@ -665,7 +720,10 @@ aria-labelledby="confirmacao-titulo"
     <button
                             type="button"
 className = "confirmacao-fechar"
-onClick = {() => setConfirmacao(null)}
+onClick = {() => {
+    setConfirmacao(null);
+    setMotivo("");
+}}
 disabled = { processando }
 aria-label="Fechar confirmação"
     >
@@ -687,10 +745,41 @@ aria-label="Fechar confirmação"
     <p>
 {
     confirmacao === "bloqueio"
-    ? "Sua conta continuará ativa até que a solicitação seja analisada pelo administrador."
-    : "O desbloqueio será realizado somente após a solicitação ser analisada e aprovada pelo administrador."
+        ? "Sua conta continuará ativa até que a solicitação seja analisada pelo administrador."
+        : "O desbloqueio será realizado somente após a solicitação ser analisada e aprovada pelo administrador."
 }
 </p>
+
+    < div className = "confirmacao-motivo" >
+        <label htmlFor="motivo-solicitacao" >
+            Motivo da solicitação
+                </label>
+
+                < textarea
+id = "motivo-solicitacao"
+value = { motivo }
+onChange = {(event) =>
+setMotivo(event.target.value)
+            }
+maxLength = { 500}
+disabled = { processando }
+placeholder = {
+    confirmacao === "bloqueio"
+    ? "Explique por que deseja bloquear sua conta..."
+    : "Explique por que deseja desbloquear sua conta..."
+            }
+        />
+
+    < div className = "confirmacao-motivo-footer" >
+        <small>
+        Campo obrigatório
+            </small>
+
+            <span>
+{ motivo.length }/500
+    </span>
+    </div>
+    </div>
 
     < div className = "confirmacao-aviso" >
         <span>i </span>
@@ -706,7 +795,10 @@ aria-label="Fechar confirmação"
         <button
                                 type="button"
 className = "confirmacao-cancelar"
-onClick = {() => setConfirmacao(null)}
+onClick = {() => {
+    setConfirmacao(null);
+    setMotivo("");
+}}
 disabled = { processando }
     >
     Cancelar
@@ -720,7 +812,7 @@ onClick = {
     ? solicitarBloqueio
     : solicitarDesbloqueio
                                 }
-disabled = { processando }
+disabled = { processando || !motivo.trim() }
     >
 {
     processando

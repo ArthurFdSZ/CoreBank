@@ -21,6 +21,20 @@ public class AccountRequestsController : ControllerBase
         _context = context;
     }
 
+    // ============================================================
+    // DTO
+    // ============================================================
+
+    // Dados enviados pelo cliente ao criar uma solicitação.
+    public class CreateAccountRequestDto
+    {
+        public string Motivo { get; set; } = string.Empty;
+    }
+
+    // ============================================================
+    // MÉTODOS AUXILIARES
+    // ============================================================
+
     // Obtém o ID do cliente autenticado através do JWT.
     private int GetAuthenticatedCustomerId()
     {
@@ -43,6 +57,7 @@ public class AccountRequestsController : ControllerBase
         {
             AccountRequestType.Block => "Bloqueio",
             AccountRequestType.Unblock => "Desbloqueio",
+            AccountRequestType.OpenAccount => "Abertura de conta",
             _ => "Desconhecido"
         };
     }
@@ -57,6 +72,9 @@ public class AccountRequestsController : ControllerBase
 
             AccountRequestType.Unblock =>
                 "Solicitação de desbloqueio da conta.",
+
+            AccountRequestType.OpenAccount =>
+                "Solicitação de abertura de conta.",
 
             _ =>
                 "Solicitação registrada no CoreBank."
@@ -75,6 +93,19 @@ public class AccountRequestsController : ControllerBase
         };
     }
 
+    // Valida e normaliza o motivo informado pelo cliente.
+    private static string? ValidateReason(
+        CreateAccountRequestDto? request)
+    {
+        if (request is null ||
+            string.IsNullOrWhiteSpace(request.Motivo))
+        {
+            return null;
+        }
+
+        return request.Motivo.Trim();
+    }
+
     // ============================================================
     // HISTÓRICO DE SOLICITAÇÕES DO CLIENTE
     // ============================================================
@@ -84,21 +115,10 @@ public class AccountRequestsController : ControllerBase
     {
         int customerId = GetAuthenticatedCustomerId();
 
-        var account = await _context.Accounts
-            .AsNoTracking()
-            .FirstOrDefaultAsync(account =>
-                account.CustomerId == customerId);
-
-        if (account is null)
-        {
-            return NotFound(
-                "Conta não encontrada.");
-        }
-
         var requests = await _context.AccountRequests
             .AsNoTracking()
             .Where(request =>
-                request.AccountId == account.Id)
+                request.CustomerId == customerId)
             .OrderByDescending(request =>
                 request.CreatedAt)
             .ToListAsync();
@@ -115,6 +135,9 @@ public class AccountRequestsController : ControllerBase
                 Descricao =
                     FormatRequestDescription(
                         request.Type),
+
+                Motivo =
+                    request.Reason,
 
                 Status =
                     FormatRequestStatus(
@@ -138,9 +161,25 @@ public class AccountRequestsController : ControllerBase
     // ============================================================
 
     [HttpPost("me/block")]
-    public async Task<IActionResult> RequestBlock()
+    public async Task<IActionResult> RequestBlock(
+        [FromBody] CreateAccountRequestDto request)
     {
         int customerId = GetAuthenticatedCustomerId();
+
+        // Valida o motivo informado pelo cliente.
+        string? reason = ValidateReason(request);
+
+        if (reason is null)
+        {
+            return BadRequest(
+                "O motivo da solicitação é obrigatório.");
+        }
+
+        if (reason.Length > 500)
+        {
+            return BadRequest(
+                "O motivo da solicitação deve ter no máximo 500 caracteres.");
+        }
 
         var account = await _context.Accounts
             .FirstOrDefaultAsync(account =>
@@ -177,8 +216,14 @@ public class AccountRequestsController : ControllerBase
 
         var accountRequest = new AccountRequest
         {
+            CustomerId = customerId,
             AccountId = account.Id,
-            Type = AccountRequestType.Block
+
+            Type =
+                AccountRequestType.Block,
+
+            Reason =
+                reason
         };
 
         _context.AccountRequests.Add(
@@ -190,7 +235,8 @@ public class AccountRequestsController : ControllerBase
             $"/api/accountrequests/{accountRequest.Id}",
             new
             {
-                Id = accountRequest.Id,
+                Id =
+                    accountRequest.Id,
 
                 Tipo =
                     FormatRequestType(
@@ -199,6 +245,9 @@ public class AccountRequestsController : ControllerBase
                 Descricao =
                     FormatRequestDescription(
                         accountRequest.Type),
+
+                Motivo =
+                    accountRequest.Reason,
 
                 Status =
                     FormatRequestStatus(
@@ -222,9 +271,25 @@ public class AccountRequestsController : ControllerBase
     // ============================================================
 
     [HttpPost("me/unblock")]
-    public async Task<IActionResult> RequestUnblock()
+    public async Task<IActionResult> RequestUnblock(
+        [FromBody] CreateAccountRequestDto request)
     {
         int customerId = GetAuthenticatedCustomerId();
+
+        // Valida o motivo informado pelo cliente.
+        string? reason = ValidateReason(request);
+
+        if (reason is null)
+        {
+            return BadRequest(
+                "O motivo da solicitação é obrigatório.");
+        }
+
+        if (reason.Length > 500)
+        {
+            return BadRequest(
+                "O motivo da solicitação deve ter no máximo 500 caracteres.");
+        }
 
         var account = await _context.Accounts
             .FirstOrDefaultAsync(account =>
@@ -261,8 +326,14 @@ public class AccountRequestsController : ControllerBase
 
         var accountRequest = new AccountRequest
         {
+            CustomerId = customerId,
             AccountId = account.Id,
-            Type = AccountRequestType.Unblock
+
+            Type =
+                AccountRequestType.Unblock,
+
+            Reason =
+                reason
         };
 
         _context.AccountRequests.Add(
@@ -274,7 +345,8 @@ public class AccountRequestsController : ControllerBase
             $"/api/accountrequests/{accountRequest.Id}",
             new
             {
-                Id = accountRequest.Id,
+                Id =
+                    accountRequest.Id,
 
                 Tipo =
                     FormatRequestType(
@@ -283,6 +355,9 @@ public class AccountRequestsController : ControllerBase
                 Descricao =
                     FormatRequestDescription(
                         accountRequest.Type),
+
+                Motivo =
+                    accountRequest.Reason,
 
                 Status =
                     FormatRequestStatus(
@@ -300,4 +375,112 @@ public class AccountRequestsController : ControllerBase
                     "Solicitação de desbloqueio realizada com sucesso."
             });
     }
+
+    // ============================================================
+    // SOLICITAÇÃO DE ABERTURA DE CONTA
+    // ============================================================
+
+    [HttpPost("me/open")]
+    public async Task<IActionResult> RequestOpenAccount(
+        [FromBody] CreateAccountRequestDto request)
+    {
+        int customerId = GetAuthenticatedCustomerId();
+
+        string? reason = ValidateReason(request);
+
+        if (reason is null)
+        {
+            return BadRequest(
+                "O motivo da solicitação é obrigatório.");
+        }
+
+        if (reason.Length > 500)
+        {
+            return BadRequest(
+                "O motivo da solicitação deve ter no máximo 500 caracteres.");
+        }
+
+        // A abertura só pode ser solicitada por um cliente
+        // que ainda não possui conta bancária.
+        bool accountExists =
+            await _context.Accounts
+                .AnyAsync(account =>
+                    account.CustomerId == customerId);
+
+        if (accountExists)
+        {
+            return BadRequest(
+                "Você já possui uma conta no CoreBank.");
+        }
+
+        // Evita mais de uma solicitação de abertura pendente.
+        bool pendingOpenRequestExists =
+            await _context.AccountRequests
+                .AnyAsync(accountRequest =>
+                    accountRequest.CustomerId == customerId &&
+                    accountRequest.Type ==
+                        AccountRequestType.OpenAccount &&
+                    accountRequest.Status ==
+                        AccountRequestStatus.Pending);
+
+        if (pendingOpenRequestExists)
+        {
+            return BadRequest(
+                "Já existe uma solicitação de abertura de conta pendente.");
+        }
+
+        var accountRequest = new AccountRequest
+        {
+            CustomerId = customerId,
+
+            // A conta ainda não existe.
+            AccountId = null,
+
+            Type =
+                AccountRequestType.OpenAccount,
+
+            Reason =
+                reason
+        };
+
+        _context.AccountRequests.Add(
+            accountRequest);
+
+        await _context.SaveChangesAsync();
+
+        return Created(
+            $"/api/accountrequests/{accountRequest.Id}",
+            new
+            {
+                Id =
+                    accountRequest.Id,
+
+                Tipo =
+                    FormatRequestType(
+                        accountRequest.Type),
+
+                Descricao =
+                    FormatRequestDescription(
+                        accountRequest.Type),
+
+                Motivo =
+                    accountRequest.Reason,
+
+                Status =
+                    FormatRequestStatus(
+                        accountRequest.Status),
+
+                CreatedAt =
+                    DateTimeHelper.ToBrazilianDateTime(
+                        accountRequest.CreatedAt),
+
+                ReviewedAt =
+                    DateTimeHelper.ToBrazilianDateTime(
+                        accountRequest.ReviewedAt),
+
+                Message =
+                    "Solicitação de abertura de conta realizada com sucesso."
+            });
+    }
+
 }

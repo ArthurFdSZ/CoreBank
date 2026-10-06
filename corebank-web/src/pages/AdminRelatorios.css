@@ -1,0 +1,763 @@
+/* =========================================================
+   COREBANK - RELATÓRIOS ADMINISTRATIVOS
+   Layout baseado na referência aprovada pelo usuário.
+   A estrutura global continua herdando AdminDashboard.css.
+   ========================================================= */
+
+.relatorios-content {
+    padding-bottom: 34px;
+}
+
+.relatorios-header {
+    margin-bottom: 0;
+}
+
+/* =========================================================
+   PERÍODO
+   ========================================================= */
+
+.relatorios-periodo-row {
+    display: flex;
+    justify-content: flex-end;
+    margin: -8px 0 16px;
+}
+
+.relatorios-periodo {
+    min-width: 190px;
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 10px 13px;
+    border: 1px solid rgba(210, 219, 227, 0.12);
+    border-radius: 11px;
+    background: rgba(10, 16, 22, 0.72);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+}
+
+.relatorios-periodo-icon {
+    width: 34px;
+    height: 34px;
+    display: grid;
+    place-items: center;
+    border-radius: 9px;
+    background: rgba(255, 255, 255, 0.045);
+    color: rgba(226, 233, 239, 0.78);
+    font-size: 15px;
+}
+
+.relatorios-periodo div {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.relatorios-periodo small {
+    color: rgba(175, 187, 197, 0.48);
+    font-size: 9px;
+}
+
+.relatorios-periodo strong {
+    color: rgba(241, 244, 246, 0.88);
+    font-size: 11px;
+}
+
+/* =========================================================
+   KPIs
+   ========================================================= */
+
+.relatorios-kpis {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+    margin-bottom: 16px;
+}
+
+.relatorios-kpi {
+    position: relative;
+    min-height: 140px;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 18px;
+    border: 1px solid rgba(210, 219, 227, 0.13);
+    border-radius: 14px;
+    background: linear-gradient( 145deg, rgba(255, 255, 255, 0.026), rgba(255, 255, 255, 0.008) ), rgba(8, 14, 20, 0.77);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.15), inset 0 1px rgba(255, 255, 255, 0.018);
+}
+
+    .relatorios-kpi::after {
+        content: "";
+        position: absolute;
+        width: 110px;
+        height: 110px;
+        right: -40px;
+        bottom: -55px;
+        border-radius: 50%;
+        filter: blur(24px);
+        opacity: 0.2;
+    }
+
+    .relatorios-kpi.clientes::after {
+        background: #8b72bd;
+    }
+
+    .relatorios-kpi.contas::after {
+        background: #6b8fbd;
+    }
+
+    .relatorios-kpi.solicitacoes::after {
+        background: #c5a95c;
+    }
+
+    .relatorios-kpi.saldo::after {
+        background: #54c99a;
+    }
+
+.relatorios-kpi-icon {
+    width: 42px;
+    min-width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    border-radius: 11px;
+    font-size: 17px;
+}
+
+.relatorios-kpi.clientes .relatorios-kpi-icon {
+    background: rgba(139, 114, 189, 0.12);
+    color: #a78bd9;
+}
+
+.relatorios-kpi.contas .relatorios-kpi-icon {
+    background: rgba(107, 143, 189, 0.12);
+    color: #87a9d3;
+}
+
+.relatorios-kpi.solicitacoes .relatorios-kpi-icon {
+    background: rgba(197, 169, 92, 0.12);
+    color: #d4ba72;
+}
+
+.relatorios-kpi.saldo .relatorios-kpi-icon {
+    background: rgba(84, 201, 154, 0.12);
+    color: #65d4a8;
+}
+
+.relatorios-kpi-text {
+    position: relative;
+    z-index: 2;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    padding-top: 3px;
+}
+
+    .relatorios-kpi-text > span {
+        color: rgba(180, 192, 201, 0.57);
+        font-size: 8px;
+        font-weight: 750;
+        letter-spacing: 0.10em;
+    }
+
+    .relatorios-kpi-text > strong {
+        margin-top: 12px;
+        color: #f1f4f6;
+        font-size: 25px;
+        line-height: 1;
+        font-weight: 720;
+        white-space: nowrap;
+    }
+
+    .relatorios-kpi-text > small {
+        margin-top: 8px;
+        color: rgba(174, 186, 195, 0.47);
+        font-size: 9px;
+    }
+
+.relatorios-mini-line {
+    position: absolute;
+    z-index: 1;
+    right: 18px;
+    bottom: 16px;
+    width: 92px;
+    height: 26px;
+    display: flex;
+    align-items: flex-end;
+    gap: 0;
+    opacity: 0.42;
+}
+
+    .relatorios-mini-line i {
+        flex: 1;
+        display: block;
+        height: 2px;
+        margin-left: -1px;
+        border-radius: 999px;
+        transform-origin: center;
+    }
+
+        .relatorios-mini-line i:nth-child(1) {
+            transform: translateY(-1px) rotate(-7deg);
+        }
+
+        .relatorios-mini-line i:nth-child(2) {
+            transform: translateY(-4px) rotate(5deg);
+        }
+
+        .relatorios-mini-line i:nth-child(3) {
+            transform: translateY(-7px) rotate(-5deg);
+        }
+
+        .relatorios-mini-line i:nth-child(4) {
+            transform: translateY(-11px) rotate(-9deg);
+        }
+
+.relatorios-kpi.clientes .relatorios-mini-line i {
+    background: #8b72bd;
+}
+
+.relatorios-kpi.contas .relatorios-mini-line i {
+    background: #6b8fbd;
+}
+
+.relatorios-kpi.solicitacoes .relatorios-mini-line i {
+    background: #c5a95c;
+}
+
+.relatorios-kpi.saldo .relatorios-mini-line i {
+    background: #54c99a;
+}
+
+/* =========================================================
+   PAINÉIS
+   ========================================================= */
+
+.relatorios-main-grid,
+.relatorios-bottom-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.55fr) minmax(310px, 0.75fr);
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.relatorios-panel {
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid rgba(210, 219, 227, 0.13);
+    border-radius: 15px;
+    background: linear-gradient( 145deg, rgba(255, 255, 255, 0.022), rgba(255, 255, 255, 0.006) ), rgba(8, 14, 20, 0.78);
+    box-shadow: 0 20px 44px rgba(0, 0, 0, 0.15), inset 0 1px rgba(255, 255, 255, 0.016);
+}
+
+.relatorios-evolucao,
+.relatorios-distribuicao,
+.relatorios-detalhamento,
+.relatorios-resumo {
+    padding: 20px;
+}
+
+.relatorios-panel-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+    .relatorios-panel-header h2 {
+        margin: 4px 0 4px;
+        color: #eef2f4;
+        font-size: 17px;
+        font-weight: 680;
+    }
+
+    .relatorios-panel-header p {
+        margin: 4px 0 0;
+        color: rgba(177, 189, 198, 0.52);
+        font-size: 10px;
+        line-height: 1.45;
+    }
+
+.relatorios-operacao {
+    min-width: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 12px;
+    border: 1px solid rgba(210, 219, 227, 0.11);
+    border-radius: 9px;
+    background: rgba(255, 255, 255, 0.022);
+    color: rgba(228, 233, 237, 0.75);
+    font-size: 9px;
+}
+
+/* =========================================================
+   GRÁFICO DE LINHAS
+   ========================================================= */
+
+.relatorios-chart-legend {
+    display: flex;
+    justify-content: flex-end;
+    gap: 18px;
+    margin: 16px 4px 4px;
+}
+
+    .relatorios-chart-legend span {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        color: rgba(190, 200, 207, 0.60);
+        font-size: 9px;
+    }
+
+    .relatorios-chart-legend i,
+    .relatorios-dist-title i,
+    .relatorios-tipo i {
+        width: 7px;
+        height: 7px;
+        display: inline-block;
+        border-radius: 50%;
+    }
+
+    .relatorios-chart-legend .deposito,
+    .relatorios-dist-item.deposito i,
+    .relatorios-tipo.deposito i {
+        background: #54c99a;
+    }
+
+    .relatorios-chart-legend .saque,
+    .relatorios-dist-item.saque i,
+    .relatorios-tipo.saque i {
+        background: #8b72bd;
+    }
+
+    .relatorios-chart-legend .transferencia,
+    .relatorios-dist-item.transferencia i,
+    .relatorios-tipo.transferencia i {
+        background: #6b8fbd;
+    }
+
+.relatorios-chart-area {
+    display: grid;
+    grid-template-columns: 58px minmax(0, 1fr);
+    min-height: 280px;
+    margin-top: 2px;
+}
+
+.relatorios-y-axis {
+    height: 250px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 17px 8px 15px 0;
+    color: rgba(171, 184, 194, 0.48);
+    font-size: 8px;
+    text-align: right;
+}
+
+.relatorios-svg-wrap {
+    min-width: 0;
+    overflow: hidden;
+}
+
+.relatorios-line-chart {
+    width: 100%;
+    height: 250px;
+    overflow: visible;
+}
+
+.relatorios-grid-lines line {
+    stroke: rgba(210, 219, 227, 0.075);
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+}
+
+.relatorios-chart-line {
+    fill: none;
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    filter: url(#relatoriosGlow);
+}
+
+.relatorios-serie.deposito .relatorios-chart-line {
+    stroke: #54c99a;
+}
+
+.relatorios-serie.saque .relatorios-chart-line {
+    stroke: #8b72bd;
+}
+
+.relatorios-serie.transferencia .relatorios-chart-line {
+    stroke: #6b8fbd;
+}
+
+.relatorios-chart-point {
+    stroke-width: 2;
+}
+
+.relatorios-serie.deposito .relatorios-chart-point {
+    fill: #0a1117;
+    stroke: #54c99a;
+}
+
+.relatorios-serie.saque .relatorios-chart-point {
+    fill: #0a1117;
+    stroke: #8b72bd;
+}
+
+.relatorios-serie.transferencia .relatorios-chart-point {
+    fill: #0a1117;
+    stroke: #6b8fbd;
+}
+
+.relatorios-chart-dates {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 18px 0;
+    color: rgba(171, 184, 194, 0.48);
+    font-size: 8px;
+}
+
+/* =========================================================
+   DISTRIBUIÇÃO
+   ========================================================= */
+
+.relatorios-donut-layout {
+    min-height: 270px;
+    display: grid;
+    grid-template-columns: 155px minmax(0, 1fr);
+    align-items: center;
+    gap: 20px;
+    padding-top: 14px;
+}
+
+.relatorios-donut {
+    width: 155px;
+    height: 155px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.18);
+}
+
+.relatorios-donut-center {
+    width: 104px;
+    height: 104px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #091016;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.035);
+}
+
+    .relatorios-donut-center strong {
+        color: #f1f4f6;
+        font-size: 15px;
+        font-weight: 700;
+    }
+
+    .relatorios-donut-center span {
+        margin-top: 4px;
+        color: rgba(174, 186, 195, 0.46);
+        font-size: 8px;
+    }
+
+.relatorios-distribuicao-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 19px;
+}
+
+.relatorios-dist-item {
+    position: relative;
+}
+
+.relatorios-dist-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+    .relatorios-dist-title span {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        color: rgba(222, 228, 232, 0.74);
+        font-size: 9px;
+    }
+
+    .relatorios-dist-title strong {
+        color: rgba(239, 242, 244, 0.87);
+        font-size: 9px;
+    }
+
+.relatorios-progress {
+    height: 6px;
+    overflow: hidden;
+    margin-top: 7px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.055);
+}
+
+    .relatorios-progress span {
+        display: block;
+        height: 100%;
+        border-radius: inherit;
+    }
+
+.relatorios-dist-item.deposito .relatorios-progress span {
+    background: #54c99a;
+}
+
+.relatorios-dist-item.transferencia .relatorios-progress span {
+    background: #6b8fbd;
+}
+
+.relatorios-dist-item.saque .relatorios-progress span {
+    background: #8b72bd;
+}
+
+.relatorios-dist-item > small {
+    display: block;
+    margin-top: 4px;
+    color: rgba(167, 179, 188, 0.42);
+    font-size: 8px;
+    text-align: right;
+}
+
+/* =========================================================
+   TABELA
+   ========================================================= */
+
+.relatorios-detalhamento .relatorios-panel-header,
+.relatorios-resumo .relatorios-panel-header {
+    padding-bottom: 13px;
+    border-bottom: 1px solid rgba(210, 219, 227, 0.08);
+}
+
+.relatorios-table-wrap {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.relatorios-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+    .relatorios-table th,
+    .relatorios-table td {
+        padding: 13px 9px;
+        border-bottom: 1px solid rgba(210, 219, 227, 0.07);
+        text-align: left;
+        white-space: nowrap;
+    }
+
+    .relatorios-table th {
+        color: rgba(167, 181, 191, 0.46);
+        font-size: 8px;
+        font-weight: 750;
+        letter-spacing: 0.07em;
+    }
+
+    .relatorios-table td {
+        color: rgba(203, 211, 217, 0.66);
+        font-size: 9px;
+    }
+
+    .relatorios-table tbody tr:last-child td {
+        border-bottom: 0;
+    }
+
+.relatorios-tipo {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.relatorios-valor {
+    font-weight: 700;
+}
+
+    .relatorios-valor.deposito {
+        color: #63d3a7;
+    }
+
+    .relatorios-valor.transferencia {
+        color: #83a5cf;
+    }
+
+    .relatorios-valor.saque {
+        color: #a28bd0;
+    }
+
+.relatorios-empty {
+    height: 100px;
+    text-align: center !important;
+    color: rgba(174, 186, 195, 0.42) !important;
+}
+
+/* =========================================================
+   RESUMO
+   ========================================================= */
+
+.relatorios-resumo-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    padding-top: 13px;
+}
+
+.relatorios-resumo-item {
+    min-height: 61px;
+    display: grid;
+    grid-template-columns: 38px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 11px;
+    padding: 10px;
+    border: 1px solid rgba(210, 219, 227, 0.055);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.018);
+}
+
+.relatorios-resumo-icon {
+    width: 38px;
+    height: 38px;
+    display: grid;
+    place-items: center;
+    border-radius: 9px;
+    font-size: 17px;
+}
+
+.relatorios-resumo-item.deposito .relatorios-resumo-icon {
+    background: rgba(84, 201, 154, 0.11);
+    color: #63d3a7;
+}
+
+.relatorios-resumo-item.transferencia .relatorios-resumo-icon {
+    background: rgba(107, 143, 189, 0.11);
+    color: #83a5cf;
+}
+
+.relatorios-resumo-item.saque .relatorios-resumo-icon {
+    background: rgba(139, 114, 189, 0.11);
+    color: #a28bd0;
+}
+
+.relatorios-resumo-info {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+    .relatorios-resumo-info span {
+        color: rgba(213, 220, 225, 0.72);
+        font-size: 9px;
+    }
+
+    .relatorios-resumo-info strong {
+        color: rgba(241, 244, 246, 0.88);
+        font-size: 11px;
+    }
+
+.relatorios-resumo-item > small {
+    color: rgba(167, 179, 188, 0.42);
+    font-size: 8px;
+    white-space: nowrap;
+}
+
+/* =========================================================
+   RESPONSIVIDADE
+   ========================================================= */
+
+@media (max-width: 1280px) {
+    .relatorios-kpis {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .relatorios-main-grid,
+    .relatorios-bottom-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .relatorios-donut-layout {
+        grid-template-columns: 180px minmax(0, 1fr);
+    }
+}
+
+@media (max-width: 850px) {
+    .relatorios-periodo-row {
+        margin-top: 12px;
+    }
+
+    .relatorios-periodo {
+        width: 100%;
+    }
+
+    .relatorios-kpis {
+        grid-template-columns: 1fr;
+    }
+
+    .relatorios-panel-header {
+        flex-direction: column;
+    }
+
+    .relatorios-operacao {
+        width: 100%;
+    }
+
+    .relatorios-chart-legend {
+        justify-content: flex-start;
+        flex-wrap: wrap;
+    }
+
+    .relatorios-donut-layout {
+        grid-template-columns: 1fr;
+        justify-items: center;
+    }
+
+    .relatorios-distribuicao-lista {
+        width: 100%;
+    }
+}
+
+@media (max-width: 560px) {
+    .relatorios-evolucao,
+    .relatorios-distribuicao,
+    .relatorios-detalhamento,
+    .relatorios-resumo {
+        padding: 15px;
+    }
+
+    .relatorios-chart-area {
+        grid-template-columns: 42px minmax(0, 1fr);
+    }
+
+    .relatorios-y-axis {
+        font-size: 7px;
+    }
+
+    .relatorios-resumo-item {
+        grid-template-columns: 38px minmax(0, 1fr);
+    }
+
+        .relatorios-resumo-item > small {
+            grid-column: 2;
+        }
+}
+
+/* =========================================================
+   AJUSTE FINAL — REMOVE SOMENTE AS LINHAS DECORATIVAS DOS KPIs
+   Mantém cores, fundos e identidade visual dos cards.
+   ========================================================= */
+.relatorios-mini-line {
+    display: none !important;
+}

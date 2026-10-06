@@ -1,0 +1,421 @@
+* {
+    box-sizing: border-box;
+}
+
+.ativacao-page {
+    min-height: 100vh;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 110px 24px 40px;
+    background: #050709;
+    color: #f3f5f7;
+    font-family: Inter, Arial, Helvetica, sans-serif;
+}
+
+    /* =====================================================
+   BACKGROUND / LUZES
+===================================================== */
+
+    .ativacao-page::before {
+        content: "";
+        position: absolute;
+        inset: -8%;
+        pointer-events: none;
+        background-image: linear-gradient(rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.15)), url("/images/novo%20background.png");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        opacity: 1;
+    }
+
+.ativacao-light {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(100px);
+    pointer-events: none;
+}
+
+.ativacao-light-one {
+    top: -180px;
+    left: 10%;
+    width: 450px;
+    height: 450px;
+    background: rgba(220, 225, 230, 0.05);
+}
+
+.ativacao-light-two {
+    right: 4%;
+    bottom: -200px;
+    width: 520px;
+    height: 520px;
+    background: rgba(160, 170, 180, 0.04);
+}
+
+/* =====================================================
+   TOPO
+===================================================== */
+
+.ativacao-topbar {
+    position: absolute;
+    z-index: 3;
+    top: 0;
+    left: 0;
+    width: 100%;
+    min-height: 76px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 54px;
+    border-bottom: 1px solid rgba(225, 230, 235, 0.14);
+    background: rgba(5, 9, 13, 0.30);
+    backdrop-filter: blur(9px);
+    -webkit-backdrop-filter: blur(9px);
+}
+
+.ativacao-brand {
+    display: flex;
+    align-items: center;
+    font-size: 2rem;
+    letter-spacing: -1.3px;
+}
+
+    .ativacao-brand strong {
+        color: #ffffff;
+        font-weight: 750;
+    }
+
+    .ativacao-brand span {
+        color: #b5bdc5;
+        font-weight: 400;
+    }
+
+.ativacao-topbar button {
+    padding: 10px 20px;
+    border: 1px solid rgba(225, 230, 235, 0.30);
+    border-radius: 11px;
+    background: rgba(5, 9, 13, 0.26);
+    color: #d0d5da;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    backdrop-filter: blur(5px);
+    transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+
+    .ativacao-topbar button:hover {
+        border-color: rgba(235, 239, 242, 0.48);
+        background: rgba(10, 14, 18, 0.34);
+        color: #ffffff;
+    }
+
+/* =====================================================
+   CARD
+===================================================== */
+
+.ativacao-card {
+    position: relative;
+    z-index: 2;
+    width: min(720px, 100%);
+    padding: 46px 52px 34px;
+    overflow: hidden;
+    border: 1px solid rgba(225, 230, 235, 0.36);
+    border-radius: 22px;
+    text-align: center;
+    background: rgba(5, 9, 13, 0.16);
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
+    box-shadow: 0 35px 80px rgba(0, 0, 0, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.10);
+}
+
+    .ativacao-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background: linear-gradient( 145deg, rgba(255, 255, 255, 0.035), transparent 35%, rgba(255, 255, 255, 0.015) );
+    }
+
+    .ativacao-card > * {
+        position: relative;
+        z-index: 1;
+    }
+
+.ativacao-loading {
+    padding: 60px;
+}
+
+    .ativacao-loading p {
+        margin-top: 20px;
+        color: rgba(225, 230, 235, 0.72);
+    }
+
+/* =====================================================
+   ÍCONE / TÍTULO
+===================================================== */
+
+.ativacao-status-icon {
+    width: 66px;
+    height: 66px;
+    margin: 0 auto 22px;
+    display: grid;
+    place-items: center;
+    border: 1px solid rgba(225, 230, 235, 0.34);
+    border-radius: 18px;
+    background: rgba(5, 9, 13, 0.28);
+    color: #eef1f3;
+    font-size: 26px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07), 0 12px 30px rgba(0, 0, 0, 0.22);
+}
+
+.ativacao-eyebrow {
+    display: inline-block;
+    margin-bottom: 13px;
+    color: #c1c8ce;
+    font-size: 0.62rem;
+    font-weight: 800;
+    letter-spacing: 0.25em;
+}
+
+.ativacao-card h1 {
+    margin: 0;
+    color: #ffffff;
+    font-size: clamp(28px, 4vw, 38px);
+    font-weight: 650;
+    letter-spacing: -1.2px;
+    text-shadow: 0 2px 15px rgba(0, 0, 0, 0.45);
+}
+
+.ativacao-description {
+    max-width: 570px;
+    margin: 18px auto 0;
+    color: rgba(225, 230, 235, 0.72);
+    line-height: 1.7;
+    font-size: 0.86rem;
+}
+
+/* =====================================================
+   ETAPAS
+===================================================== */
+
+.ativacao-flow {
+    display: flex;
+    align-items: center;
+    margin: 38px 0;
+}
+
+.ativacao-step {
+    min-width: 118px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 9px;
+    color: rgba(210, 216, 221, 0.48);
+}
+
+    .ativacao-step > span {
+        width: 34px;
+        height: 34px;
+        display: grid;
+        place-items: center;
+        border: 1px solid rgba(225, 230, 235, 0.24);
+        border-radius: 50%;
+        background: rgba(5, 9, 13, 0.24);
+        color: rgba(220, 225, 230, 0.62);
+        font-size: 12px;
+        font-weight: 800;
+    }
+
+    .ativacao-step div {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+    }
+
+    .ativacao-step strong {
+        color: rgba(225, 230, 235, 0.62);
+        font-size: 12px;
+    }
+
+    .ativacao-step small {
+        font-size: 10px;
+    }
+
+    .ativacao-step.concluido > span,
+    .ativacao-step.atual > span {
+        border-color: rgba(245, 247, 249, 0.72);
+        background: rgba(220, 225, 230, 0.08);
+        color: #ffffff;
+        box-shadow: 0 0 0 3px rgba(220, 225, 230, 0.05);
+    }
+
+    .ativacao-step.concluido strong,
+    .ativacao-step.atual strong {
+        color: #f3f5f7;
+    }
+
+.ativacao-line {
+    height: 1px;
+    flex: 1;
+    margin: 0 -5px 35px;
+    background: rgba(225, 230, 235, 0.16);
+}
+
+    .ativacao-line.active {
+        background: linear-gradient( 90deg, rgba(235, 239, 242, 0.65), rgba(225, 230, 235, 0.16) );
+    }
+
+/* =====================================================
+   MENSAGENS
+===================================================== */
+
+.ativacao-message {
+    margin: -10px 0 22px;
+    padding: 13px 16px;
+    border-radius: 10px;
+    font-size: 0.76rem;
+    backdrop-filter: blur(8px);
+}
+
+    .ativacao-message.success {
+        border: 1px solid rgba(102, 196, 148, 0.25);
+        background: rgba(30, 94, 61, 0.22);
+        color: #a8dcc0;
+    }
+
+    .ativacao-message.error {
+        border: 1px solid rgba(231, 111, 111, 0.24);
+        background: rgba(110, 20, 20, 0.28);
+        color: #f2bebe;
+    }
+
+/* =====================================================
+   BOTÕES
+===================================================== */
+
+.ativacao-primary,
+.ativacao-secondary {
+    position: relative;
+    width: 100%;
+    min-height: 55px;
+    border-radius: 11px;
+    font-size: 0.91rem;
+    font-weight: 750;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease, background 0.2s ease;
+}
+
+.ativacao-primary {
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.50);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    background: linear-gradient( 110deg, #eef1f3 0%, #b8c0c7 48%, #818c96 100% );
+    color: #0a1015;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.30), inset 0 1px 0 rgba(255, 255, 255, 0.75);
+}
+
+    .ativacao-primary::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -120px;
+        width: 80px;
+        height: 100%;
+        transform: skewX(-20deg);
+        background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.55), transparent );
+        transition: left 0.65s ease;
+    }
+
+    .ativacao-primary:hover:not(:disabled) {
+        transform: translateY(-1px);
+        filter: brightness(1.08);
+        box-shadow: 0 16px 35px rgba(0, 0, 0, 0.40);
+    }
+
+        .ativacao-primary:hover:not(:disabled)::before {
+            left: calc(100% + 30px);
+        }
+
+    .ativacao-primary:disabled {
+        opacity: 0.65;
+        cursor: wait;
+    }
+
+.ativacao-secondary {
+    border: 1px solid rgba(225, 230, 235, 0.30);
+    background: rgba(5, 9, 13, 0.26);
+    color: #d0d5da;
+}
+
+    .ativacao-secondary:hover {
+        border-color: rgba(235, 239, 242, 0.48);
+        background: rgba(10, 14, 18, 0.34);
+        color: #ffffff;
+    }
+
+/* =====================================================
+   RODAPÉ
+===================================================== */
+
+.ativacao-card footer {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 26px;
+    padding-top: 22px;
+    border-top: 1px solid rgba(225, 230, 235, 0.12);
+    color: rgba(210, 216, 221, 0.58);
+    font-size: 0.68rem;
+}
+
+    .ativacao-card footer span {
+        color: rgba(240, 243, 245, 0.82);
+    }
+
+/* =====================================================
+   RESPONSIVIDADE
+===================================================== */
+
+@media (max-width: 700px) {
+    .ativacao-page {
+        padding: 100px 16px 28px;
+    }
+
+    .ativacao-topbar {
+        padding: 0 22px;
+    }
+
+    .ativacao-card {
+        padding: 34px 22px 28px;
+        border-radius: 19px;
+    }
+
+    .ativacao-flow {
+        align-items: flex-start;
+    }
+
+    .ativacao-step {
+        min-width: 78px;
+    }
+
+        .ativacao-step strong {
+            font-size: 10px;
+        }
+
+        .ativacao-step small {
+            font-size: 9px;
+        }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ativacao-primary,
+    .ativacao-secondary,
+    .ativacao-topbar button {
+        transition: none;
+    }
+}

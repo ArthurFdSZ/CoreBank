@@ -4,6 +4,7 @@ using CoreBank.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CoreBank.Infrastructure.Migrations
 {
     [DbContext(typeof(CoreBankDbContext))]
-    partial class CoreBankDbContextModelSnapshot : ModelSnapshot
+    [Migration("20261003191943_AddReasonToAccountRequests")]
+    partial class AddReasonToAccountRequests
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -72,14 +75,11 @@ namespace CoreBank.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("AccountId")
+                    b.Property<int>("AccountId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
-
-                    b.Property<int?>("CustomerId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Reason")
                         .IsRequired()
@@ -98,8 +98,6 @@ namespace CoreBank.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AccountId");
-
-                    b.HasIndex("CustomerId");
 
                     b.ToTable("AccountRequests");
                 });
@@ -235,12 +233,8 @@ namespace CoreBank.Infrastructure.Migrations
                     b.HasOne("CoreBank.Domain.Entities.Account", null)
                         .WithMany()
                         .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("CoreBank.Domain.Entities.Customer", null)
-                        .WithMany()
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("CoreBank.Domain.Entities.PasswordResetRequest", b =>

@@ -1,0 +1,459 @@
+/* =========================================================
+   SOLICITAÇÕES - COMPLEMENTO DO TEMPLATE ADMIN
+   A identidade principal vem de AdminDashboard.css.
+   ========================================================= */
+
+.admin-solicitacoes-loading-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.admin-solicitacoes-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: rgba(218, 225, 231, 0.65);
+}
+
+    .admin-solicitacoes-loading strong {
+        color: #f3f5f7;
+        font-size: 24px;
+    }
+
+.admin-solicitacoes-resumo {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+.admin-solicitacoes-panel {
+    min-height: 440px;
+}
+
+.admin-solicitacoes-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid rgba(213, 221, 228, 0.10);
+}
+
+    .admin-solicitacoes-toolbar h2 {
+        margin: 6px 0 0;
+        color: #f1f3f5;
+        font-size: 18px;
+        font-weight: 650;
+    }
+
+.admin-solicitacoes-search {
+    width: 350px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 14px;
+    border: 1px solid rgba(211, 219, 226, 0.16);
+    border-radius: 11px;
+    background: rgba(7, 13, 19, 0.58);
+    color: rgba(190, 200, 208, 0.58);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+    .admin-solicitacoes-search:focus-within {
+        border-color: rgba(79, 140, 255, 0.45);
+        box-shadow: 0 0 0 3px rgba(79, 140, 255, 0.07);
+    }
+
+    .admin-solicitacoes-search input {
+        width: 100%;
+        border: 0;
+        outline: 0;
+        background: transparent;
+        color: #edf0f2;
+        font: inherit;
+        font-size: 12px;
+    }
+
+        .admin-solicitacoes-search input::placeholder {
+            color: rgba(177, 188, 197, 0.42);
+        }
+
+.admin-solicitacoes-filtros {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 17px 0;
+}
+
+    .admin-solicitacoes-filtros button {
+        min-height: 34px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 0 13px;
+        border: 1px solid rgba(211, 219, 226, 0.10);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.025);
+        color: rgba(190, 200, 208, 0.62);
+        font-size: 10px;
+        font-weight: 650;
+        cursor: pointer;
+        transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    }
+
+        .admin-solicitacoes-filtros button:hover {
+            border-color: rgba(79, 140, 255, 0.22);
+            color: rgba(225, 231, 236, 0.85);
+        }
+
+        .admin-solicitacoes-filtros button.active {
+            border-color: rgba(79, 140, 255, 0.30);
+            background: rgba(79, 140, 255, 0.10);
+            color: #aac5ff;
+        }
+
+        .admin-solicitacoes-filtros button span {
+            min-width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 5px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.055);
+            font-size: 9px;
+        }
+
+.admin-solicitacoes-table td {
+    height: 64px;
+}
+
+.admin-solicitacao-cliente {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+    .admin-solicitacao-cliente > div:last-child {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .admin-solicitacao-cliente strong {
+        color: rgba(238, 241, 243, 0.88);
+        font-size: 11px;
+        font-weight: 650;
+    }
+
+    .admin-solicitacao-cliente span {
+        color: rgba(174, 185, 194, 0.46);
+        font-size: 9px;
+    }
+
+.admin-solicitacao-avatar {
+    width: 31px;
+    min-width: 31px;
+    height: 31px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(79, 140, 255, 0.20);
+    border-radius: 50%;
+    background: rgba(79, 140, 255, 0.08);
+    color: #a9c4ff;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.admin-solicitacao-tipo {
+    display: inline-flex;
+    align-items: center;
+    min-height: 25px;
+    padding: 0 9px;
+    border-radius: 999px;
+    font-size: 9px;
+    font-weight: 700;
+}
+
+    .admin-solicitacao-tipo.block {
+        border: 1px solid rgba(255, 111, 111, 0.18);
+        background: rgba(255, 111, 111, 0.07);
+        color: #e7a0a0;
+    }
+
+    .admin-solicitacao-tipo.unblock {
+        border: 1px solid rgba(92, 208, 150, 0.18);
+        background: rgba(92, 208, 150, 0.07);
+        color: #8ed9b3;
+    }
+
+.admin-solicitacao-detalhes {
+    min-width: 82px;
+    height: 31px;
+    border: 1px solid rgba(117, 160, 255, 0.20);
+    border-radius: 8px;
+    background: rgba(79, 140, 255, 0.07);
+    color: #b6cbff;
+    font-size: 9px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+    .admin-solicitacao-detalhes:hover {
+        transform: translateY(-1px);
+        border-color: rgba(117, 160, 255, 0.38);
+        background: rgba(79, 140, 255, 0.12);
+    }
+
+.admin-solicitacoes-footer {
+    padding-top: 17px;
+    border-top: 1px solid rgba(213, 221, 228, 0.08);
+    color: rgba(184, 194, 202, 0.55);
+    font-size: 11px;
+    text-align: right;
+}
+
+    .admin-solicitacoes-footer strong {
+        color: rgba(235, 239, 242, 0.82);
+    }
+
+.admin-solicitacoes-success {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 18px;
+    padding: 14px 16px;
+    border: 1px solid rgba(78, 211, 143, 0.18);
+    border-radius: 12px;
+    background: rgba(78, 211, 143, 0.06);
+    color: rgba(224, 239, 231, 0.82);
+}
+
+    .admin-solicitacoes-success > span {
+        color: #6bdba2;
+        font-weight: 800;
+    }
+
+    .admin-solicitacoes-success strong {
+        font-size: 12px;
+    }
+
+    .admin-solicitacoes-success p {
+        margin: 4px 0 0;
+        color: rgba(197, 216, 206, 0.66);
+        font-size: 11px;
+    }
+
+/* =========================================================
+   MODAL DE ANÁLISE
+   ========================================================= */
+
+.admin-solicitacao-modal-backdrop {
+    position: fixed;
+    z-index: 100;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: rgba(0, 0, 0, 0.68);
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
+}
+
+.admin-solicitacao-modal {
+    width: min(720px, 100%);
+    max-height: calc(100vh - 48px);
+    overflow-y: auto;
+    padding: 26px;
+    border: 1px solid rgba(213, 221, 228, 0.15);
+    border-radius: 18px;
+    background: linear-gradient(145deg, rgba(14, 20, 26, 0.98), rgba(7, 11, 15, 0.98));
+    box-shadow: 0 28px 90px rgba(0, 0, 0, 0.55);
+}
+
+.admin-solicitacao-modal-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(213, 221, 228, 0.10);
+}
+
+    .admin-solicitacao-modal-header h2 {
+        margin: 6px 0 7px;
+        color: #f3f5f7;
+        font-size: 22px;
+    }
+
+    .admin-solicitacao-modal-header p {
+        margin: 0;
+        color: rgba(187, 198, 207, 0.58);
+        font-size: 11px;
+    }
+
+.admin-solicitacao-modal-close {
+    width: 36px;
+    min-width: 36px;
+    height: 36px;
+    border: 1px solid rgba(213, 221, 228, 0.13);
+    border-radius: 9px;
+    background: rgba(255, 255, 255, 0.035);
+    color: rgba(225, 230, 234, 0.72);
+    font-size: 22px;
+    cursor: pointer;
+}
+
+.admin-solicitacao-modal-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    padding: 20px 0;
+}
+
+    .admin-solicitacao-modal-grid > div,
+    .admin-solicitacao-modal-status > div {
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+        padding: 13px 14px;
+        border: 1px solid rgba(213, 221, 228, 0.09);
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.025);
+    }
+
+        .admin-solicitacao-modal-grid span,
+        .admin-solicitacao-modal-status > div > span:first-child,
+        .admin-solicitacao-motivo > span {
+            color: rgba(167, 179, 188, 0.50);
+            font-size: 8px;
+            font-weight: 750;
+            letter-spacing: 0.8px;
+        }
+
+    .admin-solicitacao-modal-grid strong,
+    .admin-solicitacao-modal-status strong {
+        color: rgba(238, 241, 243, 0.88);
+        font-size: 11px;
+    }
+
+.admin-solicitacao-motivo {
+    padding: 16px;
+    border: 1px solid rgba(79, 140, 255, 0.13);
+    border-radius: 11px;
+    background: rgba(79, 140, 255, 0.045);
+}
+
+    .admin-solicitacao-motivo p {
+        margin: 9px 0 0;
+        color: rgba(222, 228, 233, 0.78);
+        font-size: 12px;
+        line-height: 1.65;
+    }
+
+.admin-solicitacao-modal-status {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    padding-top: 12px;
+}
+
+    .admin-solicitacao-modal-status .admin-status {
+        width: fit-content;
+    }
+
+.admin-solicitacao-data-analise {
+    margin-top: 12px;
+    color: rgba(176, 187, 196, 0.56);
+    font-size: 10px;
+}
+
+    .admin-solicitacao-data-analise strong {
+        color: rgba(227, 232, 236, 0.76);
+    }
+
+.admin-solicitacao-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 9px;
+    margin-top: 22px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(213, 221, 228, 0.09);
+}
+
+    .admin-solicitacao-modal-actions button {
+        min-width: 94px;
+        height: 37px;
+        border-radius: 9px;
+        font-size: 10px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: 0.2s ease;
+    }
+
+        .admin-solicitacao-modal-actions button:disabled,
+        .admin-solicitacao-modal-close:disabled {
+            opacity: 0.5;
+            cursor: default;
+        }
+
+.admin-solicitacao-secondary {
+    border: 1px solid rgba(213, 221, 228, 0.13);
+    background: rgba(255, 255, 255, 0.035);
+    color: rgba(219, 225, 230, 0.68);
+}
+
+.admin-solicitacao-reject {
+    border: 1px solid rgba(255, 107, 107, 0.20);
+    background: rgba(255, 107, 107, 0.07);
+    color: #e9a0a0;
+}
+
+.admin-solicitacao-approve {
+    border: 1px solid rgba(82, 211, 145, 0.22);
+    background: rgba(82, 211, 145, 0.08);
+    color: #8bdcb2;
+}
+
+.admin-solicitacao-modal-actions button:not(:disabled):hover {
+    transform: translateY(-1px);
+    filter: brightness(1.12);
+}
+
+@media (max-width: 1200px) {
+    .admin-solicitacoes-resumo {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 800px) {
+    .admin-solicitacoes-resumo,
+    .admin-solicitacao-modal-grid,
+    .admin-solicitacao-modal-status {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-solicitacoes-toolbar {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .admin-solicitacoes-search {
+        width: 100%;
+    }
+
+    .admin-solicitacoes-filtros {
+        overflow-x: auto;
+    }
+
+    .admin-solicitacao-modal-actions {
+        flex-wrap: wrap;
+    }
+}

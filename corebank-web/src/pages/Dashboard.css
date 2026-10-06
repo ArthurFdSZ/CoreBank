@@ -998,3 +998,504 @@ body,
         animation: none;
     }
 }
+
+/* =========================================================
+   REFINAMENTO VISUAL - COREBANK CLIENTE
+   Mantém layout e lógica; adiciona profundidade e vida.
+   ========================================================= */
+
+.balance-card,
+.summary-card,
+.quick-actions-card,
+.recent-card {
+    transition: transform 0.24s ease, border-color 0.24s ease, box-shadow 0.24s ease, background 0.24s ease;
+}
+
+    .balance-card:hover,
+    .summary-card:hover,
+    .quick-actions-card:hover,
+    .recent-card:hover {
+        transform: translateY(-2px);
+        border-color: rgba(224, 230, 235, 0.26);
+        box-shadow: 0 24px 55px rgba(0, 0, 0, 0.28), inset 0 1px rgba(255, 255, 255, 0.055);
+    }
+
+    .balance-card::before,
+    .summary-card::before,
+    .quick-actions-card::before,
+    .recent-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 12%;
+        width: 76%;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(235, 239, 242, 0.22), transparent);
+        pointer-events: none;
+    }
+
+    .balance-card::after {
+        content: "";
+        position: absolute;
+        width: 210px;
+        height: 210px;
+        right: -95px;
+        top: -115px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(203, 211, 218, 0.09), transparent 68%);
+        pointer-events: none;
+    }
+
+    .summary-card:hover .summary-icon {
+        transform: translateY(-1px) scale(1.04);
+        border-color: rgba(225, 230, 234, 0.2);
+        background: rgba(203, 211, 218, 0.14);
+    }
+
+.summary-icon {
+    transition: transform 0.22s ease, border-color 0.22s ease, background 0.22s ease;
+}
+
+.account-status.active {
+    box-shadow: 0 0 20px rgba(80, 206, 157, 0.055);
+}
+
+.quick-actions button::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(135deg, rgba(255,255,255,0.035), transparent 42%);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    pointer-events: none;
+}
+
+.quick-actions button {
+    position: relative;
+    overflow: hidden;
+}
+
+    .quick-actions button:hover::after {
+        opacity: 1;
+    }
+
+    .quick-actions button:hover .quick-icon {
+        transform: translateY(-2px) scale(1.035);
+        box-shadow: 0 10px 23px rgba(0, 0, 0, 0.24);
+    }
+
+.quick-icon {
+    transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+.transaction-item {
+    position: relative;
+    transition: background 0.2s ease, padding 0.2s ease;
+}
+
+    .transaction-item:hover {
+        padding-left: 7px;
+        background: linear-gradient(90deg, rgba(203, 211, 218, 0.045), transparent 78%);
+    }
+
+.header-user {
+    transition: border-color 0.22s ease, background 0.22s ease, box-shadow 0.22s ease;
+}
+
+    .header-user:hover {
+        border-color: rgba(220, 226, 231, 0.2);
+        background: rgba(21, 27, 33, 0.34);
+        box-shadow: 0 10px 28px rgba(0, 0, 0, 0.16);
+    }
+
+.nav-item.active {
+    position: relative;
+}
+
+    .nav-item.active::before {
+        content: "";
+        position: absolute;
+        left: -1px;
+        top: 13px;
+        bottom: 13px;
+        width: 2px;
+        border-radius: 10px;
+        background: rgba(231, 235, 238, 0.8);
+        box-shadow: 0 0 12px rgba(220, 226, 231, 0.18);
+    }
+
+@media (prefers-reduced-motion: reduce) {
+    .balance-card,
+    .summary-card,
+    .quick-actions-card,
+    .recent-card,
+    .summary-icon,
+    .quick-icon,
+    .transaction-item,
+    .header-user {
+        transition: none;
+    }
+}
+
+
+/* =========================================================
+   REFINAMENTO VISUAL V2 - MAIS VIDA
+   Mantém layout e lógica; reforça profundidade e identidade.
+   ========================================================= */
+
+/* Cards com mais presença, sem mudar dimensões */
+.balance-card,
+.summary-card,
+.quick-actions-card,
+.recent-card {
+    border-color: rgba(221, 227, 232, 0.20);
+    background: radial-gradient(circle at 92% 8%, rgba(130, 150, 168, 0.10), transparent 30%), linear-gradient(145deg, rgba(31, 38, 45, 0.64), rgba(8, 12, 16, 0.46));
+    box-shadow: 0 22px 55px rgba(0, 0, 0, 0.27), inset 0 1px 0 rgba(255, 255, 255, 0.055);
+}
+
+    /* Glow diferente e sutil para os três cards superiores */
+    .balance-card::after,
+    .summary-card::after {
+        content: "";
+        position: absolute;
+        z-index: 0;
+        width: 150px;
+        height: 150px;
+        right: -58px;
+        top: -62px;
+        border-radius: 50%;
+        filter: blur(28px);
+        pointer-events: none;
+    }
+
+    .balance-card::after {
+        background: rgba(84, 201, 154, 0.12);
+    }
+
+.dashboard-summary .summary-card:nth-child(2)::after {
+    background: rgba(107, 143, 189, 0.14);
+}
+
+.dashboard-summary .summary-card:nth-child(3)::after {
+    background: rgba(139, 114, 189, 0.13);
+}
+
+.balance-card > *,
+.summary-card > * {
+    position: relative;
+    z-index: 2;
+}
+
+/* Saldo com destaque um pouco mais premium */
+.balance-row > strong {
+    text-shadow: 0 0 24px rgba(224, 232, 238, 0.08);
+}
+
+.account-status.active {
+    box-shadow: 0 0 18px rgba(80, 206, 157, 0.08);
+}
+
+    .account-status.active span {
+        box-shadow: 0 0 8px rgba(104, 209, 168, 0.55);
+    }
+
+/* Ícones superiores mais vivos */
+.summary-icon {
+    border-color: rgba(220, 227, 232, 0.16);
+    background: linear-gradient(145deg, rgba(220, 227, 232, 0.16), rgba(91, 108, 121, 0.08));
+    box-shadow: 0 9px 22px rgba(0, 0, 0, 0.20), inset 0 1px rgba(255, 255, 255, 0.06);
+}
+
+.dashboard-summary .summary-card:nth-child(2) .summary-icon {
+    color: #9dbce0;
+    background: rgba(107, 143, 189, 0.12);
+    border-color: rgba(107, 143, 189, 0.20);
+}
+
+.dashboard-summary .summary-card:nth-child(3) .summary-icon {
+    color: #b09add;
+    background: rgba(139, 114, 189, 0.12);
+    border-color: rgba(139, 114, 189, 0.20);
+}
+
+/* Barra de progresso menos cinza */
+.summary-progress {
+    background: rgba(198, 206, 213, 0.07);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.22);
+}
+
+    .summary-progress span {
+        background: linear-gradient(90deg, #6b8fbd, #a9bed6);
+        box-shadow: 0 0 14px rgba(107, 143, 189, 0.22);
+    }
+
+/* Painéis principais com leve luz interna */
+.quick-actions-card::after,
+.recent-card::after {
+    content: "";
+    position: absolute;
+    z-index: 0;
+    width: 210px;
+    height: 210px;
+    border-radius: 50%;
+    filter: blur(46px);
+    opacity: 0.10;
+    pointer-events: none;
+}
+
+.quick-actions-card::after {
+    left: -95px;
+    bottom: -125px;
+    background: #6b8fbd;
+}
+
+.recent-card::after {
+    right: -100px;
+    top: -125px;
+    background: #54c99a;
+}
+
+.quick-actions-card > *,
+.recent-card > * {
+    position: relative;
+    z-index: 2;
+}
+
+/* Ações rápidas com identidade por posição */
+.quick-actions button {
+    background: linear-gradient(145deg, rgba(177, 190, 201, 0.095), rgba(20, 26, 32, 0.16));
+    border-color: rgba(218, 225, 230, 0.16);
+}
+
+    .quick-actions button:nth-child(1) .quick-icon {
+        background: linear-gradient(145deg, #b8cae0, #6b8fbd);
+    }
+
+    .quick-actions button:nth-child(2) .quick-icon {
+        background: linear-gradient(145deg, #a8ddc7, #54a982);
+    }
+
+    .quick-actions button:nth-child(3) .quick-icon {
+        background: linear-gradient(145deg, #c2b3df, #7d69a7);
+    }
+
+    .quick-actions button:nth-child(4) .quick-icon {
+        background: linear-gradient(145deg, #d9c997, #9e884b);
+    }
+
+    .quick-actions button:nth-child(1):hover {
+        border-color: rgba(107, 143, 189, 0.34);
+        box-shadow: 0 15px 32px rgba(38, 73, 108, 0.14);
+    }
+
+    .quick-actions button:nth-child(2):hover {
+        border-color: rgba(84, 201, 154, 0.30);
+        box-shadow: 0 15px 32px rgba(35, 104, 78, 0.13);
+    }
+
+    .quick-actions button:nth-child(3):hover {
+        border-color: rgba(139, 114, 189, 0.32);
+        box-shadow: 0 15px 32px rgba(77, 56, 112, 0.14);
+    }
+
+    .quick-actions button:nth-child(4):hover {
+        border-color: rgba(197, 169, 92, 0.30);
+        box-shadow: 0 15px 32px rgba(112, 91, 38, 0.12);
+    }
+
+/* Movimentações com leitura mais agradável */
+.transaction-item {
+    border-radius: 9px;
+    padding-right: 7px;
+}
+
+    .transaction-item:hover {
+        padding-left: 9px;
+        background: linear-gradient(90deg, rgba(107, 143, 189, 0.075), rgba(255, 255, 255, 0.012) 72%, transparent);
+    }
+
+.transaction-icon.income {
+    border: 1px solid rgba(84, 201, 154, 0.13);
+    box-shadow: 0 0 18px rgba(84, 201, 154, 0.06);
+}
+
+.transaction-icon.expense {
+    border: 1px solid rgba(234, 76, 76, 0.12);
+    box-shadow: 0 0 18px rgba(234, 76, 76, 0.05);
+}
+
+/* Sidebar mais viva, ainda minimalista */
+.nav-item {
+    transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+}
+
+    .nav-item:hover {
+        transform: translateX(2px);
+        background: rgba(184, 197, 208, 0.055);
+    }
+
+    .nav-item.active {
+        border-color: rgba(211, 220, 227, 0.10);
+        background: linear-gradient(90deg, rgba(107, 143, 189, 0.13), rgba(107, 143, 189, 0.025));
+        box-shadow: inset 3px 0 0 rgba(135, 169, 211, 0.72);
+    }
+
+        .nav-item.active::before {
+            display: none;
+        }
+
+/* Usuário do cabeçalho */
+.header-user:hover {
+    border-color: rgba(107, 143, 189, 0.24);
+    background: rgba(31, 41, 50, 0.42);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.20), 0 0 24px rgba(107, 143, 189, 0.04);
+}
+
+/* Movimento elegante e discreto */
+.balance-card,
+.summary-card,
+.quick-actions-card,
+.recent-card {
+    transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+}
+
+    .balance-card:hover,
+    .summary-card:hover,
+    .quick-actions-card:hover,
+    .recent-card:hover {
+        transform: translateY(-2px);
+        border-color: rgba(225, 231, 235, 0.26);
+        box-shadow: 0 27px 62px rgba(0, 0, 0, 0.30), inset 0 1px 0 rgba(255, 255, 255, 0.065);
+    }
+
+@media (prefers-reduced-motion: reduce) {
+    .balance-card,
+    .summary-card,
+    .quick-actions-card,
+    .recent-card,
+    .quick-actions button,
+    .nav-item,
+    .transaction-item,
+    .header-user {
+        transition: none;
+    }
+}
+
+
+/* =========================================================
+   CORREÇÃO DE ESTRUTURA DOS CARDS SUPERIORES
+   Mantém os refinamentos visuais sem alterar o layout original.
+   ========================================================= */
+
+.dashboard-summary {
+    align-items: stretch;
+}
+
+.balance-card,
+.summary-card {
+    min-height: 0;
+    height: auto;
+    align-self: stretch;
+}
+
+    /* Remove qualquer interferência visual que possa alongar os cards */
+    .balance-card::after,
+    .summary-card::after {
+        pointer-events: none;
+    }
+
+/* Preserva o fluxo interno original */
+.balance-card {
+    display: flex;
+    flex-direction: column;
+}
+
+.summary-card {
+    display: flex;
+    flex-direction: column;
+}
+
+    /* Evita que elementos internos forcem altura extra */
+    .balance-card > *,
+    .summary-card > * {
+        flex-shrink: 0;
+    }
+
+/* Mantém os cards superiores compactos em desktop */
+@media (min-width: 981px) {
+    .dashboard-summary {
+        align-items: start;
+    }
+
+    .balance-card,
+    .summary-card {
+        height: fit-content;
+        align-self: start;
+    }
+}
+
+
+/* =========================================================
+   CORREÇÃO FINAL — PRESERVA A ESTRUTURA ORIGINAL DO CARD SALDO
+   ========================================================= */
+
+/* O refinamento visual não pode transformar os elementos
+   posicionados do card em elementos do fluxo normal. */
+.balance-card .account-details {
+    position: absolute;
+    z-index: 2;
+    left: 27px;
+    bottom: 25px;
+}
+
+.balance-card .balance-wave {
+    position: absolute;
+    z-index: 1;
+    right: -50px;
+    bottom: -110px;
+}
+
+    .balance-card .balance-wave.wave-two {
+        right: -70px;
+        bottom: -122px;
+    }
+
+/* Restaura exatamente a altura-base dos cards superiores. */
+.balance-card,
+.summary-card {
+    min-height: 190px;
+    height: auto;
+    align-self: stretch;
+}
+
+    /* Não deixa a decoração participar do cálculo de altura. */
+    .balance-card .account-details,
+    .balance-card .balance-wave {
+        flex-shrink: initial;
+    }
+
+    /* Mantém apenas o conteúdo normal acima dos efeitos visuais. */
+    .balance-card .card-header-row,
+    .balance-card .balance-row,
+    .summary-card .summary-card-top,
+    .summary-card .summary-main-value,
+    .summary-card .summary-description,
+    .summary-card .summary-progress,
+    .summary-card .summary-footer {
+        position: relative;
+        z-index: 2;
+    }
+
+@media (min-width: 981px) {
+    .dashboard-summary {
+        align-items: stretch;
+    }
+
+    .balance-card,
+    .summary-card {
+        min-height: 190px;
+        height: auto;
+        align-self: stretch;
+    }
+}

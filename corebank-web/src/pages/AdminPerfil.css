@@ -1,0 +1,237 @@
+/* =========================================================
+   COREBANK - PERFIL ADMINISTRATIVO
+   Complementa o AdminDashboard.css
+   ========================================================= */
+
+.admin-perfil-hero {
+    position: relative;
+    min-height: 170px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 30px 34px;
+    margin-bottom: 18px;
+    overflow: hidden;
+    border: 1px solid rgba(211, 219, 226, 0.16);
+    border-radius: 18px;
+    background: radial-gradient( circle at 88% 120%, rgba(79, 140, 255, 0.07), transparent 35% ), rgba(10, 17, 23, 0.88);
+}
+
+.admin-perfil-avatar {
+    width: 82px;
+    min-width: 82px;
+    height: 82px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(168, 184, 197, 0.30);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.035);
+    color: #f3f5f7;
+    font-size: 31px;
+    font-weight: 700;
+}
+
+.admin-perfil-identidade {
+    display: flex;
+    flex-direction: column;
+}
+
+    .admin-perfil-identidade h2 {
+        margin: 9px 0 5px;
+        color: #f2f4f5;
+        font-size: 24px;
+        font-weight: 700;
+    }
+
+    .admin-perfil-identidade p {
+        margin: 0;
+        color: rgba(184, 194, 202, 0.58);
+        font-size: 13px;
+    }
+
+.admin-perfil-badge {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 34px;
+    padding: 0 15px;
+    border: 1px solid rgba(79, 140, 255, 0.27);
+    border-radius: 18px;
+    background: rgba(79, 140, 255, 0.08);
+    color: #a9c4ff;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+    .admin-perfil-badge span {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #7fa8ff;
+    }
+
+.admin-perfil-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+    margin-bottom: 18px;
+}
+
+.admin-perfil-card,
+.admin-perfil-seguranca {
+    border: 1px solid rgba(211, 219, 226, 0.14);
+    border-radius: 18px;
+    background: rgba(10, 17, 23, 0.88);
+}
+
+.admin-perfil-card {
+    padding: 28px 30px;
+}
+
+.admin-perfil-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(213, 221, 228, 0.10);
+}
+
+    .admin-perfil-card-header h2 {
+        margin: 7px 0 5px;
+        color: #f1f3f5;
+        font-size: 18px;
+        font-weight: 650;
+    }
+
+    .admin-perfil-card-header p {
+        margin: 0;
+        color: rgba(184, 194, 202, 0.52);
+        font-size: 11px;
+    }
+
+.admin-perfil-card-icon {
+    width: 39px;
+    min-width: 39px;
+    height: 39px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(211, 219, 226, 0.16);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.035);
+    color: rgba(228, 234, 239, 0.82);
+    font-size: 15px;
+}
+
+.admin-perfil-dados {
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-perfil-linha {
+    min-height: 62px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    border-bottom: 1px solid rgba(213, 221, 228, 0.08);
+}
+
+    .admin-perfil-linha:last-child {
+        border-bottom: 0;
+    }
+
+    .admin-perfil-linha span {
+        color: rgba(176, 187, 196, 0.52);
+        font-size: 11px;
+    }
+
+    .admin-perfil-linha strong {
+        color: rgba(238, 241, 243, 0.88);
+        font-size: 11px;
+        font-weight: 650;
+        text-align: right;
+    }
+
+    .admin-perfil-linha .admin-perfil-status {
+        color: #69dba0;
+    }
+
+.admin-perfil-seguranca {
+    padding: 28px 30px;
+}
+
+.admin-perfil-seguranca-linha {
+    min-height: 82px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding-top: 18px;
+}
+
+    .admin-perfil-seguranca-linha > div {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .admin-perfil-seguranca-linha strong {
+        color: rgba(239, 242, 244, 0.90);
+        font-size: 12px;
+    }
+
+    .admin-perfil-seguranca-linha span {
+        color: rgba(176, 187, 196, 0.52);
+        font-size: 11px;
+    }
+
+    .admin-perfil-seguranca-linha button {
+        min-width: 130px;
+        height: 40px;
+        padding: 0 18px;
+        border: 1px solid rgba(211, 219, 226, 0.18);
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.035);
+        color: rgba(238, 241, 243, 0.86);
+        font: inherit;
+        font-size: 11px;
+        font-weight: 650;
+        cursor: pointer;
+        transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+    }
+
+        .admin-perfil-seguranca-linha button:hover {
+            border-color: rgba(230, 104, 104, 0.30);
+            background: rgba(230, 104, 104, 0.06);
+            color: #efb0b0;
+        }
+
+@media (max-width: 950px) {
+    .admin-perfil-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 700px) {
+    .admin-perfil-hero {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .admin-perfil-badge {
+        margin-left: 0;
+    }
+
+    .admin-perfil-seguranca-linha {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+        .admin-perfil-seguranca-linha button {
+            width: 100%;
+        }
+}

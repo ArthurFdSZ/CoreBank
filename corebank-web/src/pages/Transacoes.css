@@ -1,8 +1,12 @@
+/* =========================================================
+   COREBANK - TRANSAÇÕES
+   ========================================================= */
+
 * {
     box-sizing: border-box;
 }
 
-.solicitacoes-page {
+.trans-page {
     --sidebar-width: 325px;
     position: relative;
     width: 100%;
@@ -13,12 +17,11 @@
     font-family: Inter, Arial, Helvetica, sans-serif;
 }
 
-    /* ============================================================
+    /* =========================================================
    BACKGROUND
-   MESMO BACKGROUND DA HOME
-   ============================================================ */
+   ========================================================= */
 
-    .solicitacoes-page::before {
+    .trans-page::before {
         content: "";
         position: fixed;
         z-index: 0;
@@ -30,22 +33,22 @@
         background-repeat: no-repeat;
         background-position: center;
         background-size: cover;
-        filter: brightness(0.42) contrast(1.12) saturate(0.7);
+        filter: brightness(0.40) contrast(1.12) saturate(0.75);
         transform: scale(1.04);
-        animation: solicitacoesBackgroundMove 24s ease-in-out infinite alternate;
+        animation: transBackgroundMove 24s ease-in-out infinite alternate;
         pointer-events: none;
     }
 
-    .solicitacoes-page::after {
+    .trans-page::after {
         content: "";
         position: fixed;
         z-index: 1;
         inset: 0;
-        background: radial-gradient( circle at 72% 15%, rgba(185, 195, 205, 0.07), transparent 32% ), linear-gradient( 115deg, rgba(2, 6, 10, 0.87) 0%, rgba(5, 9, 13, 0.74) 48%, rgba(2, 5, 8, 0.82) 100% );
+        background: radial-gradient( circle at 75% 12%, rgba(66, 133, 255, 0.08), transparent 30% ), radial-gradient( circle at 48% 75%, rgba(94, 69, 190, 0.05), transparent 35% ), linear-gradient( 115deg, rgba(2, 6, 10, 0.88) 0%, rgba(5, 9, 13, 0.73) 48%, rgba(2, 5, 8, 0.84) 100% );
         pointer-events: none;
     }
 
-@keyframes solicitacoesBackgroundMove {
+@keyframes transBackgroundMove {
     0% {
         transform: scale(1.04) translate3d(0, 0, 0);
         background-position: 50% 50%;
@@ -62,15 +65,15 @@
     }
 }
 
-.solicitacoes-page.sidebar-collapsed {
+/* =========================================================
+   SIDEBAR
+   ========================================================= */
+
+.trans-page.sidebar-collapsed {
     --sidebar-width: 82px;
 }
 
-/* ============================================================
-   SIDEBAR
-   ============================================================ */
-
-.solicitacoes-sidebar {
+.trans-sidebar {
     position: fixed;
     z-index: 20;
     top: 0;
@@ -80,8 +83,8 @@
     display: flex;
     flex-direction: column;
     padding: 24px 20px 22px;
-    border-right: 1px solid rgba(210, 217, 223, 0.18);
-    background: rgba(3, 9, 14, 0.82);
+    border-right: 1px solid rgba(210, 217, 223, 0.16);
+    background: rgba(3, 9, 14, 0.84);
     backdrop-filter: blur(14px);
     transition: width 0.25s ease, padding 0.25s ease;
 }
@@ -97,14 +100,18 @@
 .corebank-logo {
     display: flex;
     padding-left: 12px;
-    color: #f5f6f7;
     font-size: 27px;
+    font-weight: 750;
     letter-spacing: -1px;
     white-space: nowrap;
 }
 
-.logo-bank {
-    color: #aeb7bf;
+.corebank-core {
+    color: #f5f6f7;
+}
+
+.corebank-bank {
+    color: #8faee9;
 }
 
 .sidebar-toggle {
@@ -114,15 +121,25 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid rgba(222, 227, 232, 0.3);
+    border: 1px solid rgba(122, 157, 220, 0.30);
     border-radius: 12px;
-    background: linear-gradient( 145deg, rgba(170, 179, 187, 0.18), rgba(61, 70, 78, 0.18) );
+    background: linear-gradient( 145deg, rgba(59, 103, 175, 0.18), rgba(28, 43, 65, 0.18) );
     color: #ffffff;
     font-size: 28px;
     cursor: pointer;
+    transition: 0.2s ease;
 }
 
-.solicitacoes-nav {
+    .sidebar-toggle:hover {
+        border-color: rgba(92, 146, 255, 0.48);
+        background: rgba(60, 105, 185, 0.16);
+    }
+
+/* =========================================================
+   NAVEGAÇÃO
+   ========================================================= */
+
+.trans-nav {
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -144,20 +161,33 @@
     font-weight: 650;
     cursor: pointer;
     white-space: nowrap;
-    transition: 0.2s ease;
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 
     .nav-item:hover,
     .logout-button:hover {
         color: #ffffff;
-        background: rgba(207, 214, 220, 0.07);
+        background: rgba(79, 140, 255, 0.06);
     }
 
     .nav-item.active {
-        border-color: rgba(219, 224, 228, 0.27);
-        background: linear-gradient( 90deg, rgba(188, 197, 205, 0.17), rgba(83, 94, 104, 0.08) );
+        position: relative;
+        border-color: rgba(79, 140, 255, 0.30);
+        background: linear-gradient( 90deg, rgba(79, 140, 255, 0.15), rgba(79, 140, 255, 0.035) );
         color: #ffffff;
     }
+
+        .nav-item.active::before {
+            content: "";
+            position: absolute;
+            left: -1px;
+            top: 12px;
+            bottom: 12px;
+            width: 3px;
+            border-radius: 4px;
+            background: #4f8cff;
+            box-shadow: 0 0 14px rgba(79, 140, 255, 0.55);
+        }
 
 .nav-icon {
     width: 24px;
@@ -177,13 +207,13 @@
     gap: 12px;
     margin-bottom: 16px;
     padding: 14px 17px;
-    border: 1px solid rgba(210, 217, 223, 0.15);
+    border: 1px solid rgba(89, 199, 151, 0.16);
     border-radius: 13px;
-    background: rgba(183, 193, 201, 0.05);
+    background: rgba(44, 126, 91, 0.06);
 }
 
 .security-icon {
-    color: #d7dde2;
+    color: #5ed79b;
     font-size: 20px;
 }
 
@@ -195,7 +225,7 @@
 }
 
     .security-text strong {
-        color: rgba(239, 242, 244, 0.86);
+        color: rgba(239, 242, 244, 0.88);
         font-size: 11px;
     }
 
@@ -204,9 +234,11 @@
         font-size: 10px;
     }
 
-/* SIDEBAR RECOLHIDA */
+/* =========================================================
+   SIDEBAR RECOLHIDA
+   ========================================================= */
 
-.sidebar-collapsed .solicitacoes-sidebar {
+.sidebar-collapsed .trans-sidebar {
     padding: 24px 13px 22px;
 }
 
@@ -228,37 +260,41 @@
     padding-right: 0;
 }
 
-/* ============================================================
+/* =========================================================
    CONTEÚDO
-   ============================================================ */
+   ========================================================= */
 
-.solicitacoes-content {
+.trans-content {
     position: relative;
     z-index: 2;
-    width: calc( 100% - var(--sidebar-width) );
+    width: calc(100% - var(--sidebar-width));
     min-height: 100vh;
     margin-left: var(--sidebar-width);
-    padding: 34px clamp(32px, 4.5vw, 72px) 40px;
+    padding: 34px clamp(32px, 4.5vw, 72px) 48px;
     transition: width 0.25s ease, margin-left 0.25s ease;
 }
 
-.solicitacoes-header {
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.trans-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 30px;
-    margin-bottom: 32px;
+    margin-bottom: 28px;
 }
 
 .section-label {
     display: block;
-    color: #c2c8ce;
+    color: #9eabb7;
     font-size: 10px;
     font-weight: 800;
     letter-spacing: 2px;
 }
 
-.solicitacoes-header h1 {
+.trans-header h1 {
     margin: 7px 0 4px;
     color: #f7f8f9;
     font-size: clamp(31px, 3vw, 42px);
@@ -266,7 +302,7 @@
     letter-spacing: -1.5px;
 }
 
-.solicitacoes-header p {
+.trans-header p {
     margin: 0;
     color: rgba(194, 202, 209, 0.58);
     font-size: 12px;
@@ -277,9 +313,9 @@
     align-items: center;
     gap: 15px;
     padding: 11px 13px 11px 18px;
-    border: 1px solid rgba(211, 218, 224, 0.15);
+    border: 1px solid rgba(79, 140, 255, 0.16);
     border-radius: 17px;
-    background: rgba(7, 13, 18, 0.55);
+    background: rgba(7, 13, 18, 0.62);
     backdrop-filter: blur(10px);
 }
 
@@ -291,6 +327,7 @@
 }
 
     .header-user-info strong {
+        color: #edf1f4;
         font-size: 11px;
     }
 
@@ -305,340 +342,511 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid rgba(222, 227, 231, 0.28);
+    border: 1px solid rgba(79, 140, 255, 0.30);
     border-radius: 50%;
-    background: linear-gradient( 145deg, rgba(155, 165, 174, 0.22), rgba(55, 64, 72, 0.22) );
+    background: linear-gradient( 145deg, rgba(79, 140, 255, 0.20), rgba(30, 54, 91, 0.18) );
+    color: #c5d7ff;
     font-weight: 700;
 }
 
-/* ============================================================
-   FEEDBACK
-   ============================================================ */
+/* =========================================================
+   MENSAGENS
+   ========================================================= */
 
-.feedback {
+.trans-message {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 13px;
     margin-bottom: 18px;
-    padding: 17px 20px;
-    border-radius: 14px;
+    padding: 14px 17px;
+    border-radius: 12px;
     backdrop-filter: blur(10px);
 }
 
-    .feedback > span {
-        width: 35px;
-        min-width: 35px;
-        height: 35px;
+    .trans-message span {
+        width: 29px;
+        height: 29px;
         display: flex;
         align-items: center;
         justify-content: center;
         border-radius: 50%;
+        font-weight: 800;
     }
 
-    .feedback strong {
-        display: block;
-        margin-bottom: 3px;
+    .trans-message p {
+        margin: 0;
         font-size: 11px;
     }
 
-    .feedback p {
-        margin: 0;
-        font-size: 9px;
+    .trans-message.success {
+        border: 1px solid rgba(74, 210, 151, 0.20);
+        background: rgba(35, 130, 87, 0.10);
+        color: #a8e2c6;
     }
 
-.feedback-error {
-    border: 1px solid rgba(220, 91, 91, 0.2);
-    background: rgba(120, 40, 40, 0.1);
-    color: #e9bebe;
-}
+        .trans-message.success span {
+            background: rgba(74, 210, 151, 0.13);
+            color: #5ee0a0;
+        }
 
-    .feedback-error > span {
-        background: rgba(220, 91, 91, 0.13);
+    .trans-message.error {
+        border: 1px solid rgba(230, 93, 93, 0.20);
+        background: rgba(140, 43, 43, 0.10);
+        color: #efb7b7;
     }
 
-.feedback-success {
-    border: 1px solid rgba(105, 205, 165, 0.18);
-    background: rgba(45, 110, 85, 0.09);
-    color: #bde3d3;
-}
+/* =========================================================
+   CARD DE SALDO
+   ========================================================= */
 
-    .feedback-success > span {
-        background: rgba(105, 205, 165, 0.11);
-    }
-
-/* ============================================================
-   AÇÕES
-   ============================================================ */
-
-.request-actions {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-    margin-bottom: 22px;
-}
-
-.request-card {
-    min-height: 155px;
-    display: grid;
-    grid-template-columns: 82px 1fr auto;
-    align-items: center;
-    gap: 23px;
-    padding: 25px 29px;
-    border: 1px solid rgba(209, 216, 222, 0.2);
-    border-radius: 18px;
-    background: linear-gradient( 145deg, rgba(15, 22, 28, 0.8), rgba(6, 12, 17, 0.76) );
-    color: #ffffff;
-    text-align: left;
-    backdrop-filter: blur(12px);
-    cursor: pointer;
-    transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
-}
-
-    .request-card:hover {
-        transform: translateY(-2px);
-        border-color: rgba(225, 230, 234, 0.36);
-        background: linear-gradient( 145deg, rgba(23, 31, 38, 0.86), rgba(8, 14, 19, 0.82) );
-    }
-
-    .request-card:disabled {
-        opacity: 0.5;
-        cursor: wait;
-        transform: none;
-    }
-
-.request-card-icon {
-    width: 82px;
-    height: 82px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid rgba(213, 220, 225, 0.08);
-    border-radius: 15px;
-    background: linear-gradient( 145deg, rgba(180, 190, 199, 0.12), rgba(64, 73, 81, 0.08) );
-    filter: grayscale(1);
-    font-size: 29px;
-}
-
-.request-card-text strong {
-    display: block;
-    margin-bottom: 8px;
-    color: #f2f4f5;
-    font-size: 16px;
-}
-
-.request-card-text p {
-    max-width: 360px;
-    margin: 0;
-    color: rgba(191, 200, 207, 0.58);
-    font-size: 11px;
-    line-height: 1.6;
-}
-
-.request-arrow {
-    color: rgba(221, 226, 230, 0.62);
-    font-size: 34px;
-}
-
-/* ============================================================
-   PAINEL DE SOLICITAÇÕES
-   ============================================================ */
-
-.requests-panel {
+.trans-balance-card {
+    position: relative;
     overflow: hidden;
-    border: 1px solid rgba(209, 216, 222, 0.2);
-    border-radius: 18px;
-    background: linear-gradient( 145deg, rgba(15, 22, 28, 0.8), rgba(6, 12, 17, 0.76) );
-    backdrop-filter: blur(12px);
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
-}
-
-.requests-panel-header {
-    min-height: 105px;
+    min-height: 170px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 25px;
-    padding: 24px 29px;
-    border-bottom: 1px solid rgba(202, 210, 216, 0.1);
+    gap: 40px;
+    margin-bottom: 20px;
+    padding: 28px 32px;
+    border: 1px solid rgba(79, 140, 255, 0.22);
+    border-radius: 18px;
+    background: transparent;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.16);
 }
 
-    .requests-panel-header h2 {
-        margin: 0 0 6px;
-        color: #f3f5f6;
-        font-size: 19px;
+    .trans-balance-card::before {
+        content: "";
+        position: absolute;
+        width: 340px;
+        height: 340px;
+        top: -210px;
+        right: -80px;
+        border-radius: 50%;
+        background: radial-gradient( circle, rgba(79, 140, 255, 0.17), transparent 67% );
+        pointer-events: none;
     }
 
-    .requests-panel-header p {
-        margin: 0;
-        color: rgba(190, 199, 206, 0.5);
-        font-size: 10px;
-    }
-
-    .requests-panel-header select {
-        min-width: 190px;
-        height: 43px;
-        padding: 0 13px;
-        border: 1px solid rgba(211, 218, 224, 0.16);
-        border-radius: 11px;
-        outline: none;
-        background: rgba(18, 25, 31, 0.9);
-        color: rgba(235, 238, 240, 0.84);
-        font-size: 10px;
-        cursor: pointer;
-    }
-
-    .requests-panel-header option {
-        background: #10171d;
-        color: #ffffff;
-    }
-
-/* ============================================================
-   TABELA
-   ============================================================ */
-
-.requests-table {
-    padding: 0 22px 15px;
-}
-
-.requests-table-header,
-.requests-table-row {
-    display: grid;
-    grid-template-columns: 70px minmax(160px, 0.8fr) minmax(220px, 1.4fr) 130px 170px;
+.trans-balance-value {
+    display: flex;
     align-items: center;
+    gap: 12px;
+    margin-top: 10px;
+}
+
+    .trans-balance-value strong {
+        color: #f5f7fa;
+        font-size: clamp(28px, 3vw, 38px);
+        font-weight: 720;
+        letter-spacing: -1px;
+    }
+
+    .trans-balance-value button {
+        width: 36px;
+        height: 36px;
+        border: 1px solid rgba(79, 140, 255, 0.18);
+        border-radius: 10px;
+        background: rgba(79, 140, 255, 0.07);
+        color: #9bbcff;
+        cursor: pointer;
+        transition: 0.2s ease;
+    }
+
+        .trans-balance-value button:hover {
+            background: rgba(79, 140, 255, 0.14);
+            border-color: rgba(79, 140, 255, 0.35);
+        }
+
+.trans-account-data {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(100px, 1fr));
+    gap: 40px;
+}
+
+    .trans-account-data div {
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+    }
+
+    .trans-account-data span {
+        color: rgba(179, 190, 199, 0.50);
+        font-size: 9px;
+    }
+
+    .trans-account-data strong {
+        color: rgba(237, 241, 244, 0.90);
+        font-size: 12px;
+    }
+
+.status-green {
+    color: #5ed79b !important;
+}
+
+/* =========================================================
+   DETALHES DECORATIVOS
+   ========================================================= */
+
+.trans-line {
+    position: absolute;
+    height: 1px;
+    background: linear-gradient( 90deg, transparent, rgba(79, 140, 255, 0.28), transparent );
+    pointer-events: none;
+}
+
+.line-one {
+    width: 280px;
+    right: 40px;
+    bottom: 26px;
+}
+
+.line-two {
+    width: 180px;
+    right: 110px;
+    bottom: 19px;
+    opacity: 0.45;
+}
+
+/* =========================================================
+   GRID DAS OPERAÇÕES
+   ========================================================= */
+
+.transactions-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 20px;
 }
 
-.requests-table-header {
-    min-height: 45px;
-    padding: 0 12px;
-    color: rgba(185, 194, 202, 0.5);
-    font-size: 8px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
+/* =========================================================
+   CARDS
+   ========================================================= */
+
+.transaction-card {
+    position: relative;
+    min-height: 310px;
+    display: flex;
+    flex-direction: column;
+    padding: 26px 28px;
+    border: 1px solid rgba(211, 219, 226, 0.16);
+    border-radius: 18px;
+    background: linear-gradient( 145deg, rgba(15, 22, 29, 0.88), rgba(6, 12, 17, 0.82) );
+    backdrop-filter: blur(12px);
+    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.13);
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.requests-table-row {
-    min-height: 65px;
-    padding: 0 12px;
-    border-top: 1px solid rgba(202, 210, 216, 0.08);
-    color: rgba(220, 225, 229, 0.72);
-    font-size: 9px;
-    transition: background 0.2s ease;
-}
-
-    .requests-table-row:hover {
-        background: rgba(190, 199, 207, 0.03);
+    .transaction-card:hover {
+        transform: translateY(-2px);
+        border-color: rgba(79, 140, 255, 0.27);
+        box-shadow: 0 22px 55px rgba(0, 0, 0, 0.20);
     }
 
-    .requests-table-row strong {
-        color: rgba(242, 244, 246, 0.9);
-        font-size: 10px;
+    /* Depósito */
+
+    .transaction-card:nth-child(1) {
+        border-top-color: rgba(65, 211, 151, 0.38);
     }
 
-.request-id {
-    color: rgba(200, 208, 214, 0.55);
+    /* Saque */
+
+    .transaction-card:nth-child(2) {
+        border-top-color: rgba(79, 140, 255, 0.40);
+    }
+
+/* =========================================================
+   CABEÇALHO DOS CARDS
+   ========================================================= */
+
+.transaction-title {
+    display: flex;
+    align-items: center;
+    gap: 17px;
+    margin-bottom: 25px;
 }
 
-.request-description {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+.transaction-icon {
+    width: 52px;
+    min-width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(79, 140, 255, 0.20);
+    border-radius: 14px;
+    background: linear-gradient( 145deg, rgba(79, 140, 255, 0.15), rgba(37, 65, 110, 0.08) );
+    color: #92b5ff;
+    font-size: 23px;
 }
 
-.request-status {
-    width: fit-content;
-    min-width: 85px;
-    padding: 7px 12px;
-    border: 1px solid rgba(211, 218, 224, 0.12);
-    border-radius: 10px;
-    text-align: center;
-    font-size: 8px;
+.transaction-card:nth-child(1)
+.transaction-icon {
+    border-color: rgba(65, 211, 151, 0.20);
+    background: rgba(65, 211, 151, 0.08);
+    color: #65dda5;
+}
+
+.transaction-title h2 {
+    margin: 5px 0 4px;
+    color: #f2f4f6;
+    font-size: 19px;
+}
+
+.transaction-title p {
+    margin: 0;
+    color: rgba(185, 195, 203, 0.52);
+    font-size: 10px;
+    line-height: 1.5;
+}
+
+/* =========================================================
+   LABELS
+   ========================================================= */
+
+.transaction-card > label,
+.transfer-fields label {
+    display: block;
+    margin-bottom: 8px;
+    color: rgba(202, 210, 216, 0.70);
+    font-size: 10px;
+    font-weight: 650;
+}
+
+/* =========================================================
+   INPUTS
+   ========================================================= */
+
+.money-input,
+.text-input {
+    height: 48px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 18px;
+    border: 1px solid rgba(211, 219, 226, 0.14);
+    border-radius: 11px;
+    background: rgba(4, 10, 15, 0.64);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+    .money-input:focus-within,
+    .text-input:focus-within {
+        border-color: rgba(79, 140, 255, 0.48);
+        background: rgba(7, 14, 21, 0.82);
+        box-shadow: 0 0 0 3px rgba(79, 140, 255, 0.07);
+    }
+
+    .money-input span {
+        padding-left: 15px;
+        color: #6fdba6;
+        font-size: 12px;
+        font-weight: 750;
+    }
+
+    .money-input input,
+    .text-input input {
+        width: 100%;
+        height: 100%;
+        padding: 0 14px;
+        border: 0;
+        outline: 0;
+        background: transparent;
+        color: #edf1f4;
+        font-family: inherit;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+        .money-input input::placeholder,
+        .text-input input::placeholder {
+            color: rgba(178, 189, 198, 0.35);
+        }
+
+/* =========================================================
+   BOTÕES - VISUAL MINIMALISTA
+   ========================================================= */
+
+.transaction-button {
+    width: 100%;
+    min-height: 47px;
+    margin-top: auto;
+    border: 1px solid rgba(79, 140, 255, 0.25);
+    border-radius: 11px;
+    background: rgba(79, 140, 255, 0.08);
+    color: #9dbdff;
+    font-size: 11px;
     font-weight: 700;
+    cursor: pointer;
+    box-shadow: none;
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
 }
 
-.status-concluida {
-    background: rgba(89, 153, 126, 0.1);
-    color: #a8d5c2;
+    .transaction-button:hover:not(:disabled) {
+        transform: translateY(-1px);
+        background: rgba(79, 140, 255, 0.14);
+        border-color: rgba(79, 140, 255, 0.42);
+        color: #c5d7ff;
+    }
+
+    .transaction-button:active:not(:disabled) {
+        transform: translateY(0);
+    }
+
+    .transaction-button:disabled {
+        opacity: 0.45;
+        cursor: wait;
+    }
+
+/* =========================================================
+   BOTÃO DEPÓSITO - VERDE SUAVE
+   ========================================================= */
+
+.transaction-card:nth-child(1)
+.transaction-button {
+    border-color: rgba(65, 211, 151, 0.24);
+    background: rgba(65, 211, 151, 0.07);
+    color: #73dbaa;
+    box-shadow: none;
 }
 
-.status-cancelada {
-    background: rgba(137, 142, 148, 0.09);
-    color: #b9bec2;
+    .transaction-card:nth-child(1)
+    .transaction-button:hover:not(:disabled) {
+        border-color: rgba(65, 211, 151, 0.40);
+        background: rgba(65, 211, 151, 0.12);
+        color: #9be7c3;
+    }
+
+/* =========================================================
+   BOTÃO SAQUE - AZUL SUAVE
+   ========================================================= */
+
+.transaction-card:nth-child(2)
+.transaction-button {
+    border-color: rgba(79, 140, 255, 0.24);
+    background: rgba(79, 140, 255, 0.07);
+    color: #91b4fa;
+    box-shadow: none;
 }
 
-.status-analise {
-    background: rgba(142, 158, 173, 0.11);
-    color: #c3ccd3;
+    .transaction-card:nth-child(2)
+    .transaction-button:hover:not(:disabled) {
+        border-color: rgba(79, 140, 255, 0.40);
+        background: rgba(79, 140, 255, 0.12);
+        color: #b6ceff;
+    }
+
+/* =========================================================
+   TRANSFERÊNCIA
+   ========================================================= */
+
+.transfer-card {
+    grid-column: 1 / -1;
+    min-height: 295px;
+    border-top-color: rgba(142, 102, 255, 0.42);
+    background: linear-gradient( 145deg, rgba(17, 22, 34, 0.90), rgba(7, 11, 19, 0.84) );
 }
 
-.status-pendente {
-    background: rgba(155, 149, 120, 0.09);
-    color: #d0cbb0;
+    .transfer-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 330px;
+        height: 220px;
+        background: radial-gradient( circle at top right, rgba(126, 91, 229, 0.10), transparent 67% );
+        pointer-events: none;
+    }
+
+    .transfer-card .transaction-icon {
+        border-color: rgba(151, 112, 255, 0.24);
+        background: rgba(130, 91, 235, 0.09);
+        color: #b29aff;
+    }
+
+.transfer-fields {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
 }
 
-/* ============================================================
-   VAZIO
-   ============================================================ */
+/* =========================================================
+   BOTÃO TRANSFERÊNCIA - ROXO SUAVE
+   ========================================================= */
 
-.requests-empty {
-    min-height: 250px;
+.transfer-card .transaction-button {
+    border-color: rgba(151, 112, 255, 0.25);
+    background: rgba(135, 96, 235, 0.07);
+    color: #b6a1ef;
+    box-shadow: none;
+}
+
+    .transfer-card .transaction-button:hover:not(:disabled) {
+        border-color: rgba(151, 112, 255, 0.42);
+        background: rgba(135, 96, 235, 0.13);
+        color: #d0c1f7;
+    }
+
+/* =========================================================
+   LOADING
+   ========================================================= */
+
+.trans-loading {
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    text-align: center;
+    gap: 8px;
+    background: #050a0f;
+    color: #f4f5f6;
+    font-family: Inter, Arial, Helvetica, sans-serif;
 }
 
-.empty-icon {
-    width: 48px;
-    height: 48px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 12px;
-    border-radius: 50%;
-    background: rgba(189, 198, 206, 0.07);
-    color: rgba(221, 226, 230, 0.65);
-    font-size: 18px;
-}
+    .trans-loading strong {
+        font-size: 26px;
+    }
 
-.requests-empty strong {
-    color: rgba(232, 236, 239, 0.75);
-    font-size: 11px;
-}
+    .trans-loading p {
+        margin: 0;
+        color: rgba(190, 199, 207, 0.55);
+        font-size: 11px;
+    }
 
-.requests-empty p {
-    margin: 5px 0 0;
-    color: rgba(185, 194, 201, 0.43);
-    font-size: 9px;
-}
-
-/* ============================================================
+/* =========================================================
    RESPONSIVIDADE
-   ============================================================ */
+   ========================================================= */
 
-@media (max-width: 1100px) {
-    .request-actions {
+@media (max-width: 1150px) {
+
+    .trans-balance-card {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .trans-account-data {
+        width: 100%;
+    }
+}
+
+@media (max-width: 1000px) {
+
+    .transactions-grid {
         grid-template-columns: 1fr;
     }
 
-    .requests-table {
-        overflow-x: auto;
-    }
-
-    .requests-table-header,
-    .requests-table-row {
-        min-width: 900px;
+    .transfer-card {
+        grid-column: auto;
     }
 }
 
 @media (max-width: 900px) {
-    .solicitacoes-page {
+
+    .trans-page {
         --sidebar-width: 82px;
     }
 
-    .solicitacoes-sidebar {
+    .trans-sidebar {
         padding: 24px 13px 22px;
     }
 
@@ -664,199 +872,68 @@
 }
 
 @media (max-width: 700px) {
-    .solicitacoes-content {
+
+    .trans-content {
         padding: 28px 18px 35px;
+    }
+
+    .trans-header {
+        align-items: flex-start;
     }
 
     .header-user-info {
         display: none;
     }
 
-    .request-card {
-        grid-template-columns: 60px 1fr auto;
-        padding: 20px;
+    .trans-balance-card {
+        padding: 24px 22px;
     }
 
-    .request-card-icon {
-        width: 60px;
-        height: 60px;
+    .trans-account-data {
+        grid-template-columns: 1fr;
+        gap: 17px;
     }
 
-    .requests-panel-header {
-        align-items: flex-start;
-        flex-direction: column;
+    .transaction-card {
+        padding: 22px;
     }
 
-        .requests-panel-header select {
-            width: 100%;
-        }
-}
-
-
-/* ============================================================
-   MODAL DE CONFIRMAÇÃO
-   ============================================================ */
-
-.confirmacao-overlay {
-    position: fixed;
-    z-index: 1000;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 24px;
-    background: rgba(0, 4, 8, 0.76);
-    backdrop-filter: blur(8px);
-}
-
-.confirmacao-modal {
-    position: relative;
-    width: min(100%, 520px);
-    padding: 34px;
-    border: 1px solid rgba(215, 222, 228, 0.22);
-    border-radius: 20px;
-    background: linear-gradient(145deg, rgba(18, 25, 31, 0.98), rgba(5, 10, 15, 0.98));
-    box-shadow: 0 30px 90px rgba(0, 0, 0, 0.55);
-    color: #f4f6f7;
-}
-
-.confirmacao-fechar {
-    position: absolute;
-    top: 18px;
-    right: 18px;
-    width: 38px;
-    height: 38px;
-    border: 1px solid rgba(215, 222, 228, 0.14);
-    border-radius: 10px;
-    background: rgba(185, 195, 203, 0.06);
-    color: rgba(235, 239, 242, 0.72);
-    font-size: 24px;
-    cursor: pointer;
-}
-
-.confirmacao-icone {
-    width: 54px;
-    height: 54px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 22px;
-    border: 1px solid rgba(215, 222, 228, 0.14);
-    border-radius: 15px;
-    background: linear-gradient(145deg, rgba(180, 190, 199, 0.14), rgba(64, 73, 81, 0.08));
-    color: #d8dee3;
-    font-size: 20px;
-}
-
-.confirmacao-label {
-    display: block;
-    margin-bottom: 8px;
-    color: #aeb7bf;
-    font-size: 9px;
-    font-weight: 800;
-    letter-spacing: 2px;
-}
-
-.confirmacao-modal h2 {
-    margin: 0 0 12px;
-    color: #f7f8f9;
-    font-size: 25px;
-    letter-spacing: -0.7px;
-}
-
-.confirmacao-modal > p {
-    margin: 0;
-    color: rgba(196, 204, 211, 0.62);
-    font-size: 12px;
-    line-height: 1.7;
-}
-
-.confirmacao-aviso {
-    display: flex;
-    align-items: center;
-    gap: 13px;
-    margin: 24px 0;
-    padding: 15px 16px;
-    border: 1px solid rgba(210, 217, 223, 0.12);
-    border-radius: 13px;
-    background: rgba(185, 195, 203, 0.05);
-}
-
-    .confirmacao-aviso > span {
-        width: 30px;
-        min-width: 30px;
-        height: 30px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border: 1px solid rgba(215, 222, 228, 0.16);
-        border-radius: 50%;
-        color: #cbd2d8;
-        font-size: 11px;
-        font-weight: 800;
-    }
-
-    .confirmacao-aviso div {
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-    }
-
-    .confirmacao-aviso strong {
-        font-size: 11px;
-    }
-
-    .confirmacao-aviso small {
-        color: rgba(190, 199, 207, 0.52);
-        font-size: 9px;
-        line-height: 1.5;
-    }
-
-.confirmacao-acoes {
-    display: grid;
-    grid-template-columns: 1fr 1.35fr;
-    gap: 12px;
-}
-
-    .confirmacao-acoes button {
-        min-height: 48px;
-        border-radius: 12px;
-        font-size: 11px;
-        font-weight: 750;
-        cursor: pointer;
-        transition: 0.2s ease;
-    }
-
-.confirmacao-cancelar {
-    border: 1px solid rgba(215, 222, 228, 0.16);
-    background: rgba(185, 195, 203, 0.05);
-    color: rgba(229, 233, 236, 0.72);
-}
-
-.confirmacao-confirmar {
-    border: 1px solid rgba(232, 236, 239, 0.32);
-    background: linear-gradient(145deg, #d6dde2, #aeb8c0);
-    color: #071017;
-}
-
-.confirmacao-acoes button:hover:not(:disabled),
-.confirmacao-fechar:hover:not(:disabled) {
-    transform: translateY(-1px);
-    filter: brightness(1.08);
-}
-
-.confirmacao-acoes button:disabled,
-.confirmacao-fechar:disabled {
-    opacity: 0.55;
-    cursor: wait;
-}
-
-@media (max-width: 600px) {
-    .confirmacao-modal {
-        padding: 28px 22px 22px;
-    }
-
-    .confirmacao-acoes {
+    .transfer-fields {
         grid-template-columns: 1fr;
     }
+}
+
+@media (max-width: 520px) {
+
+    .trans-header {
+        flex-direction: column;
+    }
+
+    .header-user {
+        width: 100%;
+        justify-content: flex-end;
+    }
+}
+
+/* =========================================================
+   CARD DE SALDO — MESMO PADRÃO VISUAL DO DASHBOARD
+   Somente aparência; estrutura original preservada.
+   ========================================================= */
+
+.trans-balance-card {
+    border-color: rgba(61, 203, 145, 0.28);
+    background: radial-gradient(circle at 88% 12%, rgba(49, 201, 143, 0.15), transparent 34%), linear-gradient(145deg, rgba(13, 22, 27, 0.88), rgba(6, 12, 17, 0.80));
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.025);
+}
+
+    .trans-balance-card::before {
+        background: radial-gradient( circle, rgba(49, 201, 143, 0.14), transparent 67% );
+    }
+
+.trans-line {
+    background: linear-gradient( 90deg, transparent, rgba(108, 153, 174, 0.14), transparent );
+}
+
+.line-two {
+    opacity: 0.45;
 }
